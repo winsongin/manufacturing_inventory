@@ -1,0 +1,47 @@
+import tkinter as tk
+
+#Login Screen 
+
+def login():
+  log = "Logged in!"
+  print(log)
+
+#Window Creation
+win = tk.Tk()
+frmHome = tk.Frame(win)
+frmHome.pack()
+
+#Label object Creation
+lUsername = tk.Label(win, text = 'Username')
+
+lPassword = tk.Label(win, text = 'Password')
+
+#Variables to Store Data
+
+user = tk.StringVar()
+
+passwd = tk.StringVar()
+
+#Entry object
+
+eUsername = tk.Entry(win, textvariable = user)
+
+ePassword = tk.Entry(win, textvariable = passwd)
+
+#Button
+
+bLogin = tk.Button(win, text = 'Login', command = login)
+
+#placing in GUI
+
+lUsername.pack(side= tk.TOP, anchor = 'news')
+
+eUsername.pack(side= tk.TOP, anchor = 'news')
+
+lPassword.pack(side= tk.TOP, anchor = 'news')
+
+ePassword.pack(side= tk.TOP, anchor = 'news')
+
+bLogin.pack(side = tk.BOTTOM, anchor = 'news')
+
+win.mainloop()

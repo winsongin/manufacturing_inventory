@@ -26,7 +26,7 @@ passwd = tk.StringVar()
 
 eUsername = tk.Entry(win, textvariable = user)
 
-ePassword = tk.Entry(win, textvariable = passwd)
+ePassword = tk.Entry(win, textvariable = passwd, show ='*')
 
 #Button
 
@@ -34,14 +34,15 @@ bLogin = tk.Button(win, text = 'Login', command = login)
 
 #placing in GUI
 
-lUsername.pack(side= tk.TOP, anchor = 'news')
+lUsername.pack(side= tk.TOP, anchor = 'w', expand = 'true')
 
-eUsername.pack(side= tk.TOP, anchor = 'news')
+eUsername.pack(side= tk.TOP, anchor = 'center', expand = 'true', fill = 'x')
 
-lPassword.pack(side= tk.TOP, anchor = 'news')
+lPassword.pack(side= tk.TOP, anchor = 'w', expand = 'true')
 
-ePassword.pack(side= tk.TOP, anchor = 'news')
+ePassword.pack(side= tk.TOP, anchor = 'center', expand = 'true', fill = 'x')
 
-bLogin.pack(side = tk.BOTTOM, anchor = 'news')
+bLogin.pack(side = tk.BOTTOM, anchor = 'center', expand = 'true')
+
 
 win.mainloop()

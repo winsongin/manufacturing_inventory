@@ -4,8 +4,8 @@ import tkinter as tk
 
 # Create the window first
 win = tk.Tk()
+win.geometry("1000x300") #Configure the width by height size
 mainHome = tk.Frame(win)
-mainHome.pack()
 
 # Create the labels below
 lTitle = tk.Label(win, text = 'Inventory')
@@ -15,15 +15,24 @@ lPartNum = tk.Label(win, text = 'Part No.')
 lManufact = tk.Label(win, text = 'Manufacturer')
 lQuantity = tk.Label(win, text = 'Quantity')
 
-# Entry object is for search
-#eSearch = tk.Entry(win, textvariable = search)
+# Create the entries below
+eSearch = tk.Entry(win)
+ePartName = tk.Entry(win)
+ePartNum = tk.Entry(win)
+eManufact = tk.Entry(win)
+eQuantity = tk.Entry(win)
 
 # Now place all the parts in the GUI
-lTitle.pack(padx=0, pady=10, side=tk.TOP)
-lSearch.pack(padx=0, pady=10, side=tk.TOP)
-lPartName.pack(padx=5, pady=20, side=tk.LEFT)
-lPartNum.pack(padx=5, pady=20, side=tk.LEFT)
-lManufact.pack(padx=5, pady=20, side=tk.LEFT)
-lQuantity.pack(padx=5, pady=20, side=tk.LEFT)
+lTitle.pack(fill=tk.X, pady=10)
+lSearch.pack(fill=tk.X, pady=10)
+eSearch.pack(fill=tk.X, pady=10)
+lPartName.pack(padx=10, pady=10, side=tk.LEFT)
+lPartNum.pack(padx=10, pady=10, side=tk.LEFT)
+lManufact.pack(padx=10, pady=10, side=tk.LEFT)
+lQuantity.pack(padx=10, pady=10, side=tk.LEFT)
+ePartName.pack(padx=10, pady=10, side=tk.LEFT)
+ePartNum.pack(padx=10, pady=10, side=tk.LEFT)
+eManufact.pack(padx=10, pady=10, side=tk.LEFT)
+eQuantity.pack(padx=10, pady=10, side=tk.LEFT)
 
 win.mainloop()

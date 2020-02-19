@@ -3,18 +3,42 @@ import tkinter as tk
 #Login Screen 
 
 def login():
-  log = "Logged in!"
+  log = "Logged in "
+  name = eUsername.get()
+  log = log + name
   print(log)
+  if name == 'Francisco Montalvo':
+      frmHome.pack_forget()
+      frmA.pack()
+      
 
 #Window Creation
 win = tk.Tk()
-frmHome = tk.Frame(win)
+
+win.title("Inventory Manager")
+win.geometry("400x400") #width and height
+
+frmHome = tk.Frame(win, height = 400)
 frmHome.pack()
 
-#Label object Creation
-lUsername = tk.Label(win, text = 'Username')
+frmA = tk.Frame(win)
 
-lPassword = tk.Label(win, text = 'Password')
+#Menu Creation
+
+#menu = tk.Menu(win)
+#win.config(menu = menu)
+#testmenu = tk.Menu(menu)
+#menu.add_cascade(label = 'Test', menu = testmenu)
+#testmenu.add_command(label = 'Quit', command = win.quit)
+
+
+#Label object 
+
+lHere = tk.Label(frmA, text = 'Assembly')
+
+lUsername = tk.Label(frmHome, text = 'Username')
+
+lPassword = tk.Label(frmHome, text = 'Password')
 
 #Variables to Store Data
 
@@ -24,15 +48,16 @@ passwd = tk.StringVar()
 
 #Entry object
 
-eUsername = tk.Entry(win, textvariable = user)
+eUsername = tk.Entry(frmHome, textvariable = user)
 
-ePassword = tk.Entry(win, textvariable = passwd, show ='*')
+ePassword = tk.Entry(frmHome, textvariable = passwd, show ='*')
 
 #Button
 
-bLogin = tk.Button(win, text = 'Login', command = login)
+bLogin = tk.Button(frmHome, text = 'Login', command = login)
 
 #placing in GUI
+lHere.pack()
 
 lUsername.pack(side= tk.TOP, anchor = 'w', expand = 'true')
 
@@ -42,7 +67,7 @@ lPassword.pack(side= tk.TOP, anchor = 'w', expand = 'true')
 
 ePassword.pack(side= tk.TOP, anchor = 'center', expand = 'true', fill = 'x')
 
-bLogin.pack(side = tk.BOTTOM, anchor = 'center', expand = 'true')
+bLogin.pack(side = tk.BOTTOM, anchor = 'center')
 
 
 win.mainloop()

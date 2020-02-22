@@ -27,7 +27,12 @@ CREATE TABLE `employees` (
   `first_name` varchar(45) NOT NULL,
   `last_name` varchar(45) NOT NULL,
   `phone_number` varchar(10) DEFAULT NULL,
-  `dept` varchar(45) NOT NULL,
+  `dept` varchar(45) DEFAULT NULL,
+  `can_receive` char(1) DEFAULT 'N',
+  `can_assemble` char(1) DEFAULT 'N',
+  `can_test` char(1) DEFAULT 'N',
+  `can_ship` char(1) DEFAULT 'N',
+  `is_admin` char(1) DEFAULT 'N',
   PRIMARY KEY (`employee_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,7 +43,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES ('0001','Ralph','Pura','5555555555','Receiving'),('0002','John','Doe','6666666666','Assembly'),('0003','Jane','Smith','7777777777','Testing'),('0004','John','Gibson','8888888888','Shipping');
+INSERT INTO `employees` VALUES ('0001','Ralph','Pura','5555555555','Receiving','Y','N','N','N','N'),('0002','John','Doe','6666666666','Assembly','N','Y','N','N','N'),('0003','Jane','Smith','7777777777','Testing','N','N','Y',NULL,'N'),('0004','John','Gibson','8888888888','Shipping','N','N','N','Y','N');
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-02 21:35:17
+-- Dump completed on 2020-02-22 14:01:31

@@ -23,9 +23,6 @@ class pyTree:
 
         self.tree.configure(height=20)
         self.tree.grid()
-        self.transient(self.master)
-        self.focus_force()
-        self.grab_set()
 
 ### Create the label widgets below
 ##lWorkNum = Label(win, text = "Work #", font = ("arial", 12, "bold"))
@@ -45,6 +42,6 @@ class pyTree:
 ##lStatus.place(x=300, y=90)
 ##lDaysLeft.place(x=500, y=90)
 
-window = Tk()
-main = pyTree(window)
-main.mainloop()
+if __name__ == "__main__":
+    window = Tk()
+    main = pyTree(window)

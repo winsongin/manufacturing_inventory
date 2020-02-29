@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.17, for Win64 (x86_64)
 --
 -- Host: localhost    Database: inventory_system
 -- ------------------------------------------------------
--- Server version	8.0.19
+-- Server version	8.0.17
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -26,7 +26,7 @@ CREATE TABLE `inventory` (
   `part_name` varchar(45) NOT NULL DEFAULT '-',
   `part_no` varchar(45) NOT NULL DEFAULT '-',
   `manufacturer` varchar(45) NOT NULL DEFAULT '-',
-  `qty` int DEFAULT NULL,
+  `qty` int(11) DEFAULT NULL,
   `part_type` varchar(45) NOT NULL DEFAULT '-',
   PRIMARY KEY (`part_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -38,7 +38,7 @@ CREATE TABLE `inventory` (
 
 LOCK TABLES `inventory` WRITE;
 /*!40000 ALTER TABLE `inventory` DISABLE KEYS */;
-INSERT INTO `inventory` VALUES ('3HP Engine','01-444','We Move Things LLC',120,'Engine'),('Green Chassis','0X1233','Plastics Inc',100,'Chassis'),('Red Chassis','0X1234','Plastics Inc',100,'Chassis'),('Blue Chassis','0X1254','Plastic Inc',100,'Chassis'),('1\" Rubber Wheel','1234-4321','Rubber R Us',200,'Wheel'),('2\" Rubber Tire','1237-4444','Rubber R Us',100,'Wheel'),('5HP Engine','30-123','We Move Things LLC',50,'Engine'),('1.5\" Hard Rubber Tire','4321-5432','Rubber R Us',250,'Wheel');
+INSERT INTO `inventory` VALUES ('3HP Engine','01-444','We Move Things LLC',50,'Engine'),('Green Chassis','0X1233','Plastics Inc',100,'Chassis'),('Red Chassis','0X1234','Plastics Inc',100,'Chassis'),('Blue Chassis','0X1254','Plastic Inc',100,'Chassis'),('1\" Rubber Wheel','1234-4321','Rubber R Us',200,'Wheel'),('2\" Rubber Tire','1237-4444','Rubber R Us',100,'Wheel'),('5HP Engine','30-123','We Move Things LLC',50,'Engine'),('1.5\" Hard Rubber Tire','4321-5432','Rubber R Us',250,'Wheel');
 /*!40000 ALTER TABLE `inventory` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-28 23:23:39
+-- Dump completed on 2020-02-28 23:40:50

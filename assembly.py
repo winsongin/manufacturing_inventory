@@ -3,6 +3,7 @@ from tkinter.ttk import *
 import tkinter.messagebox
 import mysql.connector
 
+
 def AssyWindow():
     mydb = mysql.connector.connect(
         host="localhost",
@@ -63,13 +64,17 @@ def AssyWindow():
         partNum3Qty.set("")
         return
 
+    #Instantiating text variables
     partNum1 = StringVar()
     partNum2 = StringVar()
     partNum3 = StringVar()
     partNum1Qty = StringVar()
     partNum2Qty = StringVar()
     partNum3Qty = StringVar()
+
+    #Instantiates style for ttk buttons
     style = Style()
+
     orderNumber_label = Label(mainWindow, text="Work Order Number: ", command=orderNumber(), font=("arial", 12, "bold"))
     workerID_label = Label(mainWindow, text="Worker ID: ", command=workerID(), font=("arial", 12, "bold"))
 
@@ -110,13 +115,14 @@ def AssyWindow():
 
     mainWindow.mainloop()
 
+    #Test code to show the difference in quantities
     cursor.execute("SELECT * FROM inventory WHERE part_no = \"01-444\";")
     print(cursor.fetchall())
     mydb.commit()
+    print(cursor.fetchall())
+
+    #Closes cursor and mydb
     cursor.close()
     mydb.close()
-
-
-
 
 AssyWindow()

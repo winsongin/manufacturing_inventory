@@ -8,7 +8,7 @@ def AssyWindow():
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        passwd="Razgriz!949",
+        passwd="test",
         database="inventory_system"
     )
 

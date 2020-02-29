@@ -9,7 +9,7 @@ def AssyWindow():
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        passwd="Test",
+        passwd="Razgriz!949",
         database="inventory_system"
     )
 
@@ -54,15 +54,24 @@ def AssyWindow():
 
     mainWindow.title("Assembly")
 
-    def onClick(partNum, minusQty):
-        if partNum1 == "" or minusQty == "":
+    def onClick(chassisNum, chassisQty, engNum, engQty, whlNum, whlQty):
+        print(partNum)
+        if chassisNum == "" or chassisQty == "" or engNum == "" or engQty == "" or whlNum == "" or whlQty == "":
             tkinter.messagebox.showinfo("Failed", "Fields are required")
             return
 
         answer = tkinter.messagebox.askquestion("Confirmation", "Assembly completed? ")
-        update_query = "UPDATE INVENTORY SET qty = qty - " + str(minusQty) + " WHERE part_no = \"" + partNum + "\";"
+        chas_query = "UPDATE INVENTORY SET qty = qty - " + str(
+            chassisQty) + " WHERE part_no = \"" + chassisNum + "\";"
+        eng_query = "UPDATE INVENTORY SET qty = qty - " + str(
+            engQty) + " WHERE part_no = \"" + engNum + "\";"
+        whl_query = "UPDATE INVENTORY SET qty = qty - " + str(
+            whlQty) + " WHERE part_no = \"" + whlNum + "\";"
         if answer == "yes":
-            cursor.execute(update_query)
+            cursor.execute(chas_query)
+            cursor.execute(eng_query)
+            cursor.execute(whl_query)
+            mydb.commit()
             tkinter.messagebox.showinfo("Confirmation", "Changes made")
 
     def orderNumber():
@@ -112,7 +121,9 @@ def AssyWindow():
 
     style.configure('C.TButton', padding=3, font=("arial", 13, "bold"), background='blue',
                     foreground='blue')
-    enter_button = Button(mainWindow, text="Enter", command=lambda: onClick(partNum1_entry.get(), partNum1_qty.get()), style='C.TButton')
+    enter_button = Button(mainWindow, text="Enter",
+                          command=lambda: onClick(chassis.get(), partNum1_qty.get(), engine.get(), partNum2_qty.get(),
+                                                  wheel.get(), partNum3_qty.get()), style='C.TButton')
     reset_button = Button(mainWindow, text="Reset", command=reset, style='C.TButton')
 
     partNum1_entry = OptionMenu(mainWindow, chassis, *chassis_list)
@@ -143,7 +154,7 @@ def AssyWindow():
     mainWindow.mainloop()
 
     #Test code to show the difference in quantities
-    cursor.execute("SELECT * FROM inventory WHERE part_no = \"01-444\";")
+    cursor.execute("SELECT * FROM inventory WHERE part_no = \"0X1233\";")
     txt = cursor.fetchall()
     print(txt)
     mydb.commit()

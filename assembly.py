@@ -2,13 +2,14 @@ from tkinter import *
 from tkinter.ttk import *
 import tkinter.messagebox
 import mysql.connector
+import itertools
 
 
 def AssyWindow():
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        passwd="test",
+        passwd="Test",
         database="inventory_system"
     )
 
@@ -22,8 +23,21 @@ def AssyWindow():
     partNum = ""
 
     login_query = "SELECT * FROM employees WHERE employee_id = \"" + workerID + "\";"
+    chassis_query = "SELECT part_no FROM inventory WHERE part_type = \"Chassis\";"
+    engine_query = "SELECT part_no FROM inventory WHERE part_type = \"Engine\";"
+    wheel_query = "SELECT part_no FROM inventory WHERE part_type = \"Wheel\";"
 
+    cursor.execute(chassis_query)
+    chassis_list = cursor.fetchall()
+    chassis_list = list(itertools.chain(*chassis_list))
 
+    cursor.execute(engine_query)
+    engine_list = cursor.fetchall()
+    engine_list = list(itertools.chain(*engine_list))
+
+    cursor.execute(wheel_query)
+    wheel_list = cursor.fetchall()
+    wheel_list = list(itertools.chain(*wheel_list))
     # print(query)
 
     cursor.execute(login_query)
@@ -41,6 +55,10 @@ def AssyWindow():
     mainWindow.title("Assembly")
 
     def onClick(partNum, minusQty):
+        if partNum1 == "" or minusQty == "":
+            tkinter.messagebox.showinfo("Failed", "Fields are required")
+            return
+
         answer = tkinter.messagebox.askquestion("Confirmation", "Assembly completed? ")
         update_query = "UPDATE INVENTORY SET qty = qty - " + str(minusQty) + " WHERE part_no = \"" + partNum + "\";"
         if answer == "yes":
@@ -64,6 +82,15 @@ def AssyWindow():
         partNum3Qty.set("")
         return
 
+    chassis = StringVar(mainWindow)
+    chassis.set(chassis_list[0])
+
+    engine = StringVar(mainWindow)
+    engine.set(engine_list[0])
+
+    wheel = StringVar(mainWindow)
+    wheel.set(wheel_list[0])
+
     #Instantiating text variables
     partNum1 = StringVar()
     partNum2 = StringVar()
@@ -80,17 +107,17 @@ def AssyWindow():
 
     qty_label = Label(mainWindow, text="Qty", font=("arial", 13, "bold"))
     partNum1_label = Label(mainWindow, text="Chassis: ", font=("arial", 13, "bold"))
-    partNum2_label = Label(mainWindow, text="Wheels: ", font=("arial", 13, "bold"))
-    partNum3_label = Label(mainWindow, text="Antenna:  ", font=("arial", 13, "bold"))
+    partNum2_label = Label(mainWindow, text="Engine: ", font=("arial", 13, "bold"))
+    partNum3_label = Label(mainWindow, text="Wheel:  ", font=("arial", 13, "bold"))
 
     style.configure('C.TButton', padding=3, font=("arial", 13, "bold"), background='blue',
                     foreground='blue')
     enter_button = Button(mainWindow, text="Enter", command=lambda: onClick(partNum1_entry.get(), partNum1_qty.get()), style='C.TButton')
     reset_button = Button(mainWindow, text="Reset", command=reset, style='C.TButton')
 
-    partNum1_entry = Entry(mainWindow, textvariable=partNum1)
-    partNum2_entry = Entry(mainWindow, textvariable=partNum2)
-    partNum3_entry = Entry(mainWindow, textvariable=partNum3)
+    partNum1_entry = OptionMenu(mainWindow, chassis, *chassis_list)
+    partNum2_entry = OptionMenu(mainWindow, engine, *engine_list)
+    partNum3_entry = OptionMenu(mainWindow, wheel, *wheel_list)
     partNum1_qty = Entry(mainWindow, width=5, textvariable=partNum1Qty)
     partNum2_qty = Entry(mainWindow, width=5, textvariable=partNum2Qty)
     partNum3_qty = Entry(mainWindow, width=5, textvariable=partNum3Qty)
@@ -117,10 +144,10 @@ def AssyWindow():
 
     #Test code to show the difference in quantities
     cursor.execute("SELECT * FROM inventory WHERE part_no = \"01-444\";")
-    print(cursor.fetchall())
+    txt = cursor.fetchall()
+    print(txt)
     mydb.commit()
-    print(cursor.fetchall())
-
+    print(txt)
     #Closes cursor and mydb
     cursor.close()
     mydb.close()

@@ -51,31 +51,31 @@ class inventory:
         self.tree.grid() #Arrange all the TreeView parts in a grid.
         
         #Connect to the database if possible.
-        connection=mysql.connector.connect(host="localhost",
-        user="root",password="T1t@n1umus",
-        auth_plugin="mysql_native_password", database="inventory")
-        if connection.is_connected():
-            db_Info = newConnect.get_server_info()
-            print("Connected to MySQL Server version ", db_Info)
-            cursor = connection.cursor()
-            cursor.execute("select database()")
-            records = cursor.fetchone()
-            print("Connected to database called ", record)
-
-            #Print all the database records onto the GUI.
-            printAll = "SELECT * FROM inventory"
-            cursor.execute(printAll)
-            records  = cursor.fetchall()
+##        connection=mysql.connector.connect(host="localhost",
+##        user="root",password="T1t@n1umus",
+##        auth_plugin="mysql_native_password", database="inventory")
+##        if connection.is_connected():
+##            db_Info = newConnect.get_server_info()
+##            print("Connected to MySQL Server version ", db_Info)
+##            cursor = connection.cursor()
+##            cursor.execute("select database()")
+##            records = cursor.fetchone()
+##            print("Connected to database called ", record)
+##
+##            #Print all the database records onto the GUI.
+##            printAll = "SELECT * FROM inventory"
+##            cursor.execute(printAll)
+##            records  = cursor.fetchall()
 
 ##            #Query command when intiating searches
 ##            search_query = "SELECT * FROM inventory WHERE part_name = searchEntry"
 ##            cursor.execute(search_query)
 ##            records = cursor.fetchall()
             
-        if (connection.is_connected()):
-            cursor.close()
-            connection.close()
-            print("MySQL connection closed.")
+##        if (connection.is_connected()):
+##            cursor.close()
+##            connection.close()
+##            print("MySQL connection closed.")
 
     #def search_list(self):
         # If search button is pressed, search through the entire list by inputted entry.

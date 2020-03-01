@@ -8,8 +8,8 @@ import mysql.connector
 class in_progress:
     def __init__(self,master):
         self.master=master
-        self.tree=ttk.Treeview(master, column=("column",
-        "column1", "column2", "column3", "column4")) #Needed to create new columns
+        self.tree=ttk.Treeview(master, column=("column", "column1",
+        "column2", "column3", "column4")) #Needed to create new columns
         self.master.title("Work In Progress")
         searchEntry = StringVar()
         self.master.resizable(False, False) #Don't allow users to resize window.
@@ -51,31 +51,31 @@ class in_progress:
         self.tree.grid() #Arrange all the TreeView parts in a grid.
 
         #Connect to the database if possible.
-        connection=mysql.connector.connect(host="localhost",
-        user="root",password="T1t@n1umus",auth_plugin="mysql_native_password",
-        database="work_in_progress")
-        if connection.is_connected():
-            db_Info = newConnect.get_server_info()
-            print("Connected to MySQL Server version ", db_Info)
-            cursor = connection.cursor()
-            cursor.execute("select database()")
-            records = cursor.fetchone()
-            print("Connected to database called ", record)
-
-            #Print all the database records onto the GUI.
-            printAll = "SELECT * FROM work_in_progress"
-            cursor.execute(printAll)
-            records  = cursor.fetchall()
+##        connection=mysql.connector.connect(host="localhost",
+##        user="root",password="T1t@n1umus",
+##        auth_plugin="mysql_native_password", database="work_in_progress")
+##        if connection.is_connected():
+##            db_Info = newConnect.get_server_info()
+##            print("Connected to MySQL Server version ", db_Info)
+##            cursor = connection.cursor()
+##            cursor.execute("select database()")
+##            records = cursor.fetchone()
+##            print("Connected to database called ", record)
+##
+##            #Print all the database records onto the GUI.
+##            printAll = "SELECT * FROM work_in_progress"
+##            cursor.execute(printAll)
+##            records  = cursor.fetchall()
 
 ##            #Query command when intiating searches
 ##            search_query = "SELECT * FROM work_in_progress WHERE wo_number = searchEntry"
 ##            cursor.execute(search_query)
 ##            records = cursor.fetchall()
 
-        if (connection.is_connected()):
-            cursor.close()
-            connection.close()
-            print("MySQL connection closed.")
+##        if (connection.is_connected()):
+##            cursor.close()
+##            connection.close()
+##            print("MySQL connection closed.")
 
     #def search_list(self):
         # If search button is pressed, search through the entire list by inputted entry.

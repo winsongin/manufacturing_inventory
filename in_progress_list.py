@@ -1,10 +1,7 @@
-
 from tkinter import *
 import tkinter as tk
 from tkinter import ttk
 import mysql.connector
-from mysql.connector import Error
-from mysql.connector import errorcode
 
 # In Progress List
 
@@ -29,11 +26,13 @@ class in_progress:
         self.lETA = Label(self.master, text="Estimated Time of Arrival")
         self.eSearch = Entry(self.master, textvariable=searchEntry, width=25)
         self.bSearch = Button(self.master, text="Search")
+        self.bQuit = Button(self.master, text="Quit", command=self.master.destroy)
         
         # Now arrange all of the parts above in a grid.
         self.lTitle.grid(row=0, column=0, sticky=E+W)
         self.eSearch.grid(row=0, column=1, sticky=E)
         self.bSearch.grid(row=0, column=2, sticky=E)
+        self.bQuit.grid(row=1, column=2)
 
         # Create the columns and headings below
         self.tree.column("#0", minwidth=0, width=0)
@@ -51,37 +50,32 @@ class in_progress:
         self.tree.configure(height=20)
         self.tree.grid() #Arrange all the TreeView parts in a grid.
 
-    def connectSQL(self):
-        try:
-            #Connect to the database if possible.
-            connection=mysql.connector.connect(host="127.0.0.1",
-            user="root",password="T1t@n1umus",auth_plugin="mysql_native_password",
-            database="work_in_progress")
-            if connection.is_connected():
-                db_Info = newConnect.get_server_info()
-                print("Connected to MySQL Server version ", db_Info)
-                cursor = connection.cursor()
-                cursor.execute("select database()")
-                records = cursor.fetchone()
-                print("Connected to database called ", record)
+        #Connect to the database if possible.
+        connection=mysql.connector.connect(host="localhost",
+        user="root",password="T1t@n1umus",auth_plugin="mysql_native_password",
+        database="work_in_progress")
+        if connection.is_connected():
+            db_Info = newConnect.get_server_info()
+            print("Connected to MySQL Server version ", db_Info)
+            cursor = connection.cursor()
+            cursor.execute("select database()")
+            records = cursor.fetchone()
+            print("Connected to database called ", record)
 
-                #Print all the database records onto the GUI.
-                printAll = "SELECT * FROM work_in_progress"
-                cursor.execute(printAll)
-                records  = cursor.fetchall()
+            #Print all the database records onto the GUI.
+            printAll = "SELECT * FROM work_in_progress"
+            cursor.execute(printAll)
+            records  = cursor.fetchall()
 
-                #Query command when intiating searches
-                search_query = "SELECT * FROM work_in_progress WHERE wo_number = searchEntry"
-                cursor.execute(search_query)
-                records = cursor.fetchall()
-                
-        except Error as e:
-            print("An unexpected error occured.")
-        finally:
-            if (connection.is_connected()):
-                cursor.close()
-                connection.close()
-                print("MySQL connection closed.")
+##            #Query command when intiating searches
+##            search_query = "SELECT * FROM work_in_progress WHERE wo_number = searchEntry"
+##            cursor.execute(search_query)
+##            records = cursor.fetchall()
+
+        if (connection.is_connected()):
+            cursor.close()
+            connection.close()
+            print("MySQL connection closed.")
 
     #def search_list(self):
         # If search button is pressed, search through the entire list by inputted entry.

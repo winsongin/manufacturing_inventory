@@ -5,6 +5,7 @@ import sys
 import random
 import tkinter as tk
 
+myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "winsongin", database = inventory_system)
 
 root = tk.Tk()
 root.geometry("600x500")
@@ -21,9 +22,9 @@ def estimatedTimeOfArrival():
     return eta
 
 # TODO: need to ensure that the number generated doesn't already exists in the database
-def workOrder(): 
-    workOrder = random.randint(1, 100)
-    print("Work Order #: ", workOrder)
+# def workOrder(): 
+#     workOrder = random.randint(1, 100)
+#     print("Work Order #: ", workOrder)
 
 # Prints the Date/Time
 dateTimeInput = tk.StringVar()
@@ -55,7 +56,7 @@ workerIDEntry = tk.Entry(root, textvariable=workerIDInput, highlightbackground="
 workerIDLabel.place(x=40, y=300)
 workerIDEntry.place(x=150, y=300)
 
-# myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "ForSchoolUse", database = userInput)
+# myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "winsongin", database = inventory_system)
     
 # # TODO: workerId should be checked in the database to ensure that it is an authorized user/employee
 # def workerId(): 
@@ -66,10 +67,19 @@ workerIDEntry.place(x=150, y=300)
 #         print("WorkerId is 5 digits. Please try again.")
 #         workerId = input("Enter your workerId: ")
 
-# def onSubmit():
+def onSubmit():
+    myCursor = myDb.cursor()
+    workOrder = workOrderEntry.get()
+    dateTime = dateTime()
+    eta = estimatedTimeOfArrival()
+    querydateTime = "INSERT INTO work_in_progress (wo_number, date_recv, eta) VALUES (%s, %s, %s)"
+    val = (workOrder, dateTime, eta)
+    myCursor.execute(querydateTime, val)
+
+myDb.commit()
 
 
-submit = tk.Button(root, text="Submit", bg='red', highlightbackground="light gray")
+submit = tk.Button(root, text="Submit", bg='red', highlightbackground="light gray", command=onSubmit)
 submit.place(x=250, y=400)
 
 root.mainloop()

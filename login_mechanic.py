@@ -15,9 +15,9 @@ mydb = sql.connect(
 
 cur = mydb.cursor()
 
-def finddept(p):
+def finddept(uid):
     d = []
-    statement = ("select dept from employees where last_name= '{}'").format(p)
+    statement = ("select dept from employees where employee_id= '{}'").format(uid)
     cur.execute(statement)
     results = cur.fetchall()
     for x in results:

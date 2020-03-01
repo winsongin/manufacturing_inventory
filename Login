@@ -17,14 +17,14 @@ mydb = sql.connect(
         )
 
 cur = mydb.cursor()
-u = []
+uid = []
 p = []
-statement = "select first_name from employees"
+statement = "select employee_id from employees"
 cur.execute(statement)
 results = cur.fetchall()
 for x in results:
-    u.append(x)
-statement = "select last_name from employees"
+    uid.append(x)
+statement = "select pass from employees"
 cur.execute(statement)
 results = cur.fetchall()
 for x in results:
@@ -36,7 +36,7 @@ def login():
     lock = True
     found = False
     name = eUsername.get()
-    for x in u:
+    for x in uid:
         ts = ''.join(x)
         if ts == name:
             found_user = ts
@@ -49,7 +49,7 @@ def login():
             lock = False
     if found == True and lock == False:
         print('Logged in')
-        finddept(found_pass)
+        finddept(found_user)
 
 #Window Creation
 win = tk.Tk()

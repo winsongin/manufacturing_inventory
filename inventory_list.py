@@ -10,8 +10,8 @@ from mysql.connector import errorcode
 class inventory:
     def __init__(self,master):
         self.master=master
-        self.tree=ttk.Treeview(master, column=
-        ("column", "column1", "column2", "column3"))#Needed to create new columns
+        self.tree=ttk.Treeview(master, column= ("column", "column1",
+        "column2", "column3", "column4"))#Needed to create new columns
         self.master.title("Inventory List")
         searchEntry = StringVar()
         self.master.resizable(False, False) #Don't allow users to resize window.
@@ -25,6 +25,7 @@ class inventory:
         self.lPartNum = Label(self.master, text="Part No.")
         self.lManufact = Label(self.master, text="Manfacturer")
         self.lQuantity = Label(self.master, text="Quantity")
+        self.lPartType = Label(self.master, text="Part Type")
         self.eSearch = Entry(self.master, textvariable=searchEntry, width=30)
         self.bSearch = Button(self.master, text="Search")
 
@@ -43,6 +44,8 @@ class inventory:
         self.tree.column("#3", minwidth=0, width=125)
         self.tree.heading("#4", text="Quantity")
         self.tree.column("#4", minwidth=0, width=100)
+        self.tree.heading("#5", text="Part Type")
+        self.tree.column("#5", minwidth=0, width=125)
 
         self.tree.configure(height=20)
         self.tree.grid() #Arrange all the TreeView parts in a grid.

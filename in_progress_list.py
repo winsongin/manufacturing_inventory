@@ -53,7 +53,7 @@ class in_progress:
         #Connect to the database if possible.
         connection=mysql.connector.connect(host="localhost",
         user="root",password="T1t@n1umus",
-        auth_plugin="mysql_native_password", database="inventory")
+        auth_plugin="mysql_native_password", database="inventory_system")
         if connection.is_connected():
             db_Info = connection.get_server_info()
             print("Connected to MySQL Server version ", db_Info)

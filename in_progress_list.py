@@ -51,31 +51,37 @@ class in_progress:
         self.tree.grid() #Arrange all the TreeView parts in a grid.
 
         #Connect to the database if possible.
-##        connection=mysql.connector.connect(host="localhost",
-##        user="root",password="T1t@n1umus",
-##        auth_plugin="mysql_native_password", database="work_in_progress")
-##        if connection.is_connected():
-##            db_Info = newConnect.get_server_info()
-##            print("Connected to MySQL Server version ", db_Info)
-##            cursor = connection.cursor()
-##            cursor.execute("select database()")
-##            records = cursor.fetchone()
-##            print("Connected to database called ", record)
-##
-##            #Print all the database records onto the GUI.
-##            printAll = "SELECT * FROM work_in_progress"
-##            cursor.execute(printAll)
-##            records  = cursor.fetchall()
+        connection=mysql.connector.connect(host="localhost",
+        user="root",password="T1t@n1umus",
+        auth_plugin="mysql_native_password", database="inventory")
+        if connection.is_connected():
+            db_Info = connection.get_server_info()
+            print("Connected to MySQL Server version ", db_Info)
+            cursor = connection.cursor()
+            cursor.execute("select database()")
+            records = cursor.fetchone()
+            print("Connected to database called ", records)
+
+            #Print all the database records onto the GUI.
+            printAll = "SELECT * FROM work_in_progress"
+            cursor.execute(printAll)
+            records  = cursor.fetchall()
+            for row in records:
+                print("Work Number: ", row[0])
+                print("Status: ", row[1])
+                print("Company: ", row[2])
+                print("Date Received: ", row[3])
+                print("ETA: ", row[4])
 
 ##            #Query command when intiating searches
 ##            search_query = "SELECT * FROM work_in_progress WHERE wo_number = searchEntry"
 ##            cursor.execute(search_query)
 ##            records = cursor.fetchall()
 
-##        if (connection.is_connected()):
-##            cursor.close()
-##            connection.close()
-##            print("MySQL connection closed.")
+        if (connection.is_connected()):
+            cursor.close()
+            connection.close()
+            print("MySQL connection closed.")
 
     #def search_list(self):
         # If search button is pressed, search through the entire list by inputted entry.

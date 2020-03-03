@@ -1,24 +1,43 @@
 from datetime import datetime, timedelta
-# import time as tm
+import time as tm
 import mysql.connector
 import sys
 import random
 import tkinter as tk
 
-myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "winsongin", database = inventory_system)
+myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "Razgriz!949", database = "inventory_system")
 
 root = tk.Tk()
 root.geometry("600x500")
 root.title("Receiving")
 root.configure(bg="light gray")
 
-def dateTime():
+
+def datentime():
     now = datetime.now()
+    now = now.strftime("%m/%d/%Y, %H:%M:%S")
+    #print(type(now))
     return now
+
+
+def onSubmit():
+    myCursor = myDb.cursor()
+    workOrder = workOrderEntry.get()
+    dateTimeVar = datentime()
+    print(type(dateTimeVar))
+    eta = estimatedTimeOfArrival()
+    val = workOrder + "\",\"" + dateTimeVar + "\",\"" + eta + "\",\"Assembly\",\"Best Buy\");"
+    querydateTime = "INSERT INTO work_in_progress (wo_number, date_recv, eta, status, company) VALUES (\"" + val
+    print(querydateTime)
+    myCursor.execute(querydateTime)
+    myDb.commit()
+
 
 # ETA of manufacturing a product is roughly 2 hours after the work order is received
 def estimatedTimeOfArrival(): 
     eta = (datetime.now() + timedelta(hours=2))
+    eta = eta.strftime("%m/%d/%Y, %H:%M:%S")
+    print(eta)
     return eta
 
 # TODO: need to ensure that the number generated doesn't already exists in the database
@@ -30,7 +49,7 @@ def estimatedTimeOfArrival():
 dateTimeInput = tk.StringVar()
 dateTimeLabel = tk.Label(root, text="Date/Time:", bg="light gray")
 dateTimeEntry = tk.Entry(root, textvariable=dateTimeInput, highlightbackground="light gray", width=25)
-dateTimeInput.set(dateTime())
+dateTimeInput.set(datentime())
 dateTimeLabel.place(x=40, y= 20)
 dateTimeEntry.place(x=150, y= 20)
 
@@ -67,16 +86,10 @@ workerIDEntry.place(x=150, y=300)
 #         print("WorkerId is 5 digits. Please try again.")
 #         workerId = input("Enter your workerId: ")
 
-def onSubmit():
-    myCursor = myDb.cursor()
-    workOrder = workOrderEntry.get()
-    dateTime = dateTime()
-    eta = estimatedTimeOfArrival()
-    querydateTime = "INSERT INTO work_in_progress (wo_number, date_recv, eta) VALUES (%s, %s, %s)"
-    val = (workOrder, dateTime, eta)
-    myCursor.execute(querydateTime, val)
 
-myDb.commit()
+
+#This should be put within onSumbit() function.
+#myDb.commit()
 
 
 submit = tk.Button(root, text="Submit", bg='red', highlightbackground="light gray", command=onSubmit)

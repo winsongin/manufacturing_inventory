@@ -6,7 +6,7 @@ mydb = mysql.connector.connect(
   host= "localhost",
   user= "root",
   passwd= "Omar131997",
-    database = "inventory_system_employees"
+    database = "employees"
 )
 
 mycursor = mydb.cursor()
@@ -24,13 +24,16 @@ mainWindow.geometry("600x500")#Resizing window
 
 mainWindow.title("Testing") #giving window a title
 
-def onClick():#funcion to out
-    answer = tkinter.messagebox.askquestion("Results", "Are these tests correct? ")
-    if answer == "yes":
-        tkinter.messagebox.showinfo("Results", "All Test Pass")
 
-    number = Label(mainWindow, text="PASS" , font=("arial", 30, "bold"))
-    number.place(x=225, y=400)
+def onClick():#funcion to out
+    a = 5
+    b = 12
+    answer = tkinter.messagebox.askquestion("Results", "Are these tests correct? ")
+    if answer == "yes" and a >= int(entry3.get()) >= b:
+        tkinter.messagebox.showinfo("Results", "All Test Pass")
+    else:
+        tkinter.messagebox.showinfo("Results", "All Test Failed")
+
 def orderNumber():
     number = Label(mainWindow, text = 123456789, font = ("arial", 15, "bold"))
     number.place(x = 225, y = 80)
@@ -65,9 +68,9 @@ enter_button = Button(mainWindow, text = "Enter", bg = "blue", fg = "white",  co
 reset_button = Button(mainWindow, text = "Reset", command = reset, bg = "blue", fg = "white", font = ("arial", 13, "bold"))
 #User input
 entry3 = Entry(mainWindow)
-entry4 = Entry(mainWindow)
-entry5 = Entry(mainWindow)
-entry6 = Entry(mainWindow)
+# entry4 = Entry(mainWindow)
+# entry5 = Entry(mainWindow)
+# entry6 = Entry(mainWindow)
 
 #Placing all Labels and Buttons on to window.
 testing_label.place(x = 130, y = 10)
@@ -88,36 +91,8 @@ enter_button.place(x = 400, y = 315 )
 reset_button.place(x = 320, y = 315 )
 
 entry3.place(x = 310, y = 160)
-entry4.place(x = 310, y = 190)
-entry5.place(x = 310, y = 220)
-entry6.place(x = 310, y = 250)
+# entry4.place(x = 310, y = 190)
+# entry5.place(x = 310, y = 220)
+# entry6.place(x = 310, y = 250)
 
 mainWindow.mainloop()
-
-# mainWindow = Tk()
-
-# topFrame = Frame(mainWindow)
-# topFrame.pack()
-#
-# bottomFrame = Frame(mainWindow)
-# bottomFrame.pack(side = BOTTOM)
-
-#Here we create the buttons:
-# button1 = Button(topFrame, text = "Button 1", fg = "red") #fg(ForGround Color/text Color) is for a color.
-# button2 = Button(topFrame, text = "Button 2", fg = "blue") #bg(BackGround Color)
-# button3 = Button(topFrame, text = "Button 3", fg = "green")
-# button4 = Button(bottomFrame, text = "Button 4", fg = "purple")
-#
-# one = Label(mainWindow, text = "Hello World!", bg = "blue", fg = "white")
-# two = Label(mainWindow, text = "How are you!", bg = "red", fg = "black")
-
-#Here we display the buttons:
-#By default, pack makes the buttons stack on top of each other.
-# button1.pack(side = LEFT)
-# button2.pack(side = LEFT)
-# button3.pack(side = LEFT)
-# button4.pack(side = BOTTOM)
-# one.pack(fill = X) #Fill makes the widget as big as can be on the X axis.
-# two.pack(side = LEFT, fill = Y) #filling the Y axis
-
-# mainWindow.mainloop() #this will continue displaying window until we close it.

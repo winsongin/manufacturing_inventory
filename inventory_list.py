@@ -73,19 +73,16 @@ class inventory:
                 print("Quantity: ", row[3])
                 print("Part Type: ", row[4])
 
-##            #Query command when intiating searches
-##            search_query = "SELECT * FROM inventory WHERE part_name = searchEntry"
-##            cursor.execute(search_query)
-##            records = cursor.fetchall()
+            counter = 0
+            for row in records:
+                self.tree.insert('', 'end', values=
+                (row[0],row[1],row[2],row[3],row[4]))
+                counter += 1
             
         if (connection.is_connected()):
             cursor.close()
             connection.close()
             print("MySQL connection closed.")
-
-    #def search_list(self):
-        # If search button is pressed, search through the entire list by inputted entry.
-
 
 if __name__ == "__main__":
     window = Tk()

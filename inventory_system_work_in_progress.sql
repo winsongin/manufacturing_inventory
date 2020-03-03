@@ -26,8 +26,8 @@ CREATE TABLE `work_in_progress` (
   `wo_number` varchar(7) NOT NULL,
   `status` varchar(10) NOT NULL,
   `company` varchar(45) NOT NULL,
-  `date_recv` date DEFAULT NULL,
-  `eta` date DEFAULT NULL,
+  `date_recv` mediumtext,
+  `eta` mediumtext,
   PRIMARY KEY (`wo_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Shows data for all open work orders';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -38,7 +38,7 @@ CREATE TABLE `work_in_progress` (
 
 LOCK TABLES `work_in_progress` WRITE;
 /*!40000 ALTER TABLE `work_in_progress` DISABLE KEYS */;
-INSERT INTO `work_in_progress` VALUES ('00001','Receiving','Target',NULL,NULL),('00002','Assembly','Best Buy',NULL,NULL),('00003','Testing','Walmart',NULL,NULL),('00004','Shipping','Microcenter',NULL,NULL),('00005','Assembly','Microcenter',NULL,NULL),('00006','Testing','Best Buy',NULL,NULL),('00007','Testing','Walmart',NULL,NULL);
+INSERT INTO `work_in_progress` VALUES ('00001','Receiving','Target',NULL,NULL),('00002','Assembly','Best Buy',NULL,NULL),('00003','Testing','Walmart',NULL,NULL),('00004','Shipping','Microcenter',NULL,NULL),('00005','Assembly','Microcenter',NULL,NULL),('00006','Testing','Best Buy',NULL,NULL),('00007','Testing','Walmart',NULL,NULL),('12345','Assembly','Best Buy','03/01/2020, 18:00:03','03/01/2020, 20:00:03');
 /*!40000 ALTER TABLE `work_in_progress` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-02-29 14:12:45
+-- Dump completed on 2020-03-02 21:53:26

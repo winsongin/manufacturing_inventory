@@ -73,19 +73,16 @@ class in_progress:
                 print("Date Received: ", row[3])
                 print("ETA: ", row[4])
 
-##            #Query command when intiating searches
-##            search_query = "SELECT * FROM work_in_progress WHERE wo_number = searchEntry"
-##            cursor.execute(search_query)
-##            records = cursor.fetchall()
+            counter = 0
+            for row in records:
+                self.tree.insert('', 'end', values=
+                (row[0],row[1],row[2],row[3],row[4]))
+                counter += 1
 
         if (connection.is_connected()):
             cursor.close()
             connection.close()
             print("MySQL connection closed.")
-
-    #def search_list(self):
-        # If search button is pressed, search through the entire list by inputted entry.
-
                 
 if __name__ == "__main__":
     window = Tk()

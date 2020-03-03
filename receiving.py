@@ -5,7 +5,7 @@ import sys
 import random
 import tkinter as tk
 
-myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "Razgriz!949", database = "inventory_system")
+myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "winsongin", database = "inventory_system")
 
 root = tk.Tk()
 root.geometry("600x500")

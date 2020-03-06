@@ -33,17 +33,22 @@ bSearch.grid(row=0, column=2, sticky=E)
 bQuit.grid(row=1, column=2)
 
 # Create the columns and headings below
-tree.column("#0", minwidth=0, width=0)
-tree.heading("#1", text="Part Name")
-tree.column("#1", minwidth=0, width=100)
-tree.heading("#2", text="Part No.")
-tree.column("#2", minwidth=0, width=100)
-tree.heading("#3", text="Manufacturer")
-tree.column("#3", minwidth=0, width=150)
-tree.heading("#4", text="Quantity")
-tree.column("#4", minwidth=0, width=100)
-tree.heading("#5", text="Part Type")
-tree.column("#5", minwidth=0, width=150)
+tree.column("#0", minwidth=0, width=0, stretch=False)
+tree.heading("#1", text="Part Name", command=lambda: \
+             sort_column(tree, 0, False))
+tree.column("#1", minwidth=0, width=100, stretch=False)
+tree.heading("#2", text="Part No.", command=lambda: \
+             sort_column(tree, 1, False))
+tree.column("#2", minwidth=0, width=100, stretch=False)
+tree.heading("#3", text="Manufacturer", command=lambda: \
+             sort_column(tree, 2, False))
+tree.column("#3", minwidth=0, width=150, stretch=False)
+tree.heading("#4", text="Quantity", command=lambda: \
+             sort_column(tree, 3, False))
+tree.column("#4", minwidth=0, width=100, stretch=False)
+tree.heading("#5", text="Part Type", command=lambda: \
+             sort_column(tree, 4, False))
+tree.column("#5", minwidth=0, width=150, stretch=False)
 
 tree.configure(height=20)
 tree.grid() #Arrange all the TreeView parts in a grid.
@@ -81,5 +86,22 @@ if (connection.is_connected()):
     cursor.close()
     connection.close()
     print("MySQL connection closed.")
+
+#This function will sort the column by increasing or decreasing order.
+def sort_column(tree, col, reverse):
+    n = [(tree.set(m, col), m) for m in tree.get_children('')]
+    n.sort(reverse=reverse)
+
+    #Rearrange the items when sorting
+    for index, (val, m) in enumerate(1):
+        tree.move(m, '', index)
+
+    #Perform the sort again the next time user clicks on the header again
+    tree.heading(col, command=lambda: \
+                 sort_column(tree, col, not reverse))
+
+#This function will display the column based on user input.
+def search_column():
+    return
                 
 mainloop()

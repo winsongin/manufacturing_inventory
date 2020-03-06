@@ -23,8 +23,53 @@ lManufact = Label(master, text="Manfacturer")
 lQuantity = Label(master, text="Quantity")
 lPartType = Label(master, text="Part Type")
 eSearch = Entry(master, textvariable=searchEntry, width=30)
-bSearch = Button(master, text="Search")
+bSearch = Button(master, text="Search", command=lambda: search_columns)
 bQuit = Button(master, text="Quit", command=master.destroy)
+
+#This function will display the column based on user input.
+def search_columns():
+    connection=mysql.connector.connect(host="localhost",
+    user="root",password="T1t@n1umus",
+    auth_plugin="mysql_native_password", database="inventory_system")
+    if connection.is_connected():
+        db_Info = connection.get_server_info()
+        print("Connected to MySQL Server version ", db_Info)
+        cursor = connection.cursor()
+        cursor.execute("select database()")
+        records = cursor.fetchone()
+        print("Connected to database called ", records)
+
+        #Print all the database records onto the GUI.
+        querySearch = "SELECT * FROM inventory WHERE part_name = %s"
+        global queryInput
+        queryInput = searchEntry.get()
+        cursor.execute(querySearch, queryInput)
+        records  = cursor.fetchall()
+        for row in records:
+            print("Part Name: ", row[0])
+            print("Part Number: ", row[1])
+            print("Manufacturer: ", row[2])
+            print("Quantity: ", row[3])
+            print("Part Type: ", row[4])
+
+        counter = 0
+        for row in records:
+            tree.insert('', 'end', values=
+            (row[0],row[1],row[2],row[3],row[4]))
+            counter += 1
+
+#This function will sort the column by increasing or decreasing order.
+def sort_column(tree, col, reverse):
+    n = [(tree.set(m, col), m) for m in tree.get_children('')]
+    n.sort(reverse=reverse)
+
+    #Rearrange the items when sorting
+    for index, (val, m) in enumerate(1):
+        tree.move(m, '', index)
+
+    #Perform the sort again the next time user clicks on the header again
+    tree.heading(col, command=lambda: \
+                 sort_column(tree, col, not reverse))
 
 # Now arrange all of the parts above in a grid.
 lTitle.grid(row=0, column=0, sticky=E+W)
@@ -56,7 +101,7 @@ tree.grid() #Arrange all the TreeView parts in a grid.
 #Connect to the database if possible.
 connection=mysql.connector.connect(host="localhost",
 user="root",password="T1t@n1umus",
-auth_plugin="mysql_native_password", database="inventory")
+auth_plugin="mysql_native_password", database="inventory_system")
 if connection.is_connected():
     db_Info = connection.get_server_info()
     print("Connected to MySQL Server version ", db_Info)
@@ -86,22 +131,5 @@ if (connection.is_connected()):
     cursor.close()
     connection.close()
     print("MySQL connection closed.")
-
-#This function will sort the column by increasing or decreasing order.
-def sort_column(tree, col, reverse):
-    n = [(tree.set(m, col), m) for m in tree.get_children('')]
-    n.sort(reverse=reverse)
-
-    #Rearrange the items when sorting
-    for index, (val, m) in enumerate(1):
-        tree.move(m, '', index)
-
-    #Perform the sort again the next time user clicks on the header again
-    tree.heading(col, command=lambda: \
-                 sort_column(tree, col, not reverse))
-
-#This function will display the column based on user input.
-def search_column():
-    return
                 
 mainloop()

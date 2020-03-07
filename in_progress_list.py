@@ -17,10 +17,50 @@ master.grid_columnconfigure(0, weight=1)
 
 #This function will display the column based on user input.
 def search_columns():
-    connection=mysql.connector.connect(host="localhost",
-    user="root",password="T1t@n1umus",
-    auth_plugin="mysql_native_password", database="inventory_system")
-    if connection.is_connected():
+    global queryInput
+    queryInput = searchEntry.get()
+
+    #Delete all of the entries in the tree first.
+    tree.delete(*tree.get_children())
+
+    #Display all of the data if nothing is entered in the search box.
+    if (len(queryInput) == 0):
+        connection=mysql.connector.connect(host="localhost",
+        user="root",password="T1t@n1umus",
+        auth_plugin="mysql_native_password", database="inventory_system")
+        db_Info = connection.get_server_info()
+        print("Connected to MySQL Server version ", db_Info)
+        cursor = connection.cursor()
+        cursor.execute("select database()")
+        records = cursor.fetchone()
+        print("Connected to database called ", records)
+
+        #Print all the database records onto the GUI.
+        querySearch = "SELECT * FROM work_in_progress"
+        cursor.execute(querySearch)
+        records  = cursor.fetchall()
+        for row in records:
+            print("Work Number: ", row[0])
+            print("Status: ", row[1])
+            print("Company: ", row[2])
+            print("Date Received: ", row[3])
+            print("ETA: ", row[4])
+
+        counter = 0
+        for row in records:
+            tree.insert('', 'end', values=
+            (row[0],row[1],row[2],row[3],row[4]))
+            counter += 1
+                
+        cursor.close()
+        connection.close()
+        print("MySQL connection closed.")
+        
+
+    else:
+        connection=mysql.connector.connect(host="localhost",
+        user="root",password="T1t@n1umus",
+        auth_plugin="mysql_native_password", database="inventory_system")
         db_Info = connection.get_server_info()
         print("Connected to MySQL Server version ", db_Info)
         cursor = connection.cursor()
@@ -30,8 +70,6 @@ def search_columns():
 
         #Print all the database records onto the GUI.
         querySearch = "SELECT * FROM work_in_progress WHERE wo_number = %s"
-        global queryInput
-        queryInput = searchEntry.get()
         cursor.execute(querySearch, queryInput)
         records  = cursor.fetchall()
         for row in records:
@@ -46,6 +84,10 @@ def search_columns():
             tree.insert('', 'end', values=
             (row[0],row[1],row[2],row[3],row[4]))
             counter += 1
+                
+        cursor.close()
+        connection.close()
+        print("MySQL connection closed.")
 
 #This function will sort the column by increasing or decreasing order.
 def sort_column(tree, col, reverse):
@@ -102,34 +144,32 @@ tree.grid() #Arrange all the TreeView parts in a grid.
 connection=mysql.connector.connect(host="localhost",
 user="root",password="T1t@n1umus",
 auth_plugin="mysql_native_password", database="inventory_system")
-if connection.is_connected():
-    db_Info = connection.get_server_info()
-    print("Connected to MySQL Server version ", db_Info)
-    cursor = connection.cursor()
-    cursor.execute("select database()")
-    records = cursor.fetchone()
-    print("Connected to database called ", records)
+db_Info = connection.get_server_info()
+print("Connected to MySQL Server version ", db_Info)
+cursor = connection.cursor()
+cursor.execute("select database()")
+records = cursor.fetchone()
+print("Connected to database called ", records)
 
-    #Print all the database records onto the GUI.
-    printAll = "SELECT * FROM work_in_progress"
-    cursor.execute(printAll)
-    records  = cursor.fetchall()
-    for row in records:
-        print("Work Number: ", row[0])
-        print("Status: ", row[1])
-        print("Company: ", row[2])
-        print("Date Received: ", row[3])
-        print("ETA: ", row[4])
+#Print all the database records onto the GUI.
+printAll = "SELECT * FROM work_in_progress"
+cursor.execute(printAll)
+records  = cursor.fetchall()
+for row in records:
+    print("Work Number: ", row[0])
+    print("Status: ", row[1])
+    print("Company: ", row[2])
+    print("Date Received: ", row[3])
+    print("ETA: ", row[4])
 
-    counter = 0
-    for row in records:
-        tree.insert('', 'end', values=
-        (row[0],row[1],row[2],row[3],row[4]))
-        counter += 1
+counter = 0
+for row in records:
+    tree.insert('', 'end', values=
+    (row[0],row[1],row[2],row[3],row[4]))
+    counter += 1
 
-if (connection.is_connected()):
-    cursor.close()
-    connection.close()
-    print("MySQL connection closed.")
+cursor.close()
+connection.close()
+print("MySQL connection closed.")
                 
 mainloop()

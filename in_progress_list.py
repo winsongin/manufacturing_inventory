@@ -91,16 +91,60 @@ def search_columns():
 
 #This function will sort the column by increasing or decreasing order.
 def sort_column(tree, col, reverse):
-    n = [(tree.set(m, col), m) for m in tree.get_children('')]
-    n.sort(reverse=reverse)
+    #Delete all of the entries in the tree first.
+    tree.delete(*tree.get_children())
 
-    #Rearrange the items when sorting
-    for index, (val, m) in enumerate(1):
-        tree.move(m, '', index)
+    connection=mysql.connector.connect(host="localhost",
+    user="root",password="T1t@n1umus",
+    auth_plugin="mysql_native_password", database="inventory")
+    db_Info = connection.get_server_info()
+    print("Connected to MySQL Server version ", db_Info)
+    cursor = connection.cursor()
+    cursor.execute("select database()")
+    records = cursor.fetchone()
+    print("Connected to database called ", records)
 
-    #Perform the sort again the next time user clicks on the header again
-    tree.heading(col, command=lambda: \
-                 sort_column(tree, col, not reverse))
+    if (col == 0):
+        querySort = "SELECT * FROM work_in_progress ORDER BY wo_number"
+    elif (col == 1):
+        querySort = "SELECT * FROM work_in_progress ORDER BY status"
+    elif (col == 2):
+        querySort = "SELECT * FROM work_in_progress ORDER BY company"
+    elif (col == 3):
+        querySort = "SELECT * FROM work_in_progress ORDER BY date_recv"
+    elif (col == 4):
+        querySort = "SELECT * FROM work_in_progress ORDER BY eta"
+
+    #Print all the database records onto the GUI.
+    cursor.execute(querySort)
+    records  = cursor.fetchall()
+    for row in records:
+        print("Work Number: ", row[0])
+        print("Status: ", row[1])
+        print("Company: ", row[2])
+        print("Date Received: ", row[3])
+        print("ETA: ", row[4])
+
+    counter = 0
+    for row in records:
+        tree.insert('', 'end', values=
+        (row[0],row[1],row[2],row[3],row[4]))
+        counter += 1
+            
+    cursor.close()
+    connection.close()
+    print("MySQL connection closed.")
+    
+##    n = [(tree.set(m, col), m) for m in tree.get_children('')]
+##    n.sort(reverse=reverse)
+##
+##    #Rearrange the items when sorting
+##    for index, (val, m) in enumerate(1):
+##        tree.move(m, '', index)
+##
+##    #Perform the sort again the next time user clicks on the header again
+##    tree.heading(col, command=lambda: \
+##                 sort_column(tree, col, not reverse))
 
 # Configure the labels and the entry below
 lTitle = Label(master, text="Work In Progress")

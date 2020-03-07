@@ -15,17 +15,6 @@ master.resizable(False, False) #Don't allow users to resize window.
 master.grid_rowconfigure(0, weight=1)
 master.grid_columnconfigure(0, weight=1)
 
-# Configure the labels and the entry below
-lTitle = Label(master, text="Work In Progress")
-lWorkNum = Label(master, text="Work #")
-lStatus = Label(master, text="Status")
-lDaysLeft = Label(master, text="Days Until Shipment")
-lDateRecv = Label(master, text="Date Received")
-lETA = Label(master, text="Estimated Time of Arrival")
-eSearch = Entry(master, textvariable=searchEntry, width=25)
-bSearch = Button(master, text="Search", command=lambda: search_columns)
-bQuit = Button(master, text="Quit", command=master.destroy)
-
 #This function will display the column based on user input.
 def search_columns():
     connection=mysql.connector.connect(host="localhost",
@@ -70,6 +59,17 @@ def sort_column(tree, col, reverse):
     #Perform the sort again the next time user clicks on the header again
     tree.heading(col, command=lambda: \
                  sort_column(tree, col, not reverse))
+
+# Configure the labels and the entry below
+lTitle = Label(master, text="Work In Progress")
+lWorkNum = Label(master, text="Work #")
+lStatus = Label(master, text="Status")
+lDaysLeft = Label(master, text="Days Until Shipment")
+lDateRecv = Label(master, text="Date Received")
+lETA = Label(master, text="Estimated Time of Arrival")
+eSearch = Entry(master, textvariable=searchEntry, width=25)
+bSearch = Button(master, text="Search", command=search_columns)
+bQuit = Button(master, text="Quit", command=master.destroy)
 
 # Now arrange all of the parts above in a grid.
 lTitle.grid(row=0, column=0, sticky=E+W)

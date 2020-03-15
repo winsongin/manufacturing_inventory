@@ -93,7 +93,7 @@ def search_columns():
         print("Connected to database called ", records)
 
         #Print all the database records onto the GUI.
-        querySearch = "SELECT * FROM inventory WHERE part_name = 'queryInput'"
+        querySearch = ("SELECT * FROM inventory WHERE part_name = '{}'").format(queryInput)
         cursor.execute(querySearch)
         records  = cursor.fetchall()
         for row in records:

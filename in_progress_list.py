@@ -87,7 +87,7 @@ def search_columns():
         cursor = connection.cursor()
 
         #Print all the database records onto the GUI.
-        querySearch = "SELECT * FROM work_in_progress WHERE wo_number = 'queryInput'"
+        querySearch = ("SELECT * FROM work_in_progress WHERE wo_number = '{}'").format(queryInput)
         cursor.execute(querySearch)
         records  = cursor.fetchall()
         for row in records:

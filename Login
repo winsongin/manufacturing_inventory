@@ -1,13 +1,5 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
-
 import tkinter as tk
 import mysql.connector as sql
-from login_mechanic import finddept
 
 mydb = sql.connect(
         host = 'localhost',
@@ -17,44 +9,79 @@ mydb = sql.connect(
         )
 
 cur = mydb.cursor()
-uid = []
-p = []
-statement = "select employee_id from employees"
-cur.execute(statement)
-results = cur.fetchall()
-for x in results:
-    uid.append(x)
-statement = "select pass from employees"
-cur.execute(statement)
-results = cur.fetchall()
-for x in results:
-    p.append(x)
-    
-#Login Screen 
+#gets Usernames from Database
+def getUser(u):
+   #try:
+    statement = ("select employee_id from employees where employee_id = '{}'").format(u)
+    cur.execute(statement)
+    result = cur.fetchone()
+    result = ''.join(result)
+    if result == u:
+        return True
+    else:
+        return False
+    #if not in database then throw an error
 
+
+#gets Passwords from Database
+def getPass(p):
+    statement = ("select pass from employees where pass = '{}'").format(p)
+    cur.execute(statement)
+    result = cur.fetchone()
+    if result == None:
+        return True
+    
+    result = ''.join(result)
+   
+    if result == p:
+         return False
+    #if the password is not in the database
+    else:
+         return True
+    #if not in database then throw an error
+    #try again 
+    #reset password
+
+#Temporary Switch Screen
+def switch(d):
+    temp = d
+    ltemp = tk.Label(frmA, text = temp)
+    ltemp.pack()
+    frmHome.pack_forget()
+    frmA.pack()
+    #Potential Work
+
+#Find Department For User
+def finddept(uid):
+    d = []
+    statement = ("select dept from employees where employee_id= '{}'").format(uid)
+    cur.execute(statement)
+    results = cur.fetchone()
+    for x in results:
+        ts = ''.join(x)
+        d.append(ts)
+    return (d[0])     
+
+#Login Function
 def login():
-    lock = True
-    found = False
+    lock = True                                                  
+    found = False                                                
     name = eUsername.get()
-    for x in uid:
-        ts = ''.join(x)
-        if ts == name:
-            found_user = ts
-            found = True
+    found = getUser(name)
     password = ePassword.get()
-    for x in p:
-        ts = ''.join(x)
-        if ts == password:
-            found_pass = ts
-            lock = False
+    lock = getPass(password)
+    print(lock)
     if found == True and lock == False:
         print('Logged in')
-        finddept(found_user)
-
+        dept = finddept(name)
+        switch(dept)
+    else:
+        print('Try Again')
+        
 #Window Creation
 win = tk.Tk()
 
-win.title("Inventory Manager")
+win.title("Login")
 win.geometry("600x500") #width and height
 
 frmHome = tk.Frame(win, height = 400)
@@ -64,7 +91,7 @@ frmA = tk.Frame(win)
 
 #Label object 
 
-lUsername = tk.Label(frmHome, text = 'Username')
+lUsername = tk.Label(frmHome, text = 'Employee ID')
 
 lPassword = tk.Label(frmHome, text = 'Password')
 

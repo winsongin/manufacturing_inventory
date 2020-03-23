@@ -6,22 +6,15 @@ mydb = mysql.connector.connect(
   host= "localhost",
   user= "root",
   passwd= "Omar131997",
-    database = "employees"
+    database = "inventory_system"
 )
-
-mydb2 = mysql.connector.connect(
-  host= "localhost",
-  user= "root",
-  passwd= "Omar131997",
-    database = "work_orders"
-)
-
 
 ################################# Python/Mysql Connection above #####################################################
 
+#Creating main window
 mainWindow = Tk() #creating a blank window. Top is = to blank window.
 mainWindow.geometry("600x500")#Resizing window
-mainWindow.configure(bg="light blue")
+mainWindow.configure(bg="light gray")
 mainWindow.title("Testing") #giving window a title
 
 #Creating a menu bar
@@ -47,7 +40,7 @@ def onClick():
 
 #Function will display order number
 def orderNumber():
-    cursor1 = mydb2.cursor()
+    cursor1 = mydb.cursor()
     cursor1.execute("SELECT wo_number  FROM work_in_progress WHERE company = 'Best Buy' ")
     order = cursor1.fetchall()
     return order
@@ -61,7 +54,7 @@ def workerID():
 
 #function will display Order Status
 def getStatus():
-    cursor3 = mydb2.cursor()
+    cursor3 = mydb.cursor()
     cursor3.execute("SELECT status  FROM work_in_progress WHERE status = 'Testing' " )
     stat = cursor3.fetchall()
     return stat
@@ -111,6 +104,7 @@ p4 = Label(mainWindow, text = "[98% or >]", font = ("araial", 12, "bold"))
 #Creating butoons here:
 enter_button = Button(mainWindow, text = "Enter", bg = "blue", fg = "white",  command = onClick, font = ("arial", 13, "bold"))#Command is binding to fuction.
 reset_button = Button(mainWindow, text = "Reset", command = reset, bg = "blue", fg = "white", font = ("arial", 13, "bold"))
+
 #User input
 E3 = IntVar()
 entry3 = Entry(mainWindow, textvariable = E3)
@@ -128,6 +122,7 @@ workerID_label.place(x = 10, y = 110)
 status_label.place(x = 10, y = 140)
 parameters_label.place(x = 480, y = 190)
 
+#placing items here on mainwindow
 test1_label.place(x = 50, y = 220)
 test2_label.place(x = 50, y = 250)
 test3_label.place(x = 50, y = 280)

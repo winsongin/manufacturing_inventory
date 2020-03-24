@@ -16,32 +16,29 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `work_in_progress`
+-- Table structure for table `customer`
 --
 
-DROP TABLE IF EXISTS `work_in_progress`;
+DROP TABLE IF EXISTS `customer`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `work_in_progress` (
-  `wo_number` varchar(45) NOT NULL,
-  `status` varchar(45) NOT NULL,
-  `date_recv` varchar(45) NOT NULL,
-  `eta` varchar(45) NOT NULL,
+CREATE TABLE `customer` (
   `cust_id` varchar(45) NOT NULL,
-  `price` varchar(45) NOT NULL,
+  `name` varchar(45) NOT NULL,
   `address` varchar(45) NOT NULL,
-  PRIMARY KEY (`wo_number`)
+  `owe` varchar(45) NOT NULL,
+  PRIMARY KEY (`cust_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `work_in_progress`
+-- Dumping data for table `customer`
 --
 
-LOCK TABLES `work_in_progress` WRITE;
-/*!40000 ALTER TABLE `work_in_progress` DISABLE KEYS */;
-INSERT INTO `work_in_progress` VALUES ('1','Assembly','03/24/2020, 11:42:14','03/24/2020, 13:42:14','85947','7.75','789 Harbor Blvd. Fullerton, CA 94857'),('2','Assembly','03/24/2020, 11:44:09','03/24/2020, 13:44:09','78956','4.56','123 Waze St. Fullerton, CA 95867'),('3','Assembly','03/24/2020, 11:45:40','03/24/2020, 13:45:40','21988','8.58','8490 Colonel Ave. Seal Beach, CA 95800'),('4','Assembly','03/24/2020, 11:48:06','03/24/2020, 13:48:06','8695','75.69','84956 Arts Dr. Irvine, CA 98567'),('5','Assembly','03/24/2020, 11:49:59','03/24/2020, 13:49:59','81400','73.20','1485 Path Dr. Fullerton, CA 98576'),('6','Assembly','03/24/2020, 11:51:12','03/24/2020, 13:51:12','96857','8.57','8195 Arts Dr. Fullerton, CA 94858');
-/*!40000 ALTER TABLE `work_in_progress` ENABLE KEYS */;
+LOCK TABLES `customer` WRITE;
+/*!40000 ALTER TABLE `customer` DISABLE KEYS */;
+INSERT INTO `customer` VALUES ('09132','ToysRUs','0912 Edinger Ave. Huntington Beach, CA 98485','0'),('12355','Tom Bradley','945 Nutwood Ave. Fullerton, CA 98647','0'),('21988','Johnny Tran','8490 Colonel Ave. Seal Beach, CA 95800','0'),('68954','Bobby Tran','8695 Lincoln Ave. Anaheim, CA 92180','0'),('74568','John Doe','789 Forest Hills Dr. Lake Forest, CA 98457','0'),('75849','Bob Seek','2385 Pool Dr. Fullerton, CA 98457','0'),('78495','Tennis Shop','8183 Brookhurst St. Fountain Valley, CA 92683','0'),('78549','Floyd Holliday','894 College Blvd. Fullerton, CA 98456','0'),('78956','John Doe','123 Waze St. Fullerton, CA 95867','0'),('81400','William McCarthy','1485 Path Dr. Fullerton, CA 98576','0'),('85947','Bobby Tarantino','789 Harbor Blvd. Fullerton, CA 94857','0'),('8695','Bob Mcgyver','84956 Arts Dr. Irvine, CA 98567','0'),('96857','Costco','8195 Arts Dr. Fullerton, CA 94858','0');
+/*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-24 12:12:10
+-- Dump completed on 2020-03-24 12:13:49

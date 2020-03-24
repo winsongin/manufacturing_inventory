@@ -8,7 +8,7 @@ import tkinter as tk
 myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "winsongin", database = "inventory_system")
 
 root = tk.Tk()
-root.geometry("600x500")
+root.geometry("550x400")
 root.title("Receiving")
 root.configure(bg="light gray")
 
@@ -16,34 +16,74 @@ root.configure(bg="light gray")
 def datentime():
     now = datetime.now()
     now = now.strftime("%m/%d/%Y, %H:%M:%S")
-    #print(type(now))
     return now
 
-
-def onSubmit():
+def workOrderNumber(): 
     myCursor = myDb.cursor()
-    workOrder = workOrderEntry.get()
-    dateTimeVar = datentime()
-    print(type(dateTimeVar))
-    eta = estimatedTimeOfArrival()
-    val = workOrder + "\",\"" + dateTimeVar + "\",\"" + eta + "\",\"Assembly\",\"Best Buy\");"
-    querydateTime = "INSERT INTO work_in_progress (wo_number, date_recv, eta, status, company) VALUES (\"" + val
-    print(querydateTime)
-    myCursor.execute(querydateTime)
+    latestWorkOrder = "SELECT MAX(wo_number) FROM work_in_progress"
+    myCursor.execute(latestWorkOrder)
+    result = myCursor.fetchall()
     myDb.commit()
-
+    list = [x[0] for x in result]
+    lastWorkOrder = str(list[0])
+    if(lastWorkOrder == 'None'):
+        nextWorkOrder = "1"
+        print(nextWorkOrder)
+        return nextWorkOrder
+    nextWorkOrder = int(lastWorkOrder) + 1 
+    return nextWorkOrder
 
 # ETA of manufacturing a product is roughly 2 hours after the work order is received
 def estimatedTimeOfArrival(): 
     eta = (datetime.now() + timedelta(hours=2))
     eta = eta.strftime("%m/%d/%Y, %H:%M:%S")
-    print(eta)
     return eta
 
-# TODO: need to ensure that the number generated doesn't already exists in the database
-# def workOrder(): 
-#     workOrder = random.randint(1, 100)
-#     print("Work Order #: ", workOrder)
+def owe():
+    myCursor = myDb.cursor()
+    custWorkOrders = "SELECT (price) FROM work_in_progress WHERE cust_id = {}"
+    myCursor.execute(custWorkOrders.format(customerIDEntry.get()))
+    result = myCursor.fetchall()
+    myDb.commit()
+
+    owed = 0 
+    for i in result:
+        owed = owed + i[0]
+    print(owed)
+    return owed
+
+def reset(): 
+    dateTimeInput.set(datentime())
+    workOrderInput.set(workOrderNumber())
+    ETAInput.set(estimatedTimeOfArrival())
+    priceInput.set("")
+    customerNameInput.set("")
+    customerIDInput.set("")
+    addressInput.set("")
+    return
+
+
+# Order gets submitted to the database
+def onSubmit():
+    myCursor = myDb.cursor() 
+
+    orderNumber = workOrderNumber()
+    stat = "Assembly" 
+    dateTime = datentime()
+    estTimeArrv = estimatedTimeOfArrival()
+    orderPrice = priceEntry.get()
+    custName = customerNameEntry.get()
+    custID = customerIDEntry.get()
+    custAddr = addressEntry.get()
+    custOwe = owe()
+
+    query = "INSERT INTO work_in_progress (wo_number, status, date_recv, eta, price, cust_id, address) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    myCursor.execute(query, (orderNumber, stat, dateTime, estTimeArrv, orderPrice, custID, custAddr))
+    myDb.commit()
+
+    query2 = "INSERT INTO customer (cust_id, name, address, owe) VALUES (%s, %s, %s, %s)"
+    myCursor.execute(query2, (custID, custName, custAddr, custOwe))
+    myDb.commit()
 
 # Prints the Date/Time
 dateTimeInput = tk.StringVar()
@@ -53,47 +93,55 @@ dateTimeInput.set(datentime())
 dateTimeLabel.place(x=40, y= 20)
 dateTimeEntry.place(x=150, y= 20)
 
-# Prompts the user for the Work Order
+# Auto-increments the last Work Order Number and displays it to the user
 workOrderInput = tk.StringVar()
 workOrderLabel = tk.Label(root, text="Work Order #:", bg="light gray")
 workOrderEntry = tk.Entry(root, textvariable=workOrderInput, highlightbackground="light gray", width=25)
-workOrderLabel.place(x=40, y=100)
-workOrderEntry.place(x=150, y=100)
+workOrderInput.set(workOrderNumber())
+workOrderLabel.place(x=40, y=60)
+workOrderEntry.place(x=150, y=60)
 
-# Prompts the user for ETA
+# ETA is computed and displayed to the user
 ETAInput = tk.StringVar()
 ETALabel = tk.Label(root, text="ETA:", bg="light gray")
 ETAEntry = tk.Entry(root, textvariable=ETAInput, highlightbackground="light gray", width=25)
 ETAInput.set(estimatedTimeOfArrival())
-ETALabel.place(x=40, y=200)
-ETAEntry.place(x=150, y=200)
+ETALabel.place(x=40, y=100)
+ETAEntry.place(x=150, y=100)
 
-# Prompts the user for Worker ID
-workerIDInput = tk.StringVar()
-workerIDLabel = tk.Label(root, text="Employee ID:", bg="light gray")
-workerIDEntry = tk.Entry(root, textvariable=workerIDInput, highlightbackground="light gray", width=25)
-workerIDLabel.place(x=40, y=300)
-workerIDEntry.place(x=150, y=300)
+# Prompts the user for the price of the product
+priceInput = tk.StringVar()
+priceLabel = tk.Label(root, text="Price:", bg="light gray")
+priceEntry = tk.Entry(root, textvariable=priceInput, highlightbackground="light gray", width=25)
+priceLabel.place(x=40, y=140)
+priceEntry.place(x=150, y=140)
 
-# myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "winsongin", database = inventory_system)
-    
-# # TODO: workerId should be checked in the database to ensure that it is an authorized user/employee
-# def workerId(): 
-#     workerIDInput.get()
-#     print(workerIDInput)
-#     workerId = input("Enter your workerId: ") 
-#     while(len(workerId) != 5):
-#         print("WorkerId is 5 digits. Please try again.")
-#         workerId = input("Enter your workerId: ")
+# Prompts the user for the customer's name
+customerNameInput = tk.StringVar()
+customerNameLabel = tk.Label(root, text="Name:", bg="light gray")
+customerNameEntry = tk.Entry(root, textvariable=customerNameInput, highlightbackground="light gray", width=25)
+customerNameLabel.place(x=40, y=180)
+customerNameEntry.place(x=150, y=180)
 
+# Prompts the user for the customer's ID
+customerIDInput = tk.StringVar()
+customerIDLabel = tk.Label(root, text="Customer ID:", bg="light gray")
+customerIDEntry = tk.Entry(root, textvariable=customerIDInput, highlightbackground="light gray", width=25)
+customerIDLabel.place(x=40, y=220)
+customerIDEntry.place(x=150, y=220)
 
-
-#This should be put within onSumbit() function.
-#myDb.commit()
-
+# Prompts the user for the customer's address
+addressInput = tk.StringVar()
+addressLabel = tk.Label(root, text="Address:", bg="light gray")
+addressEntry = tk.Entry(root, textvariable=addressInput, highlightbackground="light gray", width=25)
+addressLabel.place(x=40, y=260)
+addressEntry.place(x=150, y=260)
 
 submit = tk.Button(root, text="Submit", bg='red', highlightbackground="light gray", command=onSubmit)
-submit.place(x=250, y=400)
+submit.place(x=250, y=300)
+
+reset = tk.Button(root, text="Reset", bg='red', highlightbackground="light gray", command=reset)
+reset.place(x=200, y=300)
 
 root.mainloop()
 

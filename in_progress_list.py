@@ -6,8 +6,8 @@ import mysql.connector
 # In Progress List
 
 master = Tk()
-tree=ttk.Treeview(master, column=("column", "column1",
-"column2", "column3", "column4")) #Needed to create new columns
+tree=ttk.Treeview(master, column=("column", "column1", "column2",
+"column3", "column4", "column5", "column6")) #Needed to create new columns
 master.title("Work In Progress")
 searchEntry = tk.StringVar()
 master.resizable(False, False) #Don't allow users to resize window.
@@ -32,14 +32,16 @@ def reset_window():
     for row in records:
         print("Work Number: ", row[0])
         print("Status: ", row[1])
-        print("Company: ", row[2])
-        print("Date Received: ", row[3])
-        print("ETA: ", row[4])
+        print("Date Received: ", row[2])
+        print("ETA: ", row[3])
+        print("Customer ID: ", row[4])
+        print("Price: ", row[5])
+        print("Address: ", row[6])
 
     counter = 0
     for row in records:
         tree.insert('', 'end', values=
-        (row[0],row[1],row[2],row[3],row[4]))
+        (row[0],row[1],row[2],row[3],row[4],row[5],row[6]))
         counter += 1
             
     cursor.close()
@@ -47,9 +49,8 @@ def reset_window():
 
 #This function will display the column based on user input.
 def search_columns():
-    global queryInput
-    queryInput = (searchEntry.get())
-
+    queryInput = str(searchEntry.get())
+    
     #Delete all of the entries in the tree first.
     tree.delete(*tree.get_children())
 
@@ -67,14 +68,16 @@ def search_columns():
         for row in records:
             print("Work Number: ", row[0])
             print("Status: ", row[1])
-            print("Company: ", row[2])
-            print("Date Received: ", row[3])
-            print("ETA: ", row[4])
+            print("Date Received: ", row[2])
+            print("ETA: ", row[3])
+            print("Customer ID: ", row[4])
+            print("Price: ", row[5])
+            print("Address: ", row[6])
 
         counter = 0
         for row in records:
             tree.insert('', 'end', values=
-            (row[0],row[1],row[2],row[3],row[4]))
+            (row[0],row[1],row[2],row[3],row[4],row[5],row[6]))
             counter += 1
                 
         cursor.close()
@@ -93,14 +96,16 @@ def search_columns():
         for row in records:
             print("Work Number: ", row[0])
             print("Status: ", row[1])
-            print("Company: ", row[2])
-            print("Date Received: ", row[3])
-            print("ETA: ", row[4])
+            print("Date Received: ", row[2])
+            print("ETA: ", row[3])
+            print("Customer ID: ", row[4])
+            print("Price: ", row[5])
+            print("Address: ", row[6])
 
         counter = 0
         for row in records:
             tree.insert('', 'end', values=
-            (row[0],row[1],row[2],row[3],row[4]))
+            (row[0],row[1],row[2],row[3],row[4],row[5],row[6]))
             counter += 1
                 
         cursor.close()
@@ -122,11 +127,15 @@ def sort_column(tree, col):
     elif (col == 1):
         querySort = "SELECT * FROM work_in_progress ORDER BY status"
     elif (col == 2):
-        querySort = "SELECT * FROM work_in_progress ORDER BY company"
-    elif (col == 3):
         querySort = "SELECT * FROM work_in_progress ORDER BY date_recv"
-    elif (col == 4):
+    elif (col == 3):
         querySort = "SELECT * FROM work_in_progress ORDER BY eta"
+    elif (col == 4):
+        querySort = "SELECT * FROM work_in_progress ORDER BY cust_id"
+    elif (col == 5):
+        querySort = "SELECT * FROM work_in_progress ORDER BY price"
+    elif (col == 6):
+        querySort = "SELECT * FROM work_in_progress ORDER BY address"        
 
     #Print all the database records onto the GUI.
     cursor.execute(querySort)
@@ -134,25 +143,27 @@ def sort_column(tree, col):
     for row in records:
         print("Work Number: ", row[0])
         print("Status: ", row[1])
-        print("Company: ", row[2])
-        print("Date Received: ", row[3])
-        print("ETA: ", row[4])
+        print("Date Received: ", row[2])
+        print("ETA: ", row[3])
+        print("Customer ID: ", row[4])
+        print("Price: ", row[5])
+        print("Address: ", row[6])
 
     counter = 0
     for row in records:
         tree.insert('', 'end', values=
-        (row[0],row[1],row[2],row[3],row[4]))
+        (row[0],row[1],row[2],row[3],row[4],row[5],row[6]))
         counter += 1
             
     cursor.close()
     connection.close()
 
 # Configure the following widgets below
-lTitle = Label(master, text="Work In Progress", font=("Arial", 20))
-eSearch = Entry(master, textvariable=searchEntry, width=25)
-bSearch = Button(master, text="Search", command=search_columns)
-bQuit = Button(master, text="Quit", command=master.destroy)
-bReset = Button(master, text="Reset", command=reset_window)
+lTitle = tk.Label(master, text="Work In Progress", font=("Arial", 20))
+eSearch = tk.Entry(master, textvariable=searchEntry, width=25)
+bSearch = tk.Button(master, text="Search", command=search_columns)
+bQuit = tk.Button(master, text="Quit", command=master.destroy)
+bReset = tk.Button(master, text="Reset", command=reset_window)
 
 # Now arrange all of the parts above in a grid.
 lTitle.grid(row=0, column=0, sticky=E+W)
@@ -164,15 +175,19 @@ bQuit.grid(row=2, column=2, sticky=E)
 # Create the columns and headings below
 tree.column("#0", minwidth=0, width=0, stretch=False)
 tree.heading("#1", text="Work #", command=lambda: sort_column(tree, 0))
-tree.column("#1", minwidth=0, width=100, stretch=False)
+tree.column("#1", minwidth=0, width=50, stretch=False)
 tree.heading("#2", text="Status", command=lambda: sort_column(tree, 1))
 tree.column("#2", minwidth=0, width=100, stretch=False)
-tree.heading("#3", text="Days Until Shipment", command=lambda: sort_column(tree, 2))
+tree.heading("#3", text="Date Received", command=lambda: sort_column(tree, 2))
 tree.column("#3", minwidth=0, width=150, stretch=False)
-tree.heading("#4", text="Date Received", command=lambda: sort_column(tree, 3))
-tree.column("#4", minwidth=0, width=100, stretch=False)
-tree.heading("#5", text="ETA", command=lambda: sort_column(tree, 4))
-tree.column("#5", minwidth=0, width=150, stretch=False)
+tree.heading("#4", text="ETA", command=lambda: sort_column(tree, 3))
+tree.column("#4", minwidth=0, width=150, stretch=False)
+tree.heading("#5", text="Customer ID", command=lambda: sort_column(tree, 4))
+tree.column("#5", minwidth=0, width=100, stretch=False)
+tree.heading("#6", text="Price", command=lambda: sort_column(tree, 5))
+tree.column("#6", minwidth=0, width=50, stretch=False)
+tree.heading("#7", text="Address", command=lambda: sort_column(tree, 6))
+tree.column("#7", minwidth=0, width=250, stretch=False)
 
 tree.configure(height=20)
 tree.grid() #Arrange all the TreeView parts in a grid.
@@ -195,14 +210,16 @@ records  = cursor.fetchall()
 for row in records:
     print("Work Number: ", row[0])
     print("Status: ", row[1])
-    print("Company: ", row[2])
-    print("Date Received: ", row[3])
-    print("ETA: ", row[4])
+    print("Date Received: ", row[2])
+    print("ETA: ", row[3])
+    print("Customer ID: ", row[4])
+    print("Price: ", row[5])
+    print("Address: ", row[6])
 
 counter = 0
 for row in records:
     tree.insert('', 'end', values=
-    (row[0],row[1],row[2],row[3],row[4]))
+    (row[0],row[1],row[2],row[3],row[4],row[5],row[6]))
     counter += 1
 
 cursor.close()

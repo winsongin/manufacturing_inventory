@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Spyder Editor
+
+This is a temporary script file.
+"""
+
 import tkinter as tk
 import mysql.connector as sql
 
@@ -28,19 +35,15 @@ def getPass(p):
     statement = ("select pass from employees where pass = '{}'").format(p)
     cur.execute(statement)
     result = cur.fetchone()
+    #if not in database return Lock is True
     if result == None:
         return True
     
     result = ''.join(result)
    
+    #if in database return false
     if result == p:
          return False
-    #if the password is not in the database
-    else:
-         return True
-    #if not in database then throw an error
-    #try again 
-    #reset password
 
 #Temporary Switch Screen
 def switch(d):
@@ -70,13 +73,12 @@ def login():
     found = getUser(name)
     password = ePassword.get()
     lock = getPass(password)
-    print(lock)
     if found == True and lock == False:
-        print('Logged in')
         dept = finddept(name)
         switch(dept)
     else:
-        print('Try Again')
+        temp = tk.Label(frmHome, text = "Password Incorrect, Try Again")
+        temp.pack()
         
 #Window Creation
 win = tk.Tk()

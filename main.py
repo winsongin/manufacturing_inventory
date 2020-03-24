@@ -1,16 +1,24 @@
 import tkinter
 from tkinter import ttk
 from Login import login
+from selection import WOWindow
 
 def main():
     dept = login()
+    print(dept)
     if dept == "Receiving":
-        WOWindow(dept)
+        receiving()
     elif dept == "Assembly":
-        WOWinwow(dept)
+        while(true):
+            workorder = WOWindow(dept)
+            assembly(workorder, workerID)
     elif dept == "Testing":
-        WOWindow(dept)
+        while(true):
+            workorder = WOWindow(dept)
+            testing(workorder, workerID)
     elif dept == "Shipping":
-        WOWindow(dept)
+        while(true):
+            workorder = WOWindow(dept)
+            shipping(workorder, workerID)
 
 main()

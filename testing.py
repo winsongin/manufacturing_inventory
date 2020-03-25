@@ -1,6 +1,7 @@
 from tkinter import * #importing the tkinter class.
 import tkinter.messagebox #Able to create pop-up Messages.
 import mysql.connector#connecting Python with Mysql
+import tkinter as tk
 
 mydb = mysql.connector.connect(
   host= "localhost",
@@ -17,6 +18,9 @@ mainWindow.geometry("600x500")#Resizing window
 mainWindow.configure(bg="light gray")
 mainWindow.title("Testing") #giving window a title
 
+def create_window():
+    window = tk.Toplevel(mainWindow)
+
 #Creating a menu bar
 FileMenu = Menu(mainWindow)
 mainWindow.config(menu = FileMenu)
@@ -28,19 +32,25 @@ subMenu.add_command(label = "Exit", command = mainWindow.destroy)
 FileMenu.add_cascade(label = "Edit", menu = subMenu2)
 subMenu2.add_command(label = "New Order")
 
-#Function will output Testing results
+#Function will output Testing results and will update status.
 def onClick():
     answer = tkinter.messagebox.askquestion("RESULT", "Are these tests correct? ")
+    cursor = mydb.cursor()
     if answer == "yes" and 5 <= int(entry3.get()) <= 12 and 98 <= int(entry4.get()) <= 100 and \
             2 <= int(entry5.get()) <= 4 and 98 <= int(entry6.get()) <= 100:
         tkinter.messagebox.showinfo("RESULT", "ALL TEST PASS!")
+        cursor = mydb.cursor()
+        cursor.execute("UPDATE work_in_progress SET status = 'Shipping' WHERE wo_number = '1' ")
+        mydb.commit()
+
     else:
         tkinter.messagebox.showinfo("RESULT", "TESTS FAILED!")
-
+        cursor.execute("UPDATE work_in_progress SET status = 'Assembly' WHERE wo_number = '1' ")
+        mydb.commit()
 #Function will display order number
 def orderNumber():
     cursor1 = mydb.cursor()
-    cursor1.execute("SELECT wo_number  FROM work_in_progress WHERE company = 'Best Buy' ")
+    cursor1.execute("SELECT wo_number  FROM work_in_progress WHERE wo_number = '1' ")
     order = cursor1.fetchall()
     return order
 
@@ -54,7 +64,7 @@ def workerID():
 #function will display Order Status
 def getStatus():
     cursor3 = mydb.cursor()
-    cursor3.execute("SELECT status  FROM work_in_progress WHERE status = 'Testing' " )
+    cursor3.execute("SELECT status  FROM work_in_progress WHERE wo_number = '1' " )
     stat = cursor3.fetchall()
     return stat
 

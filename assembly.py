@@ -5,7 +5,7 @@ import mysql.connector
 import itertools
 
 
-def AssyWindow():
+def AssyWindow(workOrder, workerID):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -18,11 +18,10 @@ def AssyWindow():
     # This section will serve as a temp login
     # workerID = str(input("Enter worker ID: "))
     # woNumber = str(input("Enter work order number: "))
-    workerID = "0001"
+    worker = "0002"
     minusQty = ""
     partNum = ""
 
-    login_query = "SELECT * FROM employees WHERE employee_id = \"" + workerID + "\";"
     chassis_query = "SELECT part_no FROM inventory WHERE part_type = \"Chassis\";"
     engine_query = "SELECT part_no FROM inventory WHERE part_type = \"Engine\";"
     wheel_query = "SELECT part_no FROM inventory WHERE part_type = \"Wheel\";"
@@ -39,15 +38,6 @@ def AssyWindow():
     wheel_list = cursor.fetchall()
     wheel_list = list(itertools.chain(*wheel_list))
     # print(query)
-
-    cursor.execute(login_query)
-    query_list = cursor.fetchall()
-    records = []
-
-    for each in query_list[0]:
-        records.append(each)
-
-    print("User: ", records[0])
 
     mainWindow = Tk()
     mainWindow.geometry("600x500")
@@ -74,13 +64,9 @@ def AssyWindow():
             mydb.commit()
             tkinter.messagebox.showinfo("Confirmation", "Changes made")
 
-    def orderNumber():
-        number = Label(mainWindow, text=123456789, font=("arial", 12, "bold"))
-        number.place(x=175, y=10)
+    #def orderNumber():
 
-    def workerID():
-        id = Label(mainWindow, text=123456, font=("arial", 12, "bold"))
-        id.place(x=95, y=35)
+
 
     def reset():
         partNum1.set("")
@@ -111,8 +97,12 @@ def AssyWindow():
     #Instantiates style for ttk buttons
     style = Style()
 
-    orderNumber_label = Label(mainWindow, text="Work Order Number: ", command=orderNumber(), font=("arial", 12, "bold"))
-    workerID_label = Label(mainWindow, text="Worker ID: ", command=workerID(), font=("arial", 12, "bold"))
+    orderNumber_label = Label(mainWindow, text="Work Order Number: ", font=("arial", 12, "bold"))
+    workerID_label = Label(mainWindow, text="Worker ID: ", font=("arial", 12, "bold"))
+    id = Label(mainWindow, text=workerID, font=("arial", 12, "bold"))
+    id.place(x=95, y=35)
+    number = Label(mainWindow, text=workOrder, font=("arial", 12, "bold"))
+    number.place(x=175, y=10)
 
     qty_label = Label(mainWindow, text="Qty", font=("arial", 13, "bold"))
     partNum1_label = Label(mainWindow, text="Chassis: ", font=("arial", 13, "bold"))
@@ -162,5 +152,3 @@ def AssyWindow():
     #Closes cursor and mydb
     cursor.close()
     mydb.close()
-
-AssyWindow()

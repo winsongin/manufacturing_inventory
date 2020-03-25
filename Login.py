@@ -6,93 +6,121 @@ This is a temporary script file.
 """
 
 import tkinter as tk
-import mysql.connector
-from login_mechanic import finddept
-
-mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        passwd="Razgriz!949",
-        database="inventory_system"
-        )
-
-cur = mydb.cursor()
-uid = []
-p = []
-statement = "select employee_id from employees"
-cur.execute(statement)
-results = cur.fetchall()
-for x in results:
-    uid.append(x)
-statement = "select pass from employees"
-cur.execute(statement)
-results = cur.fetchall()
-for x in results:
-    p.append(x)
-    
-#Login Screen 
+import mysql.connector as sql
 
 def login():
-    lock = True
-    found = False
-    name = eUsername.get()
-    for x in uid:
-        ts = ''.join(x)
-        if ts == name:
-            found_user = ts
-            found = True
-    password = ePassword.get()
-    for x in p:
-        ts = ''.join(x)
-        if ts == password:
-            found_pass = ts
-            lock = False
-    if found == True and lock == False:
-        print('Logged in')
-        return(finddept(found_user))
+    
+    mydb = sql.connect(
+            host = 'localhost',
+            user = 'root',
+            passwd = 'Razgriz!949',
+            database = 'inventory_system'
+            )
+    
+    cur = mydb.cursor()
+    #gets Usernames from Database
+    def getUser(u):
+        #try:
+        statement = ("select employee_id from employees where employee_id = '{}'").format(u)
+        cur.execute(statement)
+        result = cur.fetchone()
+        if result == None:
+            return True
+    
+        result = ''.join(result)
+        if result == u:
+            return True
 
 
-#Window Creation
-win = tk.Tk()
-
-win.title("Inventory Manager")
-win.geometry("600x500") #width and height
-
-frmHome = tk.Frame(win, height = 400)
-frmHome.pack()
-
-frmA = tk.Frame(win)
-
-
-#Label object 
-
-lUsername = tk.Label(frmHome, text = 'Username')
-lPassword = tk.Label(frmHome, text = 'Password')
+    #gets Passwords from Database
+    def getPass(p):
+        statement = ("select pass from employees where pass = '{}'").format(p)
+        cur.execute(statement)
+        result = cur.fetchone()
+        #if not in database return Lock is True
+        if result == None:
+            return True
+    
+        result = ''.join(result)
+   
+        #if in database return false
+        if result == p:
+            return False
 
 
-#Variables to Store Data
+    #Find Department For User
+    def finddept(uid):
+        d = []
+        statement = ("select dept from employees where employee_id= '{}'").format(uid)
+        cur.execute(statement)
+        results = cur.fetchone()
+        for x in results:
+            ts = ''.join(x)
+            d.append(ts)
+            return (d[0])     
 
-user = tk.StringVar()
-passwd = tk.StringVar()
+    #Login Function
+    def execute(u,p):
+        global temp
+        lock = True                                                  
+        found = False                                                
+        name = u
+        found = getUser(name)
+        password = p
+        lock = getPass(password)
+        if found == True and lock == False:
+            dept = finddept(name)
+            temp = dept
+            win.destroy()
+            return
+        else:
+            tmp = tk.Label(frmHome, text = "Password/EmployeeID Incorrect, Try Again")
+            tmp.pack()
+    
+        #Window Creation
+    win = tk.Tk()
 
+    win.title("Login")
+    win.geometry("600x500") #width and height
+    
+    frmHome = tk.Frame(win, height = 400)
+    frmHome.pack()
+    
+    
+    #Label object 
+    
+    lUsername = tk.Label(frmHome, text = 'Employee ID')
+    
+    lPassword = tk.Label(frmHome, text = 'Password')
+    
+    #Variables to Store Data
 
-#Entry object
+    user = tk.StringVar()
 
-eUsername = tk.Entry(frmHome, textvariable = user)
-ePassword = tk.Entry(frmHome, textvariable = passwd, show ='*')
+    passwd = tk.StringVar()
 
+    #Entry object
 
-#Button
+    eUsername = tk.Entry(frmHome, textvariable = user)
 
-bLogin = tk.Button(frmHome, text = 'Login', command = login)
+    ePassword = tk.Entry(frmHome, textvariable = passwd, show ='*')
+    
+    #Button
 
+    bLogin = tk.Button(frmHome, text = 'Login', command = lambda: execute(eUsername.get(),ePassword.get()))
 
-#placing in GUI
+    #placing in GUI
 
-lUsername.pack(side= tk.TOP, anchor = 'w', expand = 'true')
-eUsername.pack(side= tk.TOP, anchor = 'center', expand = 'true', fill = 'x')
-lPassword.pack(side= tk.TOP, anchor = 'w', expand = 'true')
-ePassword.pack(side= tk.TOP, anchor = 'center', expand = 'true', fill = 'x')
-bLogin.pack(side = tk.BOTTOM, anchor = 'center')
+    lUsername.pack(side= tk.TOP, anchor = 'w', expand = 'true')
 
-win.mainloop()
+    eUsername.pack(side= tk.TOP, anchor = 'center', expand = 'true', fill = 'x')
+
+    lPassword.pack(side= tk.TOP, anchor = 'w', expand = 'true')
+
+    ePassword.pack(side= tk.TOP, anchor = 'center', expand = 'true', fill = 'x')
+
+    bLogin.pack(side = tk.BOTTOM, anchor = 'center')
+      
+    win.mainloop()
+    
+    return temp

@@ -4,6 +4,7 @@ from Login import login
 from assembly import AssyWindow
 from selection import WOWindow
 from testing import TestWindow
+from shipping import Interface
 
 
 def main():
@@ -19,9 +20,9 @@ def main():
         workorder = WOWindow(dept)
         TestWindow(workorder, "0003")
     elif dept == "Shipping":
-        while(True):
-            break
-            #workorder = WOWindow(dept)
-            #shipping(workorder, workerID)
+        workorder = WOWindow(dept)
+        interface = Tk()
+        Interface(interface, "0004", workorder)
+        shipping(workorder, workerID)
 
 main()

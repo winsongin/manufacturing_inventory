@@ -26,7 +26,7 @@ def onSubmit():
     canShip = canShipInput.get()
     isAdmin = isAdminInput.get()
 
-    query = "INSERT INTO employees (employee_id, password first_name, last_name, phone_number, dept, can_receive, can_assemble, can_test, can_ship, is_admin) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    query = "INSERT INTO employees (employee_id, password, first_name, last_name, phone_number, dept, can_receive, can_assemble, can_test, can_ship, is_admin) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
     myCursor.execute(query, (empID, password, fName, lName, pNum, department, canReceive, canAssemble, canTest, canShip, isAdmin))
     myDb.commit()
 

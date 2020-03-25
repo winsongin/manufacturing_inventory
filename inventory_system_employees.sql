@@ -28,6 +28,7 @@ CREATE TABLE `employees` (
   `last_name` varchar(45) NOT NULL,
   `phone_number` varchar(10) DEFAULT NULL,
   `dept` varchar(45) DEFAULT NULL,
+  `pass` varchar(45) DEFAULT NOT NULL,
   `can_receive` char(1) DEFAULT 'N',
   `can_assemble` char(1) DEFAULT 'N',
   `can_test` char(1) DEFAULT 'N',
@@ -43,7 +44,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES ('0001','Ralph','Pura','5555555555','Receiving','Y','N','N','N','N'),('0002','John','Doe','6666666666','Assembly','N','Y','N','N','N'),('0003','Jane','Smith','7777777777','Testing','N','N','Y',NULL,'N'),('0004','John','Gibson','8888888888','Shipping','N','N','N','Y','N');
+INSERT INTO `employees` VALUES ('0001','Ralph','Pura','5555555555','Receiving','password','Y','N','N','N','N'),('0002','John','Doe','6666666666','Assembly','youtube','N','Y','N','N','N'),('0003','Jane','Smith','7777777777','Testing','minecraft','N','N','Y',NULL,'N'),('0004','John','Gibson','8888888888','Shipping','reddit','N','N','N','Y','N');
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

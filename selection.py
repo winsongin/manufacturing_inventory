@@ -3,37 +3,28 @@ import tkinter as tk
 from tkinter import ttk
 import mysql.connector
 
-# In Progress List
-
-
-
-
 def WOWindow(department):
     master = Tk()
     tree = ttk.Treeview(master, column=("column", "column1",
                                         "column2", "column3", "column4"))  # Needed to create new columns
     master.title("Work In Progress")
     searchEntry = tk.StringVar()
-    master.resizable(False, False)  # Don't allow users to resize window.
-    # Set up the grid configurations below.
+    master.resizable(False, False)
     master.grid_rowconfigure(0, weight=1)
     master.grid_columnconfigure(0, weight=1)
 
     selection = StringVar()
 
-    # Configure the labels and the entry below
     lTitle = Label(master, text="Select Work Order")
     bQuit = Button(master, text="Quit", command=master.destroy)
     search_button = Button(master, text="Search", command=lambda: select(selection.get()))
     selection_entry = Entry(master, width=10, textvariable=selection)
 
-    # Now arrange all of the parts above in a grid.
     lTitle.grid(row=0, column=0, sticky=E + W)
     bQuit.grid(row=1, column=2)
     search_button.grid(row=2, column=0)
     selection_entry.grid(row=2, column=1)
 
-    # Create the columns and headings below
     tree.column("#0", minwidth=0, width=0, stretch=False)
     tree.heading("#1", text="Work Order", command=lambda: sort_column(tree, 0, department, False))
     tree.column("#1", minwidth=0, width=100, stretch=False)
@@ -47,18 +38,12 @@ def WOWindow(department):
     tree.column("#5", minwidth=0, width=150, stretch=False)
 
     tree.configure(height=20)
-    tree.grid()  # Arrange all the TreeView parts in a grid.
+    tree.grid()
 
-    # Connect to the database if possible.
     connection = mysql.connector.connect(host="localhost",
                                          user="root", password="Razgriz!949",
                                          auth_plugin="mysql_native_password", database="inventory_system")
-    db_Info = connection.get_server_info()
-    cursor = connection.cursor()
-    cursor.execute("select database()")
-    records = cursor.fetchone()
 
-    # Print all the database records onto the GUI.
     printAll = "SELECT * FROM work_in_progress WHERE status = \"" + department + "\""
     cursor.execute(printAll)
     records = cursor.fetchall()
@@ -69,7 +54,6 @@ def WOWindow(department):
         (row[0], row[1], row[2], row[3], row[4]))
         counter += 1
 
-    # This function will display the column based on user input.
     def search_columns():
         global queryInput
         queryInput = searchEntry.get()
@@ -135,9 +119,7 @@ def WOWindow(department):
             cursor.close()
             connection.close()
 
-    # This function will sort the column by increasing or decreasing order.
     def sort_column(tree, col, department, reverse):
-        # Delete all of the entries in the tree first.
         tree.delete(*tree.get_children())
 
         connection = mysql.connector.connect(host="localhost",
@@ -159,7 +141,6 @@ def WOWindow(department):
         elif (col == 4):
             querySort = "SELECT * FROM work_in_progress WHERE status = \"" + department + "\" ORDER BY cust_id"
 
-        # Print all the database records onto the GUI.
         cursor.execute(querySort)
         records = cursor.fetchall()
         for row in records:

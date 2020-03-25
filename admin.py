@@ -15,6 +15,7 @@ def onSubmit():
     myCursor = myDb.cursor()   
 
     empID = employeeIDInput.get()
+    password = passwordInput.get()
     fName = firstNameInput.get()
     lName = lastNameInput.get()
     pNum = phoneNumberInput.get()
@@ -25,12 +26,13 @@ def onSubmit():
     canShip = canShipInput.get()
     isAdmin = isAdminInput.get()
 
-    query = "INSERT INTO employees (employee_id, first_name, last_name, phone_number, dept, can_receive, can_assemble, can_test, can_ship, is_admin) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-    myCursor.execute(query, (empID, fName, lName, pNum, department, canReceive, canAssemble, canTest, canShip, isAdmin))
+    query = "INSERT INTO employees (employee_id, password first_name, last_name, phone_number, dept, can_receive, can_assemble, can_test, can_ship, is_admin) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    myCursor.execute(query, (empID, password, fName, lName, pNum, department, canReceive, canAssemble, canTest, canShip, isAdmin))
     myDb.commit()
 
 def reset():
     employeeIDInput.set("")
+    passwordInput.set("")
     firstNameInput.set("")
     lastNameInput.set("")
     phoneNumberInput.set("")
@@ -49,70 +51,77 @@ employeeIDEntry = tk.Entry(root, textvariable=employeeIDInput, highlightbackgrou
 employeeIDLabel.place(x=40, y=20)
 employeeIDEntry.place(x=150, y=20)
 
+# Prompts the user for the employee password
+passwordInput = tk.StringVar()
+passwordLabel = tk.Label(root, text="Password:", bg="light gray")
+passwordEntry = tk.Entry(root, textvariable=passwordInput, highlightbackground="light gray", width=25)
+passwordLabel.place(x=40, y=60)
+passwordEntry.place(x=150, y=60)
+
 # Prompts the user for the employee's first name
 firstNameInput = tk.StringVar()
 firstNameLabel = tk.Label(root, text="First Name:", bg="light gray")
 firstNameEntry = tk.Entry(root, textvariable=firstNameInput, highlightbackground="light gray", width=25)
-firstNameLabel.place(x=40, y=60)
-firstNameEntry.place(x=150, y=60)
+firstNameLabel.place(x=40, y=100)
+firstNameEntry.place(x=150, y=100)
 
 # Prompts the user for the employee's last name
 lastNameInput = tk.StringVar()
 lastNameLabel = tk.Label(root, text="Last Name:", bg="light gray")
 lastNameEntry = tk.Entry(root, textvariable=lastNameInput, highlightbackground="light gray", width=25)
-lastNameLabel.place(x=40, y=100)
-lastNameEntry.place(x=150, y=100)
+lastNameLabel.place(x=40, y=140)
+lastNameEntry.place(x=150, y=140)
 
 # Prompts the user for the employee's phone number
 phoneNumberInput = tk.StringVar()
 phoneNumberLabel = tk.Label(root, text="Phone Number:", bg="light gray")
 phoneNumberEntry = tk.Entry(root, textvariable=phoneNumberInput, highlightbackground="light gray", width=25)
-phoneNumberLabel.place(x=40, y=140)
-phoneNumberEntry.place(x=150, y=140)
+phoneNumberLabel.place(x=40, y=180)
+phoneNumberEntry.place(x=150, y=180)
 
 # Prompts the user for the employee's department
 deptInput = tk.StringVar()
 deptLabel = tk.Label(root, text="Department:", bg="light gray")
 deptEntry = tk.Entry(root, textvariable=deptInput, highlightbackground="light gray", width=25)
-deptLabel.place(x=40, y=180)
-deptEntry.place(x=150, y=180)
+deptLabel.place(x=40, y=220)
+deptEntry.place(x=150, y=220)
 
 # The following will be stored in the database and determine what each employee can do/has access to 
 canReceiveInput = tk.StringVar()
 canReceiveLabel = tk.Label(root, text="Can Receive:", bg="light gray")
 canReceiveEntry = tk.Entry(root, textvariable=canReceiveInput, highlightbackground="light gray", width=25)
-canReceiveLabel.place(x=40, y=220)
-canReceiveEntry.place(x=150, y=220)
+canReceiveLabel.place(x=40, y=260)
+canReceiveEntry.place(x=150, y=260)
 
 canAssembleInput = tk.StringVar()
 canAssembleLabel = tk.Label(root, text="Can Assemble:", bg="light gray")
 canAssembleEntry = tk.Entry(root, textvariable=canAssembleInput, highlightbackground="light gray", width=25)
-canAssembleLabel.place(x=40, y=260)
-canAssembleEntry.place(x=150, y=260)
+canAssembleLabel.place(x=40, y=300)
+canAssembleEntry.place(x=150, y=300)
 
 canTestInput = tk.StringVar()
 canTestLabel = tk.Label(root, text="Can Test:", bg="light gray")
 canTestEntry = tk.Entry(root, textvariable=canTestInput, highlightbackground="light gray", width=25)
-canTestLabel.place(x=40, y=300)
-canTestEntry.place(x=150, y=300)
+canTestLabel.place(x=40, y=340)
+canTestEntry.place(x=150, y=340)
 
 canShipInput = tk.StringVar()
 canShipLabel = tk.Label(root, text="Can Ship:", bg="light gray")
 canShipEntry = tk.Entry(root, textvariable=canShipInput, highlightbackground="light gray", width=25)
-canShipLabel.place(x=40, y=340)
-canShipEntry.place(x=150, y=340)
+canShipLabel.place(x=40, y=380)
+canShipEntry.place(x=150, y=380)
 
 isAdminInput = tk.StringVar()
 isAdminLabel = tk.Label(root, text="Is Admin:", bg="light gray")
 isAdminEntry = tk.Entry(root, textvariable=isAdminInput, highlightbackground="light gray", width=25)
-isAdminLabel.place(x=40, y=380)
-isAdminEntry.place(x=150, y=380)
+isAdminLabel.place(x=40, y=420)
+isAdminEntry.place(x=150, y=420)
 
 submit = tk.Button(root, text="Submit", bg='red', highlightbackground="light gray", command=onSubmit)
-submit.place(x=250, y=420)
+submit.place(x=250, y=460)
 
 reset = tk.Button(root, text="Reset", bg='red', highlightbackground="light gray", command=reset)
-reset.place(x=200, y=420)
+reset.place(x=200, y=460)
 
 root.mainloop()
 

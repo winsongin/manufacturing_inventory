@@ -41,6 +41,7 @@ def reset():
     canTestInput.set("")
     canShip.set("")
     isdminInput.set("")
+    return
 
 # Prompts the user for the employee ID
 employeeIDInput = tk.StringVar()

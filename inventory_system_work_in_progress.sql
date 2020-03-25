@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.19, for macos10.15 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.19, for Win64 (x86_64)
 --
 -- Host: localhost    Database: inventory_system
 -- ------------------------------------------------------
@@ -30,7 +30,9 @@ CREATE TABLE `work_in_progress` (
   `cust_id` varchar(45) NOT NULL,
   `price` varchar(45) NOT NULL,
   `address` varchar(45) NOT NULL,
-  PRIMARY KEY (`wo_number`)
+  PRIMARY KEY (`wo_number`),
+  KEY `cust_id_idx` (`cust_id`),
+  CONSTRAINT `cust_id` FOREIGN KEY (`cust_id`) REFERENCES `customer` (`cust_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -40,7 +42,7 @@ CREATE TABLE `work_in_progress` (
 
 LOCK TABLES `work_in_progress` WRITE;
 /*!40000 ALTER TABLE `work_in_progress` DISABLE KEYS */;
-INSERT INTO `work_in_progress` VALUES ('1','Assembly','03/24/2020, 11:42:14','03/24/2020, 13:42:14','85947','7.75','789 Harbor Blvd. Fullerton, CA 94857'),('2','Assembly','03/24/2020, 11:44:09','03/24/2020, 13:44:09','78956','4.56','123 Waze St. Fullerton, CA 95867'),('3','Assembly','03/24/2020, 11:45:40','03/24/2020, 13:45:40','21988','8.58','8490 Colonel Ave. Seal Beach, CA 95800'),('4','Assembly','03/24/2020, 11:48:06','03/24/2020, 13:48:06','8695','75.69','84956 Arts Dr. Irvine, CA 98567'),('5','Assembly','03/24/2020, 11:49:59','03/24/2020, 13:49:59','81400','73.20','1485 Path Dr. Fullerton, CA 98576'),('6','Assembly','03/24/2020, 11:51:12','03/24/2020, 13:51:12','96857','8.57','8195 Arts Dr. Fullerton, CA 94858');
+INSERT INTO `work_in_progress` VALUES ('1','Assembly','03/24/2020, 11:42:14','03/24/2020, 13:42:14','85947','7.75','789 Harbor Blvd. Fullerton, CA 94857'),('2','Assembly','03/24/2020, 11:44:09','03/24/2020, 13:44:09','78956','4.56','123 Waze St. Fullerton, CA 95867'),('3','Assembly','03/24/2020, 11:45:40','03/24/2020, 13:45:40','21988','8.58','8490 Colonel Ave. Seal Beach, CA 95800'),('4','Assembly','03/24/2020, 11:48:06','03/24/2020, 13:48:06','8695','75.69','84956 Arts Dr. Irvine, CA 98567'),('5','Assembly','03/24/2020, 11:49:59','03/24/2020, 13:49:59','81400','73.20','1485 Path Dr. Fullerton, CA 98576'),('6','Testing','03/24/2020, 11:51:12','03/24/2020, 13:51:12','96857','8.57','8195 Arts Dr. Fullerton, CA 94858');
 /*!40000 ALTER TABLE `work_in_progress` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-24 12:12:10
+-- Dump completed on 2020-03-24 20:16:35

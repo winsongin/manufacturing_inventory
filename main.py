@@ -3,6 +3,7 @@ from tkinter import ttk
 from Login import login
 from assembly import AssyWindow
 from selection import WOWindow
+from testing import TestWindow
 
 
 def main():
@@ -15,10 +16,8 @@ def main():
         print(workorder)
         AssyWindow(workorder, "0002")
     elif dept == "Testing":
-        while(True):
-            break
-            #workorder = WOWindow(dept)
-            #testing(workorder, workerID)
+        workorder = WOWindow(dept)
+        TestWindow(workorder, "0003")
     elif dept == "Shipping":
         while(True):
             break

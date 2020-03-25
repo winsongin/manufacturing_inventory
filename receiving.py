@@ -8,7 +8,7 @@ import tkinter as tk
 myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "winsongin", database = "inventory_system")
 
 root = tk.Tk()
-root.geometry("550x400")
+root.geometry("650x500")
 root.title("Receiving")
 root.configure(bg="light gray")
 
@@ -72,8 +72,11 @@ def onSubmit():
     dateTime = datentime()
     estTimeArrv = estimatedTimeOfArrival()
     orderPrice = priceEntry.get()
+    orderQuantity = quantityEntry.get()
     custName = customerNameEntry.get()
     custID = customerIDEntry.get()
+    trackingNum = trackingNumberEntry.get()
+    orderStat = orderStatusEntry.get()
     custAddr = addressEntry.get()
     custOwe = owe()
 
@@ -81,8 +84,8 @@ def onSubmit():
     myCursor.execute(query, (orderNumber, stat, dateTime, estTimeArrv, orderPrice, custID, custAddr))
     myDb.commit()
 
-    query2 = "INSERT INTO customer (cust_id, name, address, owe) VALUES (%s, %s, %s, %s)"
-    myCursor.execute(query2, (custID, custName, custAddr, custOwe))
+    query2 = "INSERT INTO customer (cust_id, name, address, owe, quantity, tracking_number, order_status) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+    myCursor.execute(query2, (custID, custName, custAddr, custOwe, orderQuantity, trackingNum, orderStat))
     myDb.commit()
 
 # Prints the Date/Time
@@ -116,32 +119,53 @@ priceEntry = tk.Entry(root, textvariable=priceInput, highlightbackground="light 
 priceLabel.place(x=40, y=140)
 priceEntry.place(x=150, y=140)
 
+# Prompts the user for the quantity
+quantityInput = tk.StringVar()
+quantityLabel = tk.Label(root, text="Address:", bg="light gray")
+quantityEntry = tk.Entry(root, textvariable=quantityInput, highlightbackground="light gray", width=25)
+quantityLabel.place(x=40, y=200)
+quantityEntry.place(x=150, y=200)
+
 # Prompts the user for the customer's name
 customerNameInput = tk.StringVar()
 customerNameLabel = tk.Label(root, text="Name:", bg="light gray")
 customerNameEntry = tk.Entry(root, textvariable=customerNameInput, highlightbackground="light gray", width=25)
-customerNameLabel.place(x=40, y=180)
-customerNameEntry.place(x=150, y=180)
+customerNameLabel.place(x=40, y=240)
+customerNameEntry.place(x=150, y=240)
 
 # Prompts the user for the customer's ID
 customerIDInput = tk.StringVar()
 customerIDLabel = tk.Label(root, text="Customer ID:", bg="light gray")
 customerIDEntry = tk.Entry(root, textvariable=customerIDInput, highlightbackground="light gray", width=25)
-customerIDLabel.place(x=40, y=220)
-customerIDEntry.place(x=150, y=220)
+customerIDLabel.place(x=40, y=280)
+customerIDEntry.place(x=150, y=280)
+
+# Prompts the user for the tracking number
+trackingNumberInput = tk.StringVar()
+trackingNumberLabel = tk.Label(root, text="Address:", bg="light gray")
+trackingNumberEntry = tk.Entry(root, textvariable=trackingNumberInput, highlightbackground="light gray", width=25)
+trackingNumberLabel.place(x=40, y=320)
+trackingNumberEntry.place(x=150, y=320)
+
+# Prompts the user for the order status
+orderStatusInput = tk.StringVar()
+orderStatusLabel = tk.Label(root, text="Address:", bg="light gray")
+orderStatusEntry = tk.Entry(root, textvariable=orderStatusInput, highlightbackground="light gray", width=25)
+orderStatusLabel.place(x=40, y=360)
+orderStatusEntry.place(x=150, y=360)
 
 # Prompts the user for the customer's address
 addressInput = tk.StringVar()
 addressLabel = tk.Label(root, text="Address:", bg="light gray")
 addressEntry = tk.Entry(root, textvariable=addressInput, highlightbackground="light gray", width=25)
-addressLabel.place(x=40, y=260)
-addressEntry.place(x=150, y=260)
+addressLabel.place(x=40, y=400)
+addressEntry.place(x=150, y=400)
 
 submit = tk.Button(root, text="Submit", bg='red', highlightbackground="light gray", command=onSubmit)
-submit.place(x=250, y=300)
+submit.place(x=250, y=450)
 
 reset = tk.Button(root, text="Reset", bg='red', highlightbackground="light gray", command=reset)
-reset.place(x=200, y=300)
+reset.place(x=200, y=450)
 
 root.mainloop()
 

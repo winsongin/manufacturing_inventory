@@ -28,7 +28,7 @@ CREATE TABLE `employees` (
   `last_name` varchar(45) NOT NULL,
   `phone_number` varchar(10) DEFAULT NULL,
   `dept` varchar(45) DEFAULT NULL,
-  `pass` varchar(45) DEFAULT NOT NULL,
+  `pass` varchar(45) NOT NULL,
   `can_receive` char(1) DEFAULT 'N',
   `can_assemble` char(1) DEFAULT 'N',
   `can_test` char(1) DEFAULT 'N',

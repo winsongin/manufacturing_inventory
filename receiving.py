@@ -79,6 +79,9 @@ class Receiving:
         self.customerNameInput.set("")
         self.customerIDInput.set("")
         self.addressInput.set("")
+        self.trackingNumberInput.set("")
+        self.orderStatusInput.set("")
+        self.quantityInput.set("")
 
     def __init__(self, root):
         self.root = root

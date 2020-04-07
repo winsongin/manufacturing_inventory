@@ -28,18 +28,17 @@ class Admin:
         myDb.commit()
 
     def reset(self):
-        employeeIDInput.set("")
-        passwordInput.set("")
-        firstNameInput.set("")
-        lastNameInput.set("")
-        phoneNumberInput.set("")
-        deptInput.set("")
-        canReceiveInput.set("")
-        canAssembleInput.set("")
-        canTestInput.set("")
-        canShip.set("")
-        isdminInput.set("")
-        return
+        self.employeeIDInput.set("")
+        self.passwordInput.set("")
+        self.firstNameInput.set("")
+        self.lastNameInput.set("")
+        self.phoneNumberInput.set("")
+        self.deptInput.set("")
+        self.canReceiveInput.set("")
+        self.canAssembleInput.set("")
+        self.canTestInput.set("")
+        self.canShip.set("")
+        self.isdminInput.set("")
 
     def __init__(self, root): 
         self.root = root

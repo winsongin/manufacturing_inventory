@@ -142,7 +142,7 @@ class Receiving:
 
         # Prompts the user for the tracking number
         self.trackingNumberInput = tk.StringVar()
-        self.trackingNumberLabel = tk.Label(self.root, text="Tracking number: ", bg="light gray")
+        self.trackingNumberLabel = tk.Label(self.root, text="Tracking #: ", bg="light gray")
         self.trackingNumberEntry = tk.Entry(self.root, textvariable=self.trackingNumberInput, highlightbackground="light gray", width=25)
         self.trackingNumberLabel.place(x=40, y=320)
         self.trackingNumberEntry.place(x=150, y=320)

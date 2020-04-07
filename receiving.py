@@ -5,7 +5,7 @@ import sys
 import random
 import tkinter as tk
 
-myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "winsongin", database = "inventory_system")
+myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "Razgriz!949", database = "inventory_system")
 
 class Receiving: 
     def datentime(self):
@@ -58,18 +58,20 @@ class Receiving:
         orderQuantity = self.quantityEntry.get()
         custName = self.customerNameEntry.get()
         custID = self.customerIDEntry.get()
-        trackingNum = self.trackingNumberEntry.get()
+        #trackingNum = self.trackingNumberEntry.get()
         orderStat = self.orderStatusEntry.get()
         custAddr = self.addressEntry.get()
-        custOwe = self.owe()
+        custOwe = self.priceEntry.get()
+
+        query2 = "INSERT INTO customer (cust_id, name, address, owe) VALUES (%s, %s, %s, %s)"
+        myCursor.execute(query2, (custID, custName, custAddr, custOwe))
+        myDb.commit()
 
         query = "INSERT INTO work_in_progress (wo_number, status, date_recv, eta, price, cust_id, address) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        myCursor.execute(query, (orderNumber, stat, dateTime, estTimeArrv, orderPrice, custID, custAddr))
+        myCursor.execute(query, (orderNumber, orderStat, dateTime, estTimeArrv, orderPrice, custID, custAddr))
         myDb.commit()
 
-        query2 = "INSERT INTO customer (cust_id, name, address, owe, quantity, tracking_number, order_status) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-        myCursor.execute(query2, (custID, custName, custAddr, custOwe, orderQuantity, trackingNum, orderStat))
-        myDb.commit()
+
 
     def reset(self): 
         self.dateTimeInput.set(self.datentime())
@@ -79,7 +81,7 @@ class Receiving:
         self.customerNameInput.set("")
         self.customerIDInput.set("")
         self.addressInput.set("")
-        self.trackingNumberInput.set("")
+        #self.trackingNumberInput.set("")
         self.orderStatusInput.set("")
         self.quantityInput.set("")
 
@@ -151,21 +153,21 @@ class Receiving:
         self.orderStatusInput = tk.StringVar()
         self.orderStatusLabel = tk.Label(self.root, text="Order status:", bg="light gray")
         self.orderStatusEntry = tk.Entry(self.root, textvariable=self.orderStatusInput, highlightbackground="light gray", width=25)
-        self.orderStatusLabel.place(x=40, y=360)
-        self.orderStatusEntry.place(x=150, y=360)
+        self.orderStatusLabel.place(x=40, y=320)
+        self.orderStatusEntry.place(x=150, y=320)
 
         # Prompts the user for the customer's address
         self.addressInput = tk.StringVar()
         self.addressLabel = tk.Label(self.root, text="Address:", bg="light gray")
         self.addressEntry = tk.Entry(self.root, textvariable=self.addressInput, highlightbackground="light gray", width=25)
-        self.addressLabel.place(x=40, y=400)
-        self.addressEntry.place(x=150, y=400)
+        self.addressLabel.place(x=40, y=360)
+        self.addressEntry.place(x=150, y=360)
 
         self.submit = tk.Button(self.root, text="Submit", bg='red', highlightbackground="light gray", command=self.onSubmit)
-        self.submit.place(x=250, y=450)
+        self.submit.place(x=250, y=400)
 
         self.reset = tk.Button(self.root, text="Reset", bg='red', highlightbackground="light gray", command=self.reset)
-        self.reset.place(x=200, y=450)
+        self.reset.place(x=200, y=400)
 
 if __name__ == "__main__":
     root = tk.Tk()

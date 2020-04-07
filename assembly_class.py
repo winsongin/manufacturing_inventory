@@ -52,11 +52,14 @@ class assembly:
         self.partNum1Qty = StringVar()
         self.partNum2Qty = StringVar()
         self.partNum3Qty = StringVar()
+        self.partNum1Stock = StringVar()
+        self.partNum2Stock = StringVar()
+        self.partNum3Stock = StringVar()
 
         # Instantiates style for ttk buttons
         style = Style()
 
-        self.orderNumber_label = Label(self.master, text="Work Order Number: ", font=("arial", 12, "bold"))
+        orderNumber_label = Label(self.master, text="Work Order Number: ", font=("arial", 12, "bold"))
         workerID_label = Label(self.master, text="Worker ID: ", font=("arial", 12, "bold"))
         id = Label(self.master, text=self.emp_id, font=("arial", 12, "bold"))
         id.place(x=95, y=35)
@@ -64,17 +67,22 @@ class assembly:
         number.place(x=175, y=10)
 
         qty_label = Label(self.master, text="Qty", font=("arial", 13, "bold"))
+        stock_label = Label(self.master, text="Stock", font=("arial", 13, "bold"))
         partNum1_label = Label(self.master, text="Chassis: ", font=("arial", 13, "bold"))
         partNum2_label = Label(self.master, text="Engine: ", font=("arial", 13, "bold"))
         partNum3_label = Label(self.master, text="Wheel:  ", font=("arial", 13, "bold"))
+        self.part1Stock_label = Label(self.master, text="", font=("arial", 13, "bold"))
+        self.part2Stock_label = Label(self.master, text="", font=("arial", 13, "bold"))
+        self.part3Stock_label = Label(self.master, text="", font=("arial", 13, "bold"))
 
-        style.configure('C.TButton', padding=3, font=("arial", 13, "bold"), background='blue',
+        style.configure('C.TButton', padding=3, font=("arial", 12, "bold"), background='blue',
                         foreground='blue')
         enter_button = Button(self.master, text="Enter",
                               command=lambda: self.onClick(chassis.get(), partNum1_qty.get(), engine.get(),
                                                       partNum2_qty.get(),
                                                       wheel.get(), partNum3_qty.get()), style='C.TButton')
         reset_button = Button(self.master, text="Reset", command=self.reset, style='C.TButton')
+        stock_button = Button(self.master, text="Stock", command=lambda: self.stock(chassis.get(), engine.get(), wheel.get()), style='C.TButton')
 
         partNum1_entry = OptionMenu(self.master, chassis, *chassis_list)
         partNum2_entry = OptionMenu(self.master, engine, *engine_list)
@@ -83,16 +91,18 @@ class assembly:
         partNum2_qty = Entry(self.master, width=5, textvariable=self.partNum2Qty)
         partNum3_qty = Entry(self.master, width=5, textvariable=self.partNum3Qty)
 
-        self.orderNumber_label.place(x=10, y=10)
+        orderNumber_label.place(x=10, y=10)
         workerID_label.place(x=10, y=35)
 
         qty_label.place(x=360, y=130)
+        stock_label.place(x=410, y=130)
         partNum1_label.place(x=110, y=160)
         partNum2_label.place(x=110, y=190)
         partNum3_label.place(x=110, y=220)
 
-        enter_button.place(x=300, y=315, width=80)
-        reset_button.place(x=210, y=315, width=80)
+        reset_button.place(x=180, y=315, width=80)
+        enter_button.place(x=270, y=315, width=80)
+        stock_button.place(x=360, y=315, width=80)
 
         partNum1_entry.place(x=215, y=160)
         partNum2_entry.place(x=215, y=190)
@@ -100,6 +110,9 @@ class assembly:
         partNum1_qty.place(x=360, y=160)
         partNum2_qty.place(x=360, y=190)
         partNum3_qty.place(x=360, y=220)
+        self.part1Stock_label.place(x=475, y=160)
+        self.part2Stock_label.place(x=475, y=190)
+        self.part3Stock_label.place(x=475, y=220)
 
     def onClick(self, chassisNum, chassisQty, engNum, engQty, whlNum, whlQty):
         if chassisNum == "" or chassisQty == "" or engNum == "" or engQty == "" or whlNum == "" or whlQty == "":
@@ -130,6 +143,28 @@ class assembly:
         self.partNum2Qty.set("")
         self.partNum3Qty.set("")
         return
+
+    def stock(self, chassis, engine, wheel):
+        part1_query = "SELECT qty FROM inventory WHERE part_no = \"" + chassis + "\";"
+        part2_query = "SELECT qty FROM inventory WHERE part_no = \"" + engine + "\";"
+        part3_query = "SELECT qty FROM inventory WHERE part_no = \"" + wheel + "\";"
+        self.cursor.execute(part1_query)
+        part1_qty = self.cursor.fetchone()
+        self.cursor.execute(part2_query)
+        part2_qty = self.cursor.fetchone()
+        self.cursor.execute(part3_query)
+        part3_qty = self.cursor.fetchone()
+
+        self.part1Stock_label.destroy()
+        self.part2Stock_label.destroy()
+        self.part3Stock_label.destroy()
+        self.part1Stock_label = Label(self.master, text=part1_qty, font=("arial", 13, "bold"))
+        self.part2Stock_label = Label(self.master, text=part2_qty, font=("arial", 13, "bold"))
+        self.part3Stock_label = Label(self.master, text=part3_qty, font=("arial", 13, "bold"))
+        self.part1Stock_label.place(x=425, y=160)
+        self.part2Stock_label.place(x=425, y=190)
+        self.part3Stock_label.place(x=425, y=220)
+
 
 root = Tk()
 root.geometry("600x500")

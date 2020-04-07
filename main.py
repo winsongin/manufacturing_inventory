@@ -4,6 +4,8 @@ from login import Login
 from assembly_class import assembly
 from testing import TestingWindow
 from shipping import Interface
+from receiving import Receiving
+from accounting import accounting
 from selection import WOWindow
 
 
@@ -13,7 +15,11 @@ def main():
     login1 = Login(root)
     root.mainloop()
     if login1.dept == "Receiving":
-        return
+        root = Tk()
+        root.geometry("650x500")
+        root.configure(bg="light gray")
+        receiving1 = Receiving(root)
+        root.mainloop()
     elif login1.dept == "Assembly":
         workorder = WOWindow(login1.dept)
         root = Tk()
@@ -33,5 +39,14 @@ def main():
         root = Tk()
         Interface(interface, workorder, "0004")
         shipping(workorder, workerID)
+        root.mainloop()
+    elif login1.dept == "Accounting":
+        root = Tk()
+        root.geometry("500x300")
+        root.title("Accounting")
+        close_window = Button(root, text="Close", command=root.quit)
+        close_window.place(x=90, y=230)
+        app = accounting(root, "0005")
+        root.mainloop()
 
 main()

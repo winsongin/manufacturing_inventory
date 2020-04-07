@@ -37,6 +37,7 @@ class Login:
         cur.execute(statement)
         result = cur.fetchone()
         result = ''.join(result)
+        print(result)
         if result == self.user.get():
             return True
 

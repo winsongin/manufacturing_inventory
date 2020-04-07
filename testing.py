@@ -1,6 +1,7 @@
 from tkinter import * #importing the tkinter class.
 import tkinter.messagebox #Able to create pop-up Messages.
 import mysql.connector#connecting Python with Mysql
+import sys
 
 mydb = mysql.connector.connect(
             host="localhost",
@@ -10,30 +11,33 @@ mydb = mysql.connector.connect(
         )
 ################################# Python/Mysql Connection above #####################################################
 
-
+#class Decleration
 class TestingWindow:
-     # Function will output Testing results and will update status.
-    def onClick(self, wo):
+    # Function will output Testing results and will update status.
+    def onClick(self):
         answer = tkinter.messagebox.askquestion("RESULT", "Are these tests correct? ")
         cursor = mydb.cursor()
         if answer == "yes" and 5 <= int(self.entry3.get()) <= 12 and 98 <= int(self.entry4.get()) <= 100 and \
                 2 <= int(self.entry5.get()) <= 4 and 98 <= int(self.entry6.get()) <= 100:
             tkinter.messagebox.showinfo("RESULT", "ALL TEST PASS!")
             cursor = mydb.cursor()
-            cursor.execute("UPDATE work_in_progress SET status = 'Shipping' WHERE wo_number = \"" + wo + "\"")
+            cursor.execute("UPDATE work_in_progress SET status = 'Shipping' ")
             mydb.commit()
 
         else:
             tkinter.messagebox.showinfo("RESULT", "TESTS FAILED!")
-            cursor.execute("UPDATE work_in_progress SET status = 'Assembly' WHERE wo_number = \"" + wo + "\"")
+            cursor.execute("UPDATE work_in_progress SET status = 'Assembly' ")
             mydb.commit()
-   
-    def getStatus(self, wo):
+            
+    #gets status of order
+    def getStatus(self):
         cursor3 = mydb.cursor()
-        cursor3.execute("SELECT status  FROM work_in_progress WHERE wo_number = \"" + wo + "\"")
+        statement = "SELECT status  FROM work_in_progress WHERE status = '{}' "
+        cursor3.execute(statement)
         stat = cursor3.fetchall()
         return stat
 
+    # Function will Reset all Testing inputs
     def reset(self):
         self.E3.set(' ')
         self.E4.set(' ')
@@ -42,9 +46,6 @@ class TestingWindow:
 
     def __init__(self, master):
         self.master = master
-        master.geometry("600x500")  # Resizing window
-        master.configure(bg="light gray")
-        master.title("Testing")  # giving window a title
 
         self.FileMenu = Menu(master)
         self.master.config(menu= self.FileMenu)
@@ -73,10 +74,9 @@ class TestingWindow:
 
         # displaying Order Status:
         self.status_label = Label(master, text="Order Status: ", bg="yellow", font=("arial", 15, "bold"))
-        self.status = StringVar()
-        self.stat_label = Label(master, textvariable=self.status, font=("arial", 15, "bold"))
-        self.status.set(self.getStatus(workOrder))
-        self.stat_label.place(x=225, y=140)
+        self.stat = StringVar()
+        self.orderStatusEntry = Entry(self.master, textvariable=self.stat, font=("arial", 15, "bold"))
+        self.stat.set(self.getStatus())
 
         self.test1_label = Label(master, text="Test 1: Speed ", bg="red", font=("arial", 13, "bold"))
         self.test2_label = Label(master, text="Test 2: Durability ", bg="red", font=("arial", 13, "bold"))
@@ -90,7 +90,7 @@ class TestingWindow:
         self.p4 = Label(master, text="[98% or >]", font=("araial", 12, "bold"))
 
         # Creating butoons here:
-        self.enter_button = Button(master, text="Enter", bg="blue", fg="white", command=lambda: self.onClick(workOrder),
+        self.enter_button = Button(master, text="Enter", bg="blue", fg="white", command=lambda: self.onClick(),
                                    font=("arial", 13, "bold"))  # Command is binding to fuction.
         self.reset_button = Button(master, text="Reset", command=self.reset, bg="blue", fg="white",
                                    font=("arial", 13, "bold"))
@@ -130,6 +130,10 @@ class TestingWindow:
         self.entry5.place(x=310, y=280)
         self.entry6.place(x=310, y=310)
 
-master = Tk()
-a = TestingWindow(master)
-master.mainloop()
+if __name__ == "__main__":
+    master = Tk()
+    master.geometry("600x500")  # Resizing window
+    master.configure(bg="light gray")
+    master.title("Testing")  # giving window a title
+    window = TestingWindow(master)
+    master.mainloop()

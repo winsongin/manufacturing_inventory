@@ -45,6 +45,7 @@ def WOWindow(department):
                                          auth_plugin="mysql_native_password", database="inventory_system")
 
     printAll = "SELECT * FROM work_in_progress WHERE status = \"" + department + "\""
+    cursor = connection.cursor()
     cursor.execute(printAll)
     records = cursor.fetchall()
 

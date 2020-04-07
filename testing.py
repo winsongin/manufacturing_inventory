@@ -3,49 +3,21 @@ import tkinter.messagebox #Able to create pop-up Messages.
 import mysql.connector#connecting Python with Mysql
 import sys
 
-mydb = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            passwd="Omar131997",
-            database="inventory_system"
-        )
+
 ################################# Python/Mysql Connection above #####################################################
 
 #class Decleration
 class TestingWindow:
-    # Function will output Testing results and will update status.
-    def onClick(self):
-        answer = tkinter.messagebox.askquestion("RESULT", "Are these tests correct? ")
-        cursor = mydb.cursor()
-        if answer == "yes" and 5 <= int(self.entry3.get()) <= 12 and 98 <= int(self.entry4.get()) <= 100 and \
-                2 <= int(self.entry5.get()) <= 4 and 98 <= int(self.entry6.get()) <= 100:
-            tkinter.messagebox.showinfo("RESULT", "ALL TEST PASS!")
-            cursor = mydb.cursor()
-            cursor.execute("UPDATE work_in_progress SET status = 'Shipping' ")
-            mydb.commit()
-
-        else:
-            tkinter.messagebox.showinfo("RESULT", "TESTS FAILED!")
-            cursor.execute("UPDATE work_in_progress SET status = 'Assembly' ")
-            mydb.commit()
-            
-    #gets status of order
-    def getStatus(self):
-        cursor3 = mydb.cursor()
-        statement = "SELECT status  FROM work_in_progress WHERE status = '{}' "
-        cursor3.execute(statement)
-        stat = cursor3.fetchall()
-        return stat
-
-    # Function will Reset all Testing inputs
-    def reset(self):
-        self.E3.set(' ')
-        self.E4.set(' ')
-        self.E5.set(' ')
-        self.E6.set(' ')
-
-    def __init__(self, master):
+    def __init__(self, master, wo, emp_id):
         self.master = master
+        self.wo = wo
+        self.emp_id = emp_id
+        self.mydb = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            passwd="Razgriz!949",
+            database="inventory_system"
+        )
 
         self.FileMenu = Menu(master)
         self.master.config(menu= self.FileMenu)
@@ -63,33 +35,32 @@ class TestingWindow:
         # Displaying work order number.
         self.orderNumber_label = Label(master, text="Work Order Number: ", bg="yellow", font=("arial", 15, "bold"))
         self.work_number = StringVar()
-        self.number = Label(master, textvariable=self.work_number, font=("arial", 15, "bold"))
+        self.number = Label(master, text=self.wo, font=("arial", 15, "bold"))
         self.number.place(x=225, y=80)
 
         # displaying worker ID:
         self.workerID_label = Label(master, text="Worker ID: ", bg="yellow", font=("arial", 15, "bold"))
         self.id = StringVar()
-        self.id_label = Label(master, textvariable=self.id, font=("arial", 15, "bold"))
+        self.id_label = Label(master, text=self.emp_id, font=("arial", 15, "bold"))
         self.id_label.place(x=225, y=110)
 
         # displaying Order Status:
         self.status_label = Label(master, text="Order Status: ", bg="yellow", font=("arial", 15, "bold"))
         self.stat = StringVar()
-        self.orderStatusEntry = Entry(self.master, textvariable=self.stat, font=("arial", 15, "bold"))
-        self.stat.set(self.getStatus())
+        self.orderStatusEntry = Label(self.master, text="Testing", font=("arial", 15, "bold"))
 
         self.test1_label = Label(master, text="Test 1: Speed ", bg="red", font=("arial", 13, "bold"))
         self.test2_label = Label(master, text="Test 2: Durability ", bg="red", font=("arial", 13, "bold"))
         self.test3_label = Label(master, text="Test 3: Battery Efficiency  ", bg="red", font=("arial", 13, "bold"))
         self.test4_label = Label(master, text="Test 4: Remote Signal Range ", bg="red", font=("arial", 13, "bold"))
-        self.parameters_label = Label(master, text="Parameters", relief="solid", width=10, font=("araial", 12, "bold"))
+        self.parameters_label = Label(master, text="Parameters", relief="solid", width=10, font=("arial", 12, "bold"))
 
-        self.p1 = Label(master, text="[5-12 MPH]", font=("araial", 12, "bold"))
-        self.p2 = Label(master, text="[98% or >]", font=("araial", 12, "bold"))
-        self.p3 = Label(master, text="[2-4 Hours]", font=("araial", 12, "bold"))
-        self.p4 = Label(master, text="[98% or >]", font=("araial", 12, "bold"))
+        self.p1 = Label(master, text="[5-12 MPH]", font=("arial", 12, "bold"))
+        self.p2 = Label(master, text="[98% or >]", font=("arial", 12, "bold"))
+        self.p3 = Label(master, text="[2-4 Hours]", font=("arial", 12, "bold"))
+        self.p4 = Label(master, text="[98% or >]", font=("arial", 12, "bold"))
 
-        # Creating butoons here:
+        # Creating buttons here:
         self.enter_button = Button(master, text="Enter", bg="blue", fg="white", command=lambda: self.onClick(),
                                    font=("arial", 13, "bold"))  # Command is binding to fuction.
         self.reset_button = Button(master, text="Reset", command=self.reset, bg="blue", fg="white",
@@ -110,6 +81,7 @@ class TestingWindow:
         self.orderNumber_label.place(x=10, y=80)
         self.workerID_label.place(x=10, y=110)
         self.status_label.place(x=10, y=140)
+        self.orderStatusEntry.place(x=225, y=140)
         self.parameters_label.place(x=480, y=190)
 
         # placing items here on master
@@ -130,10 +102,41 @@ class TestingWindow:
         self.entry5.place(x=310, y=280)
         self.entry6.place(x=310, y=310)
 
+    # Function will output Testing results and will update status.
+    def onClick(self):
+        answer = tkinter.messagebox.askquestion("RESULT", "Are these tests correct? ")
+        cursor = self.mydb.cursor()
+        if answer == "yes" and 5 <= int(self.entry3.get()) <= 12 and 98 <= int(self.entry4.get()) <= 100 and \
+                2 <= int(self.entry5.get()) <= 4 and 98 <= int(self.entry6.get()) <= 100:
+            tkinter.messagebox.showinfo("RESULT", "ALL TEST PASS!")
+            cursor = self.mydb.cursor()
+            cursor.execute("UPDATE work_in_progress SET status = 'Shipping' ")
+            self.mydb.commit()
+
+        else:
+            tkinter.messagebox.showinfo("RESULT", "TESTS FAILED!")
+            cursor.execute("UPDATE work_in_progress SET status = 'Assembly' ")
+            self.mydb.commit()
+            
+    #gets status of order
+    def getStatus(self):
+        cursor3 = self.mydb.cursor()
+        statement = "SELECT status  FROM work_in_progress WHERE status = '{}' "
+        cursor3.execute(statement)
+        stat = cursor3.fetchall()
+        return stat
+
+    # Function will Reset all Testing inputs
+    def reset(self):
+        self.E3.set(' ')
+        self.E4.set(' ')
+        self.E5.set(' ')
+        self.E6.set(' ')
+
 if __name__ == "__main__":
     master = Tk()
     master.geometry("600x500")  # Resizing window
     master.configure(bg="light gray")
     master.title("Testing")  # giving window a title
-    window = TestingWindow(master)
+    window = TestingWindow(master, "1", "0003")
     master.mainloop()

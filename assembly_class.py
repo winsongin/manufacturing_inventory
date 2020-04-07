@@ -165,9 +165,9 @@ class assembly:
         self.part2Stock_label.place(x=425, y=190)
         self.part3Stock_label.place(x=425, y=220)
 
-
-root = Tk()
-root.geometry("600x500")
-root.title("Assembly")
-app = assembly(root, "0002", "2")
-root.mainloop()
+if __name__ == "__main__":
+    root = Tk()
+    root.geometry("600x500")
+    root.title("Assembly")
+    app = assembly(root, "0002", "2")
+    root.mainloop()

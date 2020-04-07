@@ -6,6 +6,7 @@ from testing import TestingWindow
 from shipping import Interface
 from receiving import Receiving
 from accounting import accounting
+from admin import Admin
 from selection import WOWindow
 
 
@@ -47,6 +48,13 @@ def main():
         close_window = Button(root, text="Close", command=root.quit)
         close_window.place(x=90, y=230)
         app = accounting(root, "0005")
+        root.mainloop()
+    elif login1.dept == "Admin":
+        root = Tk()
+        root.geometry("600x500")
+        root.title("New User")
+        root.configure(bg="light gray")
+        admin1 = Admin(root)
         root.mainloop()
 
 main()

@@ -12,7 +12,7 @@ class In_Progress:
         self.tree.delete(*self.tree.get_children())
 
         connection=mysql.connector.connect(host="localhost",
-        user="root",password="T1t@n1umus",
+        user="root",password="Razgriz!949",
         auth_plugin="mysql_native_password", database="inventory_system")
         cursor = connection.cursor()
 
@@ -40,7 +40,7 @@ class In_Progress:
 
     #This function will display the column based on user input.
     def search_columns(self):
-        queryInput = str(searchEntry.get())
+        queryInput = self.searchEntry.get()
         
         #Delete all of the entries in the tree first.
         self.tree.delete(*self.tree.get_children())
@@ -48,7 +48,7 @@ class In_Progress:
         #Display all of the data if nothing is entered in the search box.
         if (len(queryInput) == 0):
             connection=mysql.connector.connect(host="localhost",
-            user="root",password="T1t@n1umus",
+            user="root",password="Razgriz!949",
             auth_plugin="mysql_native_password", database="inventory_system")
             cursor = connection.cursor()
 
@@ -76,12 +76,12 @@ class In_Progress:
            
         else:
             connection=mysql.connector.connect(host="localhost",
-            user="root",password="T1t@n1umus",
+            user="root",password="Razgriz!949",
             auth_plugin="mysql_native_password", database="inventory_system")
             cursor = connection.cursor()
 
             #Print all the database records onto the GUI.
-            querySearch = ("SELECT * FROM work_in_progress WHERE wo_number = '{}'").format(queryInput)
+            querySearch = ("SELECT * FROM work_in_progress WHERE wo_number LIKE '%{}%'").format(queryInput)
             cursor.execute(querySearch)
             records  = cursor.fetchall()
             for row in records:
@@ -108,7 +108,7 @@ class In_Progress:
         self.tree.delete(*self.tree.get_children())
 
         connection=mysql.connector.connect(host="localhost",
-        user="root",password="T1t@n1umus",
+        user="root",password="Razgriz!949",
         auth_plugin="mysql_native_password", database="inventory_system")
         cursor = connection.cursor()
 
@@ -154,7 +154,7 @@ class In_Progress:
         self.tree=ttk.Treeview(master, column=("column", "column1", "column2",
         "column3", "column4", "column5", "column6")) #Needed to create new columns
         self.master.title("Work In Progress")
-        searchEntry = tk.StringVar()
+        self.searchEntry = tk.StringVar()
         self.master.resizable(False, False) #Don't allow users to resize window.
         # Set up the grid configurations below.
         self.master.grid_rowconfigure(0, weight=1)
@@ -196,7 +196,7 @@ class In_Progress:
 
         #Connect to the database if possible.
         connection=mysql.connector.connect(host="localhost",
-        user="root",password="T1t@n1umus",
+        user="root",password="Razgriz!949",
         auth_plugin="mysql_native_password", database="inventory_system")
         db_Info = connection.get_server_info()
         print("Connected to MySQL Server version ", db_Info)

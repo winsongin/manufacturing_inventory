@@ -37,7 +37,7 @@ CREATE TABLE `customer` (
 
 LOCK TABLES `customer` WRITE;
 /*!40000 ALTER TABLE `customer` DISABLE KEYS */;
-INSERT INTO `customer` VALUES ('09132','ToysRUs','0912 Edinger Ave. Huntington Beach, CA 98485','0'),('12355','Tom Bradley','945 Nutwood Ave. Fullerton, CA 98647','0'),('21988','Johnny Tran','8490 Colonel Ave. Seal Beach, CA 95800','0'),('68954','Bobby Tran','8695 Lincoln Ave. Anaheim, CA 92180','0'),('74568','John Doe','789 Forest Hills Dr. Lake Forest, CA 98457','0'),('75849','Bob Seek','2385 Pool Dr. Fullerton, CA 98457','0'),('78495','Tennis Shop','8183 Brookhurst St. Fountain Valley, CA 92683','0'),('78549','Floyd Holliday','894 College Blvd. Fullerton, CA 98456','0'),('78956','John Doe','123 Waze St. Fullerton, CA 95867','0'),('81400','William McCarthy','1485 Path Dr. Fullerton, CA 98576','0'),('85947','Bobby Tarantino','789 Harbor Blvd. Fullerton, CA 94857','0'),('8695','Bob Mcgyver','84956 Arts Dr. Irvine, CA 98567','0'),('96857','Costco','8195 Arts Dr. Fullerton, CA 94858','0');
+INSERT INTO `customer` VALUES ('0621','Winston Churchill','123 England','300'),('09132','ToysRUs','0912 Edinger Ave. Huntington Beach, CA 98485','100.99'),('12355','Tom Bradley','945 Nutwood Ave. Fullerton, CA 98647','0.0'),('21988','Johnny Tran','8490 Colonel Ave. Seal Beach, CA 95800','78.65'),('6849','Carolyn','123 Fake Street','45.12'),('68954','Bobby Tran','8695 Lincoln Ave. Anaheim, CA 92180','35.89'),('74568','John Doe','789 Forest Hills Dr. Lake Forest, CA 98457','44.56'),('75849','Bob Seek','2385 Pool Dr. Fullerton, CA 98457','57.65'),('78495','Tennis Shop','8183 Brookhurst St. Fountain Valley, CA 92683','300.68'),('78549','Floyd Holliday','894 College Blvd. Fullerton, CA 98456','50.00'),('78945','Jetset','567 Linhaven','13.00'),('78956','John Doe','123 Waze St. Fullerton, CA 95867','48.57'),('81400','William McCarthy','1485 Path Dr. Fullerton, CA 98576','97.45'),('85947','Bobby Tarantino','789 Harbor Blvd. Fullerton, CA 94857','155.12'),('8695','Bob Mcgyver','84956 Arts Dr. Irvine, CA 98567','32.98'),('96857','Costco','8195 Arts Dr. Fullerton, CA 94858','45.75');
 /*!40000 ALTER TABLE `customer` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-24 20:16:34
+-- Dump completed on 2020-04-07 18:24:46

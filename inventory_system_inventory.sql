@@ -38,7 +38,7 @@ CREATE TABLE `inventory` (
 
 LOCK TABLES `inventory` WRITE;
 /*!40000 ALTER TABLE `inventory` DISABLE KEYS */;
-INSERT INTO `inventory` VALUES ('3HP Engine','01-444','We Move Things LLC',120,'Engine'),('Green Chassis','0X1233','Plastics Inc',100,'Chassis'),('Red Chassis','0X1234','Plastics Inc',100,'Chassis'),('Blue Chassis','0X1254','Plastic Inc',100,'Chassis'),('1\" Rubber Wheel','1234-4321','Rubber R Us',200,'Wheel'),('2\" Rubber Tire','1237-4444','Rubber R Us',100,'Wheel'),('5HP Engine','30-123','We Move Things LLC',50,'Engine'),('1.5\" Hard Rubber Tire','4321-5432','Rubber R Us',250,'Wheel');
+INSERT INTO `inventory` VALUES ('3HP Engine','01-444','We Move Things LLC',111,'Engine'),('Green Chassis','0X1233','Plastics Inc',91,'Chassis'),('Red Chassis','0X1234','Plastics Inc',100,'Chassis'),('Blue Chassis','0X1254','Plastic Inc',95,'Chassis'),('1\" Rubber Wheel','1234-4321','Rubber R Us',187,'Wheel'),('2\" Rubber Tire','1237-4444','Rubber R Us',99,'Wheel'),('5HP Engine','30-123','We Move Things LLC',45,'Engine'),('1.5\" Hard Rubber Tire','4321-5432','Rubber R Us',247,'Wheel');
 /*!40000 ALTER TABLE `inventory` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-24 20:16:35
+-- Dump completed on 2020-04-07 18:24:46

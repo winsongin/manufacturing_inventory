@@ -44,7 +44,7 @@ CREATE TABLE `employees` (
 
 LOCK TABLES `employees` WRITE;
 /*!40000 ALTER TABLE `employees` DISABLE KEYS */;
-INSERT INTO `employees` VALUES ('0001','Ralph','Pura','5555555555','Receiving','password','Y','N','N','N','N'),('0002','John','Doe','6666666666','Assembly','youtube','N','Y','N','N','N'),('0003','Jane','Smith','7777777777','Testing','minecraft','N','N','Y',NULL,'N'),('0004','John','Gibson','8888888888','Shipping','reddit','N','N','N','Y','N');
+INSERT INTO `employees` VALUES ('0001','Ralph','Pura','5555555555','Receiving','password','Y','N','N','N','N'),('0002','John','Doe','6666666666','Assembly','youtube','N','Y','N','N','N'),('0003','Jane','Smith','7777777777','Testing','minecraft','N','N','Y',NULL,'N'),('0004','John','Gibson','8888888888','Shipping','reddit','N','N','N','Y','N'),('0005','Test','User','111111111','Accounting','test','N','N','N','N','N'),('0006','inventory','user','999999999','Inventory','stock','N','N','N','N','N'),('0007','admin','user','123456789','Admin','admin','N','N','N','N','Y'),('0010','Test','User','789456123','Assembly','testing','N','N','Y','N','N');
 /*!40000 ALTER TABLE `employees` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-24 20:16:35
+-- Dump completed on 2020-04-07 18:24:46

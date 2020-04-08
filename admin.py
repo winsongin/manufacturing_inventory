@@ -3,7 +3,7 @@ import mysql.connector
 import sys
 import tkinter as tk
 
-myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "winsongin", database = "inventory_system")
+myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "Razgriz!949", database = "inventory_system")
 
 
 class Admin:
@@ -23,7 +23,7 @@ class Admin:
         canShip = self.canShipInput.get()
         isAdmin = self.isAdminInput.get()
 
-        query = "INSERT INTO employees (employee_id, password, first_name, last_name, phone_number, dept, can_receive, can_assemble, can_test, can_ship, is_admin) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        query = "INSERT INTO employees (employee_id, pass, first_name, last_name, phone_number, dept, can_receive, can_assemble, can_test, can_ship, is_admin) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         myCursor.execute(query, (empID, password, fName, lName, pNum, department, canReceive, canAssemble, canTest, canShip, isAdmin))
         myDb.commit()
 

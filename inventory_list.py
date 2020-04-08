@@ -12,7 +12,7 @@ class Inventory:
         self.tree.delete(*self.tree.get_children())
 
         connection=mysql.connector.connect(host="localhost",
-        user="root",password="T1t@n1umus",
+        user="root",password="Razgriz!949",
         auth_plugin="mysql_native_password", database="inventory_system")
         cursor = connection.cursor()
 
@@ -39,7 +39,7 @@ class Inventory:
 
     #This function will display the column based on user input.
     def search_columns(self):
-        queryInput = searchEntry.get()
+        queryInput = self.searchEntry.get()
 
         #Delete all of the entries in the tree first.
         self.tree.delete(*self.tree.get_children())
@@ -47,7 +47,7 @@ class Inventory:
         #Display all of the data if nothing is entered in the search box.
         if (len(queryInput) == 0):
             connection=mysql.connector.connect(host="localhost",
-            user="root",password="T1t@n1umus",
+            user="root",password="Razgriz!949",
             auth_plugin="mysql_native_password", database="inventory_system")
             cursor = connection.cursor()
 
@@ -73,7 +73,7 @@ class Inventory:
 
         else:
             connection=mysql.connector.connect(host="localhost",
-            user="root",password="T1t@n1umus",
+            user="root",password="Razgriz!949",
             auth_plugin="mysql_native_password", database="inventory_system")
             db_Info = connection.get_server_info()
             print("Connected to MySQL Server version ", db_Info)
@@ -83,7 +83,7 @@ class Inventory:
             print("Connected to database called ", records)
 
             #Print all the database records onto the GUI.
-            querySearch = ("SELECT * FROM inventory WHERE part_name = '{}'").format(queryInput)
+            querySearch = ("SELECT * FROM inventory WHERE part_name LIKE '%{}%'").format(queryInput)
             cursor.execute(querySearch)
             records  = cursor.fetchall()
             for row in records:
@@ -108,7 +108,7 @@ class Inventory:
         self.tree.delete(*self.tree.get_children())
 
         connection=mysql.connector.connect(host="localhost",
-        user="root",password="T1t@n1umus",
+        user="root",password="Razgriz!949",
         auth_plugin="mysql_native_password", database="inventory_system")
         cursor = connection.cursor()
 
@@ -150,7 +150,7 @@ class Inventory:
         self.tree.delete(*self.tree.get_children())
 
         connection=mysql.connector.connect(host="localhost",
-        user="root",password="T1t@n1umus",
+        user="root",password="Razgriz!949",
         auth_plugin="mysql_native_password", database="inventory_system")
         cursor = connection.cursor()
         
@@ -181,7 +181,7 @@ class Inventory:
         self.tree=ttk.Treeview(master, column=("column", "column1",
         "column2", "column3", "column4")) #Needed to create new columns
         self.master.title("Inventory List")
-        searchEntry = tk.StringVar()
+        self.searchEntry = tk.StringVar()
         self.master.resizable(False, False) #Don't allow users to resize window.
         # Set up the grid configurations below.
         self.master.grid_rowconfigure(0, weight=1)
@@ -190,7 +190,7 @@ class Inventory:
         # Configure the following widgets below
         self.lTitle = tk.Label(master, text="Inventory", font=("Arial", 20))
         self.lLowQuantity = tk.Label(master, text="Low on Quantity")
-        self.eSearch = tk.Entry(master, textvariable=searchEntry, width=40)
+        self.eSearch = tk.Entry(master, textvariable=self.searchEntry, width=40)
         self.bSearch = tk.Button(master, text="Search", command=self.search_columns)
         self.bQuantity = tk.Button(master, text="Check Quantity", command=self.low_on_quantity)
         self.bQuit = tk.Button(master, text="Quit", command=master.destroy)
@@ -222,7 +222,7 @@ class Inventory:
 
         #Connect to the database if possible.
         connection=mysql.connector.connect(host="localhost",
-        user="root",password="T1t@n1umus",
+        user="root",password="Razgriz!949",
         auth_plugin="mysql_native_password", database="inventory_system")
         db_Info = connection.get_server_info()
         print("Connected to MySQL Server version ", db_Info)
@@ -252,5 +252,7 @@ class Inventory:
         connection.close()
         print("MySQL connection closed.")
 
-window = Tk()
-thisMain = Inventory(window)
+if __name__ == "__main__":
+    window = Tk()
+    thisMain = Inventory(window)
+    window.mainloop()

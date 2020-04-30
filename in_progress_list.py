@@ -34,14 +34,6 @@ class In_Progress:
         querySearch = "SELECT * FROM work_in_progress"
         cursor.execute(querySearch)
         records  = cursor.fetchall()
-        for row in records:
-            print("Work Number: ", row[0])
-            print("Status: ", row[1])
-            print("Date Received: ", row[2])
-            print("ETA: ", row[3])
-            print("Customer ID: ", row[4])
-            print("Price: ", row[5])
-            print("Address: ", row[6])
 
         counter = 0
         for row in records:
@@ -70,14 +62,6 @@ class In_Progress:
             querySearch = "SELECT * FROM work_in_progress"
             cursor.execute(querySearch)
             records  = cursor.fetchall()
-            for row in records:
-                print("Work Number: ", row[0])
-                print("Status: ", row[1])
-                print("Date Received: ", row[2])
-                print("ETA: ", row[3])
-                print("Customer ID: ", row[4])
-                print("Price: ", row[5])
-                print("Address: ", row[6])
 
             counter = 0
             for row in records:
@@ -98,14 +82,6 @@ class In_Progress:
             querySearch = ("SELECT * FROM work_in_progress WHERE wo_number LIKE '%{}%'").format(queryInput)
             cursor.execute(querySearch)
             records  = cursor.fetchall()
-            for row in records:
-                print("Work Number: ", row[0])
-                print("Status: ", row[1])
-                print("Date Received: ", row[2])
-                print("ETA: ", row[3])
-                print("Customer ID: ", row[4])
-                print("Price: ", row[5])
-                print("Address: ", row[6])
 
             counter = 0
             for row in records:
@@ -145,14 +121,6 @@ class In_Progress:
         #Print all the database records onto the GUI.
         cursor.execute(querySort)
         records  = cursor.fetchall()
-        for row in records:
-            print("Work Number: ", row[0])
-            print("Status: ", row[1])
-            print("Date Received: ", row[2])
-            print("ETA: ", row[3])
-            print("Customer ID: ", row[4])
-            print("Price: ", row[5])
-            print("Address: ", row[6])
 
         counter = 0
         for row in records:
@@ -223,14 +191,6 @@ class In_Progress:
         printAll = "SELECT * FROM work_in_progress"
         cursor.execute(printAll)
         records  = cursor.fetchall()
-        for row in records:
-            print("Work Number: ", row[0])
-            print("Status: ", row[1])
-            print("Date Received: ", row[2])
-            print("ETA: ", row[3])
-            print("Customer ID: ", row[4])
-            print("Price: ", row[5])
-            print("Address: ", row[6])
 
         counter = 0
         for row in records:

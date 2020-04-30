@@ -119,7 +119,18 @@ class In_Progress:
         cursor.close()
         connection.close()
         
+     def idle_timer(self):
+        #Increment i by 1 and continue to sleep for a second until loop breaks
+        i = 0
+        while True:
+            i += 1
+            time.sleep(1)
+
+            if self.stop_event.is_set():
+                break
+        
     def __init__(self, master):
+        self.stop_event = Event()
         self.master=master
         self.tree=ttk.Treeview(master, column=("column", "column1", "column2",
         "column3", "column4", "column5", "column6")) #Needed to create new columns
@@ -189,29 +200,17 @@ class In_Progress:
         cursor.close()
         connection.close()
         print("MySQL connection closed.")
+        
+        #Create a thread for idle_timer
+        self.action_thread = Thread(target=self.idle_timer)
+
+        #Start the thread and continue for 600 seconds before timeout.
+        self.action_thread.start()
+        self.action_thread.join(timeout=5)
+
+        #Send a signal to stop the thread.
+        self.stop_event.set()
 
 if __name__ == '__main__':
     window = Tk()
     thisMain = In_Progress(window)
-
-    stop_event = Event()
-
-    def idle_timer():
-        #Increment i by 1 and continue to sleep for a second until loop breaks
-        i = 0
-        while True:
-            i += 1
-            time.sleep(1)
-
-            if stop_event.is_set():
-                break
-
-    #Create a thread for idle_timer
-    action_thread = Thread(target=idle_timer)
-
-    #Start the thread and continue for 600 seconds before timeout.
-    action_thread.start()
-    action_thread.join(timeout=5)
-
-    #Send a signal to stop the thread.
-    stop_event.set()

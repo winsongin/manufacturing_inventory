@@ -6,18 +6,6 @@ from threading import Thread, Event #Needed to work with events
 import time #Needed for sleep function
 
 # In Progress List
-
-stop_event = Event()
-
-def idle_timer():
-    #Increment i by 1 and continue to sleep for a second until loop breaks
-    i = 0
-    while True:
-        i += 1
-        time.sleep(1)
-
-        if stop_event.is_set():
-            break
         
 class In_Progress:
         #This function will reset the window back to its default state.
@@ -206,12 +194,24 @@ if __name__ == '__main__':
     window = Tk()
     thisMain = In_Progress(window)
 
+    stop_event = Event()
+
+    def idle_timer():
+        #Increment i by 1 and continue to sleep for a second until loop breaks
+        i = 0
+        while True:
+            i += 1
+            time.sleep(1)
+
+            if stop_event.is_set():
+                break
+
     #Create a thread for idle_timer
     action_thread = Thread(target=idle_timer)
 
-    #Start the thread and continue for 300 seconds before timeout.
+    #Start the thread and continue for 600 seconds before timeout.
     action_thread.start()
-    action_thread.join(timeout=1)
+    action_thread.join(timeout=5)
 
     #Send a signal to stop the thread.
     stop_event.set()

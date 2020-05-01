@@ -20,12 +20,6 @@ class Inventory:
         querySearch = "SELECT * FROM inventory"
         cursor.execute(querySearch)
         records  = cursor.fetchall()
-        for row in records:
-            print("Work Number: ", row[0])
-            print("Status: ", row[1])
-            print("Company: ", row[2])
-            print("Date Received: ", row[3])
-            print("ETA: ", row[4])
 
         counter = 0
         for row in records:
@@ -55,12 +49,6 @@ class Inventory:
             querySearch = "SELECT * FROM inventory"
             cursor.execute(querySearch)
             records  = cursor.fetchall()
-            for row in records:
-                print("Part Name: ", row[0])
-                print("Part Number: ", row[1])
-                print("Manufacturer: ", row[2])
-                print("Quantity: ", row[3])
-                print("Part Type: ", row[4])
 
             counter = 0
             for row in records:
@@ -86,12 +74,6 @@ class Inventory:
             querySearch = ("SELECT * FROM inventory WHERE part_name LIKE '%{}%'").format(queryInput)
             cursor.execute(querySearch)
             records  = cursor.fetchall()
-            for row in records:
-                print("Part Name: ", row[0])
-                print("Part Number: ", row[1])
-                print("Manufacturer: ", row[2])
-                print("Quantity: ", row[3])
-                print("Part Type: ", row[4])
 
             counter = 0
             for row in records:
@@ -127,12 +109,6 @@ class Inventory:
         #Print all the database records onto the GUI.
         cursor.execute(querySort)
         records  = cursor.fetchall()
-        for row in records:
-            print("Part Name: ", row[0])
-            print("Part Number: ", row[1])
-            print("Manufacturer: ", row[2])
-            print("Quantity: ", row[3])
-            print("Part Type: ", row[4])
 
         counter = 0
         for row in records:
@@ -160,12 +136,6 @@ class Inventory:
         #Print all the database records onto the GUI.
         cursor.execute(quantSearch)
         records  = cursor.fetchall()
-        for row in records:
-            print("Part Name: ", row[0])
-            print("Part Number: ", row[1])
-            print("Manufacturer: ", row[2])
-            print("Quantity: ", row[3])
-            print("Part Type: ", row[4])
 
         counter = 0
         for row in records:
@@ -181,11 +151,9 @@ class Inventory:
         self.tree=ttk.Treeview(master, column=("column", "column1",
         "column2", "column3", "column4")) #Needed to create new columns
         self.master.title("Inventory List")
+        self.master.geometry("700x600")
         self.searchEntry = tk.StringVar()
         self.master.resizable(False, False) #Don't allow users to resize window.
-        # Set up the grid configurations below.
-        self.master.grid_rowconfigure(0, weight=1)
-        self.master.grid_columnconfigure(0, weight=1)
 
         # Configure the following widgets below
         self.lTitle = tk.Label(master, text="Inventory", font=("Arial", 20))
@@ -196,13 +164,12 @@ class Inventory:
         self.bQuit = tk.Button(master, text="Quit", command=master.destroy)
         self.bReset = tk.Button(master, text="Reset", command=self.reset_window)
 
-        # Now arrange all of the parts above in a grid.
-        self.lTitle.grid(row=0, column=0, sticky=E+W)
-        self.eSearch.grid(row=0, column=1, sticky=E)
-        self.bSearch.grid(row=0, column=2, sticky=E)
-        self.bQuantity.grid(row=1, column=2, sticky=E)
-        self.bReset.grid(row=2, column=2, sticky=E)
-        self.bQuit.grid(row=3, column=2, sticky=E)
+        self.lTitle.place(x=240, y=10)
+        self.eSearch.place(x=250, y=100)
+        self.bSearch.place(x=500, y=100)
+        self.bQuantity.place(x=50, y=500)
+        self.bReset.place(x=250, y=500)
+        self.bQuit.place(x=450, y=500)
 
         # Create the columns and headings below
         self.tree.column("#0", minwidth=0, width=0, stretch=False)
@@ -217,8 +184,8 @@ class Inventory:
         self.tree.heading("#5", text="Part Type", command=lambda: self.sort_column(self.tree, 4))
         self.tree.column("#5", minwidth=0, width=150, stretch=False)
 
-        self.tree.configure(height=20)
-        self.tree.grid() #Arrange all the TreeView parts in a grid.
+        self.tree.configure(height=15)
+        self.tree.place(x=20, y=150)
 
         #Connect to the database if possible.
         connection=mysql.connector.connect(host="localhost",
@@ -235,12 +202,6 @@ class Inventory:
         printAll = "SELECT * FROM inventory"
         cursor.execute(printAll)
         records  = cursor.fetchall()
-        for row in records:
-            print("Part Name: ", row[0])
-            print("Part Number: ", row[1])
-            print("Manufacturer: ", row[2])
-            print("Quantity: ", row[3])
-            print("Part Type: ", row[4])
 
         counter = 0
         for row in records:

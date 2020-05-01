@@ -13,6 +13,7 @@ class accounting:
         self.cust_address = ""
         self.cust_owe = 0.00
         self.accounting_window()
+        self.totalSales = 0.00
 
 
     def __open(self):
@@ -73,6 +74,8 @@ class accounting:
         self.submit_btn = Button(self.master, text="Submit", command=lambda: self.submit(pay.get(), self.cust_id.get()))
         self.submit_btn.place(x=5, y=230)
 
+        self.viewSales_btn = Button(self.master, text = "Total Sales", command= self.showTSales)
+        self.viewSales_btn.place(x=5, y = 260)
 
     def update_data(self, cust_id):
         self.cust_id_label.destroy()
@@ -100,6 +103,8 @@ class accounting:
 
     def submit(self, amt_paid, cust):
         total = float(self.cust_owe) - float(amt_paid)
+        self.totalSales = self.totalSales + float(amt_paid)
+        print(self.totalSales)
         print("{:0.2f}".format(total))
         print(type(total))
         total = str(round(total, 2))
@@ -107,7 +112,12 @@ class accounting:
         query = "UPDATE customer SET owe = \"" + str(total) + "\" WHERE name = \"" + cust + "\";"
         self.cursor.execute(query)
         self.mydb.commit()
-
+    
+    def showTSales(self):      
+        message = "$" + str(self.totalSales)
+        messagebox.showinfo("Total Sales",message)
+        
+        
 if __name__ == "__main__":
     root = Tk()
     root.geometry("500x300")

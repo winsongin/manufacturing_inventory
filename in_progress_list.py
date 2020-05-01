@@ -119,41 +119,38 @@ class In_Progress:
         cursor.close()
         connection.close()
         
-     def idle_timer(self):
-        #Increment i by 1 and continue to sleep for a second until loop breaks
-        i = 0
-        while True:
-            i += 1
-            time.sleep(1)
-
-            if self.stop_event.is_set():
-                break
+##    def idle_timer(self):
+##        #Increment i by 1 and continue to sleep for a second until loop breaks
+##        i = 0
+##        while True:
+##            i += 1
+##            time.sleep(1)
+##
+##            if self.stop_event.is_set():
+##                break
         
     def __init__(self, master):
-        self.stop_event = Event()
+##      self.stop_event = Event()
         self.master=master
         self.tree=ttk.Treeview(master, column=("column", "column1", "column2",
         "column3", "column4", "column5", "column6")) #Needed to create new columns
         self.master.title("Work In Progress")
+        self.master.geometry("900x600")
         self.searchEntry = tk.StringVar()
         self.master.resizable(False, False) #Don't allow users to resize window.
-        # Set up the grid configurations below.
-        self.master.grid_rowconfigure(0, weight=1)
-        self.master.grid_columnconfigure(0, weight=1)
 
         # Configure the following widgets below
         self.lTitle = tk.Label(master, text="Work In Progress", font=("Arial", 20))
-        self.eSearch = tk.Entry(master, textvariable=searchEntry, width=25)
+        self.eSearch = tk.Entry(master, textvariable=self.searchEntry, width=25)
         self.bSearch = tk.Button(master, text="Search", command=self.search_columns)
         self.bQuit = tk.Button(master, text="Quit", command=master.destroy)
         self.bReset = tk.Button(master, text="Reset", command=self.reset_window)
 
-        # Now arrange all of the parts above in a grid.
-        self.lTitle.grid(row=0, column=0, sticky=E+W)
-        self.eSearch.grid(row=0, column=1, sticky=E)
-        self.bSearch.grid(row=0, column=2, sticky=E)
-        self.bReset.grid(row=1, column=2, sticky=E)
-        self.bQuit.grid(row=2, column=2, sticky=E)
+        self.lTitle.place(x=300, y=10)
+        self.eSearch.place(x=600, y=100)
+        self.bSearch.place(x=800, y=100)
+        self.bReset.place(x=100, y=500)
+        self.bQuit.place(x=800, y=500)
 
         # Create the columns and headings below
         self.tree.column("#0", minwidth=0, width=0, stretch=False)
@@ -172,8 +169,8 @@ class In_Progress:
         self.tree.heading("#7", text="Address", command=lambda: self.sort_column(self.tree, 6))
         self.tree.column("#7", minwidth=0, width=250, stretch=False)
 
-        self.tree.configure(height=20)
-        self.tree.grid() #Arrange all the TreeView parts in a grid.
+        self.tree.configure(height=15)
+        self.tree.place(x=20, y=150)
 
         #Connect to the database if possible.
         connection=mysql.connector.connect(host="localhost",
@@ -201,16 +198,17 @@ class In_Progress:
         connection.close()
         print("MySQL connection closed.")
         
-        #Create a thread for idle_timer
-        self.action_thread = Thread(target=self.idle_timer)
-
-        #Start the thread and continue for 600 seconds before timeout.
-        self.action_thread.start()
-        self.action_thread.join(timeout=5)
-
-        #Send a signal to stop the thread.
-        self.stop_event.set()
+##        #Create a thread for idle_timer
+##        self.action_thread = Thread(target=self.idle_timer)
+##
+##        #Start the thread and continue for 600 seconds before timeout.
+##        self.action_thread.start()
+##        self.action_thread.join(timeout=600)
+##
+##        #Send a signal to stop the thread.
+##        self.stop_event.set()
 
 if __name__ == '__main__':
     window = Tk()
     thisMain = In_Progress(window)
+    window.mainloop()

@@ -1,10 +1,15 @@
 from tkinter import * #importing the tkinter class.
 import tkinter.messagebox #Able to create pop-up Messages.
-import mysql.connector#connecting Python with Mysql
-import sys
+import mysql.connector
 
-
-################################# Python/Mysql Connection above #####################################################
+import assembly_class
+import login
+import testing
+import shipping_connector
+import receiving
+import accounting
+import admin
+import selection
 
 #class Decleration
 class TestingWindow:
@@ -15,7 +20,7 @@ class TestingWindow:
         self.mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            passwd="Razgriz!949",
+            passwd="Omar131997",
             database="inventory_system"
         )
 
@@ -26,8 +31,8 @@ class TestingWindow:
         self.subMenu2 = Menu(self.FileMenu)
         self.FileMenu.add_cascade(label="File", menu=self.subMenu)
         self.subMenu.add_command(label="Exit", command=self.master.destroy)
+        self.subMenu.add_command(label = "Logout", command=self.Logoff)
         self.FileMenu.add_cascade(label="Edit", menu=self.subMenu2)
-        self.subMenu2.add_command(label="New Order")
 
         # creating labels here:
         self.testing_label = Label(master, text="TESTING PROCESS", relief="solid", width=18, font=("arial", 25, "bold"))
@@ -102,7 +107,61 @@ class TestingWindow:
         self.entry5.place(x=310, y=280)
         self.entry6.place(x=310, y=310)
 
-    # Function will output Testing results and will update status.
+    # Logof function will let user logout.
+    def Logoff(self):
+        answer = tkinter.messagebox.askquestion("Logout", "Are you sure you want to logout? ")
+
+        if answer == "yes":
+            tkinter.messagebox.showinfo("Logout", "Goodbye")
+            self.master.destroy()
+
+            root = Tk()
+            root.geometry("650x500")
+            login1 = login.Login(root)
+            root.mainloop()
+            if login1.dept == "Receiving":
+                root = Tk()
+                root.geometry("650x500")
+                root.configure(bg="light gray")
+                receiving1 = receiving.Receiving(root)
+                root.mainloop()
+            elif login1.dept == "Assembly":
+                workorder = selection.WOWindow(login1.dept)
+                root = Tk()
+                root.geometry("600x500")
+                root.title("Assembly")
+                app = assembly_class.assembly(root, "0002", workorder)
+                root.mainloop()
+            elif login1.dept == "Testing":
+                workorder = selection.WOWindow(login1.dept)
+                root = Tk()
+                root.geometry("600x500")
+                root.title("Testing")
+                app = testing.TestingWindow(root, workorder, "0003")
+                root.mainloop()
+            elif login1.dept == "Shipping":
+                workorder = selection.WOWindow(login1.dept)
+                root = Tk()
+                app = shipping_connector.Interface(root, workorder, "0004")
+                shipping_connector(workorder, workerID)
+                root.mainloop()
+            elif login1.dept == "Accounting":
+                root = Tk()
+                root.geometry("500x300")
+                root.title("Accounting")
+                close_window = tk.Button(root, text="Close", command=master.quit)
+                close_window.place(x=90, y=230)
+                app = accounting(root, "0005")
+
+            elif login1.dept == "Admin":
+                root = Tk()
+                root.geometry("600x500")
+                root.title("New User")
+                root.configure(bg="light gray")
+                admin1 = admin.Admin(root)
+                root.mainloop()
+
+
     def onClick(self):
         answer = tkinter.messagebox.askquestion("RESULT", "Are these tests correct? ")
         cursor = self.mydb.cursor()
@@ -133,10 +192,11 @@ class TestingWindow:
         self.E5.set(' ')
         self.E6.set(' ')
 
+
 if __name__ == "__main__":
     master = Tk()
     master.geometry("600x500")  # Resizing window
     master.configure(bg="light gray")
     master.title("Testing")  # giving window a title
-    window = TestingWindow(master, "1", "0003")
+    window = TestingWindow(master,"1", "0003")
     master.mainloop()

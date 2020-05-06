@@ -4,6 +4,15 @@ import tkinter.messagebox
 import mysql.connector
 import itertools
 
+import assembly_class
+import login
+import testing
+import shipping_connector
+import receiving
+import accounting
+import admin
+import selection
+
 class Assembly:
     def __init__(self, master, emp_id):
         self.master = master
@@ -62,7 +71,13 @@ class Assembly:
 
         #orderNumber_label = Label(self.master, text="Work Order Number: ", font=("arial", 12, "bold"))
         #workerID_label = Label(self.master, text="Worker ID: ", font=("arial", 12, "bold"))
-
+        
+         #Creating file menu
+        self.subMenu = Menu(self.FileMenu)
+        self.subMenu2 = Menu(self.FileMenu)
+        self.FileMenu.add_cascade(label="File", menu=self.subMenu)
+        self.subMenu.add_command(label="Exit", command=self.master.destroy)
+        self.subMenu.add_command(label="Logout", command=self.Logoff)
 
         qty_label = Label(self.master, text="Qty", font=("arial", 13, "bold"))
         stock_label = Label(self.master, text="Stock", font=("arial", 13, "bold"))
@@ -148,6 +163,59 @@ class Assembly:
             (row[0], row[1], row[2], row[3], row[4]))
             counter += 1
 
+     #logout fucntion
+    def Logoff(self):
+        answer = tkinter.messagebox.askquestion("Logout", "Are you sure you want to logout? ")
+
+        if answer == "yes":
+            tkinter.messagebox.showinfo("Logout", "Goodbye")
+            self.master.destroy()
+
+            root = Tk()
+            root.geometry("650x500")
+            login1 = login.Login(root)
+            root.mainloop()
+            if login1.dept == "Receiving":
+                root = Tk()
+                root.geometry("650x500")
+                root.configure(bg="light gray")
+                receiving1 = receiving.Receiving(root)
+                root.mainloop()
+            elif login1.dept == "Assembly":
+                workorder = selection.WOWindow(login1.dept)
+                root = Tk()
+                root.geometry("665x340")
+                root.title("Assembly")
+                app = assembly_class.Assembly(root, "0002")
+                root.mainloop()
+            elif login1.dept == "Testing":
+                workorder = selection.WOWindow(login1.dept)
+                root = Tk()
+                root.geometry("680x500")
+                root.title("Testing")
+                app = testing.TestingWindow(root, "0003")
+                root.mainloop()
+            elif login1.dept == "Shipping":
+                workorder = selection.WOWindow(login1.dept)
+                root = Tk()
+                shipping_connector.Interface(root, workorder, "0004")
+                root.mainloop()
+            elif login1.dept == "Accounting":
+                root = Tk()
+                root.geometry("500x300")
+                root.title("Accounting")
+                close_window = tk.Button(root, text="Close", command=master.quit)
+                close_window.place(x=90, y=230)
+                app = accounting(root, "0005")
+
+            elif login1.dept == "Admin":
+                root = Tk()
+                root.geometry("600x500")
+                root.title("New User")
+                root.configure(bg="light gray")
+                admin1 = admin.Admin(root)
+                root.mainloop()
+  
     def reset(self):
         self.partNum1.set("")
         self.partNum2.set("")

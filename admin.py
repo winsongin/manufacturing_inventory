@@ -3,6 +3,14 @@ import mysql.connector
 import sys
 import tkinter as tk
 from tkinter import ttk
+import assembly_class
+import login
+import shipping
+import testing
+import receiving
+import accounting
+import admin
+import selection
 
 # myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "Razgriz!949", database = "inventory_system")
 
@@ -89,7 +97,62 @@ class Admin:
 
             # myCursor.execute(query, (empID, password, fName, lName, pNum, department, canReceive, canAssemble, canTest, canShip, isAdmin, isAccounting))
             myDb.commit()
+            
+    #Logout function
+    def Logoff(self):
+        answer = tkinter.messagebox.askquestion("Logout", "Are you sure you want to logout? ")
 
+        if answer == "yes":
+            tkinter.messagebox.showinfo("Logout", "Goodbye")
+            self.root.destroy()
+
+            master = tk.Tk()
+            master.geometry("650x500")
+            login1 = login.Login(master)
+            master.mainloop()
+            if login1.dept == "Receiving":
+                master = tk.Tk()
+                master.geometry("650x500")
+                master.configure(bg="light gray")
+                receiving1 = receiving.Receiving(master)
+                master.mainloop()
+            elif login1.dept == "Assembly":
+                workorder = selection.WOWindow(login1.dept)
+                master = tk.Tk()
+                master.geometry("665x340")
+                master.title("Assembly")
+                app = assembly_class.Assembly(master, "0002")
+                master.mainloop()
+            elif login1.dept == "Testing":
+                workorder = selection.WOWindow(login1.dept)
+                master = tk.Tk()
+                master.geometry("680x500")
+                master.title("Testing")
+                app = testing.TestingWindow(master, "0003")
+                master.mainloop()
+            elif login1.dept == "Shipping":
+                workorder = selection.WOWindow(login1.dept)
+                master = tk.Tk()
+                master.geometry("680x400")
+                app = shipping.Shipping(master, "0004")
+                master.mainloop()
+            elif login1.dept == "Accounting":
+                master = tk.Tk()
+                master.geometry("500x300")
+                master.title("Accounting")
+                close_window = tk.Button(master, text="Close", command=master.quit)
+                close_window.place(x=90, y=230)
+                app = accounting(root, "0005")
+
+            elif login1.dept == "Admin":
+                master = tk.Tk()
+                master.geometry("600x500")
+                master.title("New User")
+                master.configure(bg="light gray")
+                admin1 = admin.Admin(master)
+                master.mainloop()
+        
+            
     def reset(self):
         self.employeeIDInput.set("")
         self.passwordInput.set("")
@@ -105,9 +168,21 @@ class Admin:
         # self.canShip.set("")
         # self.isdminInput.set("")
 
+        
+        
     def __init__(self, root): 
         self.root = root
+        
+        #File Menu
+        self.FileMenu = tk.Menu(root)
+        self.root.config(menu=self.FileMenu)
 
+        self.subMenu = tk.Menu(self.FileMenu)
+        self.subMenu2 = tk.Menu(self.FileMenu)
+        self.FileMenu.add_cascade(label="File", menu=self.subMenu)
+        self.subMenu.add_command(label="Exit", command=self.root.destroy)
+        self.subMenu.add_command(label="Logout", command=self.Logoff)
+        
         # Prompts the user for the employee ID
         self.employeeIDInput = tk.StringVar()
         self.employeeIDLabel = tk.Label(self.root, text="Employee ID:", bg="light gray")

@@ -4,6 +4,15 @@ import mysql.connector
 import sys
 import random
 import tkinter as tk
+import assembly_class
+import login
+import shipping
+import testing
+import receiving
+import accounting
+import admin
+import selection
+
 
 myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "Razgriz!949", database = "inventory_system")
 
@@ -71,7 +80,58 @@ class Receiving:
         myCursor.execute(query, (orderNumber, orderStat, dateTime, estTimeArrv, orderPrice, custID, custAddr))
         myDb.commit()
 
+    def Logoff(self):
+        answer = tkinter.messagebox.askquestion("Logout", "Are you sure you want to logout? ")
 
+        if answer == "yes":
+            tkinter.messagebox.showinfo("Logout", "Goodbye")
+            self.root.destroy()
+
+            master = tk.Tk()
+            master.geometry("650x500")
+            login1 = login.Login(master)
+            master.mainloop()
+            if login1.dept == "Receiving":
+                master = tk.Tk()
+                master.geometry("650x500")
+                master.configure(bg="light gray")
+                receiving1 = receiving.Receiving(master)
+                master.mainloop()
+            elif login1.dept == "Assembly":
+                workorder = selection.WOWindow(login1.dept)
+                master = tk.Tk()
+                master.geometry("665x340")
+                master.title("Assembly")
+                app = assembly_class.Assembly(master, "0002")
+                master.mainloop()
+            elif login1.dept == "Testing":
+                workorder = selection.WOWindow(login1.dept)
+                master = tk.Tk()
+                master.geometry("680x500")
+                master.title("Testing")
+                app = testing.TestingWindow(master, "0003")
+                master.mainloop()
+            elif login1.dept == "Shipping":
+                workorder = selection.WOWindow(login1.dept)
+                master = tk.Tk()
+                master.geometry("680x400")
+                app = shipping.Shipping(master, "0004")
+                master.mainloop()
+            elif login1.dept == "Accounting":
+                master = tk.Tk()
+                master.geometry("500x300")
+                master.title("Accounting")
+                close_window = tk.Button(master, text="Close", command=master.quit)
+                close_window.place(x=90, y=230)
+                app = accounting(root, "0005")
+
+            elif login1.dept == "Admin":
+                master = tk.Tk()
+                master.geometry("600x500")
+                master.title("New User")
+                master.configure(bg="light gray")
+                admin1 = admin.Admin(master)
+                master.mainloop()
 
     def reset(self): 
         self.dateTimeInput.set(self.datentime())
@@ -89,7 +149,17 @@ class Receiving:
         self.root = root
 
         myCursor = myDb.cursor() 
+        
+        #File Menu
+        self.FileMenu = tk.Menu(root)
+        self.root.config(menu=self.FileMenu)
 
+        self.subMenu = tk.Menu(self.FileMenu)
+        self.subMenu2 = tk.Menu(self.FileMenu)
+        self.FileMenu.add_cascade(label="File", menu=self.subMenu)
+        self.subMenu.add_command(label="Exit", command=self.root.destroy)
+        self.subMenu.add_command(label="Logout", command=self.Logoff)
+        
         # Prints the Date/Time
         self.dateTimeInput = tk.StringVar()
         self.dateTimeLabel = tk.Label(self.root, text="Date/Time:", bg="light gray")

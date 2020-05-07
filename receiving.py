@@ -5,7 +5,8 @@ import sys
 import random
 import tkinter as tk
 
-myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "Razgriz!949", database = "inventory_system")
+# myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "Razgriz!949", database = "inventory_system")
+myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "winsongin", database = "inventory_system")
 
 class Receiving: 
     def datentime(self):
@@ -125,49 +126,42 @@ class Receiving:
         self.quantityInput = tk.StringVar()
         self.quantityLabel = tk.Label(self.root, text="Quantity:", bg="light gray")
         self.quantityEntry = tk.Entry(self.root, textvariable=self.quantityInput, highlightbackground="light gray", width=25)
-        self.quantityLabel.place(x=40, y=200)
-        self.quantityEntry.place(x=150, y=200)
+        self.quantityLabel.place(x=40, y=180)
+        self.quantityEntry.place(x=150, y=180)
 
         # Prompts the user for the customer's name
         self.customerNameInput = tk.StringVar()
         self.customerNameLabel = tk.Label(self.root, text="Name:", bg="light gray")
         self.customerNameEntry = tk.Entry(self.root, textvariable=self.customerNameInput, highlightbackground="light gray", width=25)
-        self.customerNameLabel.place(x=40, y=240)
-        self.customerNameEntry.place(x=150, y=240)
+        self.customerNameLabel.place(x=40, y=220)
+        self.customerNameEntry.place(x=150, y=220)
 
         # Prompts the user for the customer's ID
         self.customerIDInput = tk.StringVar()
         self.customerIDLabel = tk.Label(self.root, text="Customer ID:", bg="light gray")
         self.customerIDEntry = tk.Entry(self.root, textvariable=self.customerIDInput, highlightbackground="light gray", width=25)
-        self.customerIDLabel.place(x=40, y=280)
-        self.customerIDEntry.place(x=150, y=280)
-
-        # Prompts the user for the tracking number
-        #self.trackingNumberInput = tk.StringVar()
-        #self.trackingNumberLabel = tk.Label(self.root, text="Tracking number: ", bg="light gray")
-        #self.trackingNumberEntry = tk.Entry(self.root, textvariable=self.trackingNumberInput, highlightbackground="light gray", width=25)
-        #self.trackingNumberLabel.place(x=40, y=320)
-        #self.trackingNumberEntry.place(x=150, y=320)
+        self.customerIDLabel.place(x=40, y=260)
+        self.customerIDEntry.place(x=150, y=260)
 
         # Prompts the user for the order status
         self.orderStatusInput = tk.StringVar()
         self.orderStatusLabel = tk.Label(self.root, text="Order status:", bg="light gray")
         self.orderStatusEntry = tk.Entry(self.root, textvariable=self.orderStatusInput, highlightbackground="light gray", width=25)
-        self.orderStatusLabel.place(x=40, y=320)
-        self.orderStatusEntry.place(x=150, y=320)
+        self.orderStatusLabel.place(x=40, y=300)
+        self.orderStatusEntry.place(x=150, y=300)
 
         # Prompts the user for the customer's address
         self.addressInput = tk.StringVar()
         self.addressLabel = tk.Label(self.root, text="Address:", bg="light gray")
         self.addressEntry = tk.Entry(self.root, textvariable=self.addressInput, highlightbackground="light gray", width=25)
-        self.addressLabel.place(x=40, y=360)
-        self.addressEntry.place(x=150, y=360)
+        self.addressLabel.place(x=40, y=340)
+        self.addressEntry.place(x=150, y=340)
 
         self.submit = tk.Button(self.root, text="Submit", bg='red', highlightbackground="light gray", command=self.onSubmit)
-        self.submit.place(x=250, y=400)
+        self.submit.place(x=250, y=380)
 
         self.reset = tk.Button(self.root, text="Reset", bg='red', highlightbackground="light gray", command=self.reset)
-        self.reset.place(x=200, y=400)
+        self.reset.place(x=200, y=380)
 
 if __name__ == "__main__":
     root = tk.Tk()

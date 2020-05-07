@@ -193,13 +193,14 @@ class Assembly:
             elif login1.dept == "Shipping":
                 workorder = selection.WOWindow(login1.dept)
                 root = Tk()
-                shipping_connector.Interface(root, workorder, "0004")
+                root.geometry("680x400")
+                app = shipping.Shipping(root, "0004")
                 root.mainloop()
             elif login1.dept == "Accounting":
                 root = Tk()
                 root.geometry("500x300")
                 root.title("Accounting")
-                close_window = tk.Button(root, text="Close", command=master.quit)
+                close_window = Button(root, text="Close", command=root.quit)
                 close_window.place(x=90, y=230)
                 app = accounting(root, "0005")
 

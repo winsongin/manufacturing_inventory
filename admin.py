@@ -6,7 +6,7 @@ from tkinter import ttk
 
 # myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "Razgriz!949", database = "inventory_system")
 
-myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "winsongin", database = "inventory_system")
+myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "Razgriz!949", database = "inventory_system")
 
 
 class Admin:
@@ -28,7 +28,7 @@ class Admin:
         canTest = "N"
         canShip = "N" 
         isAdmin = "N"
-        isAccounting = "N"
+        isAccountant = "N"
 
         
         # canReceive = self.canReceiveInput.get()
@@ -55,10 +55,10 @@ class Admin:
                 isAdmin = "Y"
 
             elif department == "Accounting": 
-                isAccounting = "Y"
+                isAccountant = "Y"
 
             query = "INSERT INTO employees (employee_id, pass, first_name, last_name, phone_number, dept, can_receive, can_assemble, can_test, can_ship, is_admin, is_accountant) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-            myCursor.execute(query, (empID, password, fName, lName, pNum, department, canReceive, canAssemble, canTest, canShip, isAdmin, isAccounting))
+            myCursor.execute(query, (empID, password, fName, lName, pNum, department, canReceive, canAssemble, canTest, canShip, isAdmin, isAccountant))
             myDb.commit()
 
         # If the employees' department is being changed, the database is updated to reflect that
@@ -80,12 +80,12 @@ class Admin:
                 isAdmin = "Y"
 
             elif changeDepartment == "Accounting": 
-                isAccounting = "Y"
+                isAccountant = "Y"
 
             # query = "INSERT INTO employees (employee_id, pass, first_name, last_name, phone_number, dept, can_receive, can_assemble,can_test, can_ship, is_admin, is_accountant) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
-            query = "UPDATE employees SET pass = %s, first_name = %s, last_name = %s, phone_number = %s, dept = %s, can_receive = %s, can_assemble = %s, can_test = %s, can_ship = %s, is_admin = %s, is_accountant = %s, WHERE employee_id = %s"
-            myCursor.execute(query, (password, fName, lName, pNum, changeDepartment, canReceive, canAssemble, canTest, canShip, isAdmin, isAccountant))
+            query = "UPDATE employees SET pass = %s, first_name = %s, last_name = %s, phone_number = %s, dept = %s, can_receive = %s, can_assemble = %s, can_test = %s, can_ship = %s, is_admin = %s, is_accountant = %s WHERE employee_id = %s"
+            myCursor.execute(query, (password, fName, lName, pNum, changeDepartment, canReceive, canAssemble, canTest, canShip, isAdmin, isAccountant, empID))
 
             # myCursor.execute(query, (empID, password, fName, lName, pNum, department, canReceive, canAssemble, canTest, canShip, isAdmin, isAccounting))
             myDb.commit()

@@ -4,15 +4,6 @@ import tkinter.messagebox
 import mysql.connector
 import itertools
 
-import assembly_class
-import login
-import testing
-import shipping_connector
-import receiving
-import accounting
-import admin
-import selection
-
 class Assembly:
     def __init__(self, master, emp_id):
         self.master = master
@@ -73,8 +64,10 @@ class Assembly:
         #workerID_label = Label(self.master, text="Worker ID: ", font=("arial", 12, "bold"))
         
          #Creating file menu
-        self.subMenu = Menu(self.FileMenu)
-        self.subMenu2 = Menu(self.FileMenu)
+        self.FileMenu = Menu(self.master)
+        self.master.config(menu=self.FileMenu)
+        self.subMenu = Menu(self.master)
+        self.subMenu2 = Menu(self.master)
         self.FileMenu.add_cascade(label="File", menu=self.subMenu)
         self.subMenu.add_command(label="Exit", command=self.master.destroy)
         self.subMenu.add_command(label="Logout", command=self.Logoff)
@@ -157,11 +150,13 @@ class Assembly:
         cursor.execute(printAll)
         records = cursor.fetchall()
 
-        counter = 0
         for row in records:
+            custQuery = "SELECT name FROM customer WHERE cust_id = %s"
+            self.cursor.execute(custQuery, [row[4]])
+            cust = self.cursor.fetchone()
+            print(cust)
             tree.insert('', 'end', values=
-            (row[0], row[1], row[2], row[3], row[4]))
-            counter += 1
+            (row[0], row[1], cust[0], row[2], row[3]))
 
      #logout fucntion
     def Logoff(self):
@@ -258,9 +253,12 @@ class Assembly:
             tree.delete(i)
 
         for row in records:
+            custQuery = "SELECT name FROM customer WHERE cust_id = %s"
+            self.cursor.execute(custQuery, [row[4]])
+            cust = self.cursor.fetchone()
+            print(cust)
             tree.insert('', 'end', values=
-            (row[0], row[1], row[2], row[3], row[4]))
-            counter += 1
+            (row[0], row[1], cust[0], row[2], row[3]))
 
     def stock(self, chassis, engine, wheel):
         part1_query = "SELECT qty FROM inventory WHERE part_no = \"" + chassis + "\";"
@@ -314,11 +312,13 @@ class Assembly:
             print("ETA: ", row[3])
             print("Customer ID: ", row[4])
 
-        counter = 0
         for row in records:
+            custQuery = "SELECT name FROM customer WHERE cust_id = %s"
+            self.cursor.execute(custQuery, [row[4]])
+            cust = self.cursor.fetchone()
+            print(cust)
             tree.insert('', 'end', values=
-            (row[0], row[1], row[2], row[3], row[4]))
-            counter += 1
+            (row[0], row[1], cust[0], row[2], row[3]))
 
         cursor.close()
         connection.close()

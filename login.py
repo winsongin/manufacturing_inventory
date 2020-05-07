@@ -83,15 +83,20 @@ class Login:
         lock = self.getPass()
         if found == True and lock == False:
             temp = self.findDept()
+            user = self.user.get()
             self.dept = temp
             self.root.destroy()
-            return self.dept
 
-#if __name__ == "__main__":
-    #root = tk.Tk()
-    #root.geometry("650x500")
-    #root.title("Login")
-    #login1 = Login(root)
-    #root.mainloop()
-    #if login1.dept == 'Receiving':
-        #print('working!')
+            return temp, user
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.geometry("650x500")
+    root.title("Login")
+    result = Login(root)
+    login1 = result[0]
+    idNum = result[1]
+    print(result)
+    root.mainloop()
+    if login1.dept == 'Receiving':
+        print('working!')

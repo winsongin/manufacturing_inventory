@@ -23,7 +23,7 @@ class TestingWindow:
         self.mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            passwd="Omar131997",
+            passwd="Razgriz!949",
             database="inventory_system"
         )
         self.cursor = self.mydb.cursor(buffered=True)
@@ -139,11 +139,13 @@ class TestingWindow:
         cursor.execute(printAll)
         records = cursor.fetchall()
 
-        counter = 0
         for row in records:
+            custQuery = "SELECT name FROM customer WHERE cust_id = %s"
+            self.cursor.execute(custQuery, [row[4]])
+            cust = self.cursor.fetchone()
+            print(cust)
             tree.insert('', 'end', values=
-            (row[0], row[1], row[2], row[3], row[4]))
-            counter += 1
+            (row[0], row[1], cust[0], row[2], row[3]))
 
     # Logout Function
     def Logoff(self):
@@ -248,18 +250,14 @@ class TestingWindow:
 
         cursor.execute(querySort)
         records = cursor.fetchall()
-        for row in records:
-            print("Work Number: ", row[0])
-            print("Status: ", row[1])
-            print("Date Received: ", row[2])
-            print("ETA: ", row[3])
-            print("Customer ID: ", row[4])
 
-        counter = 0
         for row in records:
+            custQuery = "SELECT name FROM customer WHERE cust_id = %s"
+            self.cursor.execute(custQuery, [row[4]])
+            cust = self.cursor.fetchone()
+            print(cust)
             tree.insert('', 'end', values=
-            (row[0], row[1], row[2], row[3], row[4]))
-            counter += 1
+            (row[0], row[1], cust[0], row[2], row[3]))
 
         cursor.close()
         self.mydb.close()

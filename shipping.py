@@ -1,225 +1,236 @@
-import mysql.connector
+#Change these as needed
 from tkinter import *
+from tkinter.ttk import *
 import tkinter.messagebox
+import mysql.connector
 import itertools
+import openpyxl
 
-
-def get_data(wo):
-    data = {
-        "host": "localhost",
-        "user": "root",
-        "password": "Razgriz!949",
-        "db": "inventory_system",
-        "charset": "utf8"
-    }
-    db = mysql.connector.connect(**data)
-    cursor = db.cursor()
-    form_name = "customer"
-    select_word = "wo,worker_id,customer,address,qty,tracking,price,order_status"
-    sql = "SELECT {select_word} FROM customer WHERE wo = {wo}".format(select_word=select_word, form_name=form_name, wo=wo)
-    cursor.execute(sql)
-    result = cursor.fetchone()
-    if result is not None:
-        result = {
-            "wo": result[0],
-            "worker_id": result[1],
-            "customer": result[2],
-            "address": result[3],
-            "qty": result[4],
-            "tracking": result[5],
-            "price": result[6],
-            "order_status": result[7],
-        }
-    db.close()
-    return result
-
-
-def get_update_sql(data):
-    form_name = "customer"
-    line = ""
-    wo = data['wo']
-    for d in data:
-        key = d
-        value = data[key]
-        line += "{}='{}',".format(key, value)
-
-    sql = """update {form_name} set {line} where wo = {wo}""".format(form_name=form_name, line=line[:-1], wo=wo)
-    return sql
-
-
-def execute_update_sql(update_data):
-    data = {
-        "host": "39.106.219.251",
-        "user": "root",
-        "password": "admin",
-        "db": "goods",
-        "charset": "utf8"
-    }
-    db = pymysql.connect(**data)
-    cursor = db.cursor()
-    sql = get_update_sql(update_data)
-    cursor.execute(sql)
-    db.commit()
-    db.close()
-
-
-class Interface:
-    def __init__(self, interface, id, wonum):
-        self.interface = interface
-        self.id = id
-        self.wonum = wonum
-        self._init()
-
-    def _init(self):
-        self.worker_id = StringVar('')
-        self.customer = StringVar('')
-        self.address = StringVar('')
-        self.qty = StringVar('')
-        self.tracking = StringVar('')
-        self.price = StringVar('')
-
-        mydb = mysql.connector.connect(
+class Shipping:# Change Department to your department
+    def __init__(self, master, emp_id):
+        self.master = master
+        self.wo = ""
+        self.customer = "Customer: "
+        self.addr = "Address: "
+        self.price = "Price: $"
+        self.wonum = "Work Order: " + self.wo
+        self.emp_id = "Worker ID: " + emp_id
+        self.mydb = mysql.connector.connect(
             host="localhost",
             user="root",
             passwd="Razgriz!949",
             database="inventory_system"
         )
+        self.cursor = self.mydb.cursor(buffered=True)
+        self.shipping() # Change MyWindow to your window name
 
-        cursor = mydb.cursor()
+    # Change MyWindow to your window name
+    def shipping(self):
 
-        wo_query = "SELECT cust_id FROM work_in_progress WHERE wo_number = \"" + self.wonum + "\""
-        cursor.execute(wo_query)
-        cust = cursor.fetchall()
-        customer = cust[0]
-        print(type(customer[0]))
+        # Worker ID Label. Do Not Move
+        id = Label(self.master, text=self.emp_id, font=("arial", 12, "bold"))
+        id.place(x=5, y=5)
+
+        # Instantiates style for ttk buttons. Please use this for your buttons
+        style = Style()
+        style.configure('C.TButton', padding=0, font=("arial", 12), background='gray',
+                        foreground='Green')
 
 
-        customer_query = "SELECT * FROM customer WHERE cust_id = \"" + customer[0] + "\""
-        cursor.execute(customer_query)
-        test = list(cursor.fetchall())
-        cust_list = list(itertools.chain(*test))
-        cust = cust_list[1]
-        addr = cust_list[2]
-        price = cust_list[3]
+        # INSERT CODE HERE YOU CAN BASICALLY COPY AND PASTE
 
-        Label(self.interface, text='W/O #:').grid(row=0, column=0)
-        Label(self.interface, text='Worker ID:').grid(row=1, column=0)
-        Label(self.interface, text='Customer:').grid(row=2, column=0)
-        Label(self.interface, text='Address:').grid(row=3, column=0)
-        Label(self.interface, text='QTY').grid(row=4, column=0)
-        Label(self.interface, text='Tracking Number:').grid(row=5, column=0)
-        Label(self.interface, text='Price:').grid(row=6, column=0)
+        tracking = StringVar()
 
-        #self.e1 = Entry(self.interface)
-        Label(self.interface, text=self.wonum).grid(row=0, column=1, padx=10, pady=5)
-        Label(self.interface, text=self.id).grid(row=1, column=1, padx=10, pady=5)
-        Label(self.interface, textvariable=self.customer).grid(row=2, column=1, padx=10, pady=5)
-        Label(self.interface, text=cust).grid(row=2, column=2)
-        Label(self.interface, textvariable=self.address).grid(row=3, column=1, padx=10, pady=5)
-        Label(self.interface, text=addr).grid(row=3, column=2, padx=10, pady=5)
-        Label(self.interface, textvariable=self.qty).grid(row=4, column=1, padx=10, pady=5)
-        self.tracking = Entry(self.interface)
-        self.tracking.grid(row=5, column=1, padx=10, pady=5)
-        Label(self.interface, textvariable=self.price).grid(row=6, column=1, padx=10, pady=5)
-        Label(self.interface, text=price).grid(row=6, column=2, padx=10, pady=5)
+        self.woLabel = Label(self.master, text=self.wonum,font=("arial", 12, "bold"))
+        self.custLabel = Label(self.master, text=self.customer, font=("arial", 13, "bold"))
+        self.addrLabel = Label(self.master, text=self.addr, font=("arial", 13, "bold"))
+        self.priceLabel = Label(self.master, text=self.price,font=("arial", 13, "bold"))
+        self.trackingLabel = Label(self.master, text="Tracking: ", font=("arial", 13, "bold"))
+        self.trackingEntry = Entry(self.master, width=20, textvariable=tracking)
 
-        #self.e1.grid(row=0, column=1, padx=10, pady=5)
+        self.woLabel.place(x=5, y=25)
+        self.custLabel.place(x=5, y=80)
+        self.addrLabel.place(x=5, y=105)
+        self.priceLabel.place(x=5, y=130)
+        self.trackingLabel.place(x=5, y=155)
+        self.trackingEntry.place(x=90, y=155)
 
-        Button(self.interface, text='Print', width=10, command=self.show).grid(row=7, column=0, sticky=W, padx=10, pady=5)
-        Button(self.interface, text='Submit', width=10, command=self.submit).grid(row=8, column=0, sticky=W, padx=10, pady=5)
-        Button(self.interface, text='Ship', width=10, command=self.ship).grid(row=8, column=1, sticky=W, padx=10, pady=5)
+        # BELOW IS THE CODE FOR THE SELECTION WINDOW
 
-    def show(self):
-        """
-        1.获得当前wo的值
-        2.清空所有输入框
-        3.查询数据库数据
-        4.将数据进行显示
-        """
+        #Selection Grid
+        tree = Treeview(self.master, column=("column", "column1", "column2", "column3", "column4"))
+        searchQuery = StringVar()
+        selection = StringVar()
 
-        status = self.is_exist()
-        if status:
-            wo = self.e1.get()
-            data = get_data(wo)
-            self.clear()
-            self.set_value(data)
-        else:
-            # 未查询到数据
-            tkinter.messagebox.showinfo(title='shipping message', message="no found data")
-            self.clear()
+        load_button = Button(self.master, text="Select Work Order", command=lambda: self.select(selection.get()), style='C.TButton')
+        selection_entry = Entry(self.master, width=15, textvariable=selection)
 
-    def submit(self):
-        status = self.is_exist()
-        if status:
-            data = self.get_all_input()
-            execute_update_sql(data)
-        else:
-            # 未查询到数据
-            tkinter.messagebox.showinfo(title='shipping message', message="no found data")
+        selection_entry.place(x=400, y=8)
+        load_button.place(x=500, y=7)
 
-    def ship(self):
-        status = self.is_exist()
+        tree.column("#0", minwidth=0, width=0, stretch=False)
+        tree.heading("#1", text="Work Order", command=lambda: self.sort_column(tree, 0, False))
+        tree.column("#1", minwidth=0, width=100, stretch=False)
+        tree.heading("#2", text="Department", command=lambda: self.sort_column(tree, 1, False))
+        tree.column("#2", minwidth=0, width=100, stretch=False)
+        tree.heading("#3", text="Customer", command=lambda: self.sort_column(tree, 2, False))
+        tree.column("#3", minwidth=0, width=150, stretch=False)
+        tree.heading("#4", text="Received Date", command=lambda: self.sort_column(tree, 3, False))
+        tree.column("#4", minwidth=0, width=150, stretch=False)
+        tree.heading("#5", text="Estimated Ship", command=lambda: self.sort_column(tree, 4, False))
+        tree.column("#5", minwidth=0, width=150, stretch=False)
 
-        if status:
-            data = {
-                "wo": self.e1.get(),
-                "order_status": "shipped",
-            }
-            execute_update_sql(data)
-            tkinter.messagebox.showinfo(title='shipping message', message=" The order is shipping out")
-        else:
-            tkinter.messagebox.showinfo(title='shipping message', message="no found data")
+        tree.configure(height=5)
+        tree.place(x=7, y=180) # You may need to increase y's value to fit your form
 
-    def is_exist(self):
-        """
-        检查这条数据是否存在
-        """
-        wo = self.e1.get()
-        data = get_data(wo)
-        if data is None:
-            return False
-        else:
-            return True
+        printAll = "SELECT * FROM work_in_progress WHERE status = \"" + "Shipping" + "\"" # CHANGE "ASSEMBLY" TO YOUR DEPARTMENT
+        cursor = self.mydb.cursor()
+        cursor.execute(printAll)
+        records = cursor.fetchall()
 
-    def clear(self):
-        """
-        清空所有Entry
-        """
-        self.e1.delete(0, END)
-        self.worker_id.set("1")
-        self.customer.set("2")
-        self.address.set("3")
-        self.qty.set("4")
-        self.tracking.delete(0, END)
-        self.price.set("5")
+        for row in records:
+            custQuery = "SELECT name FROM customer WHERE cust_id = %s"
+            self.cursor.execute(custQuery, [row[4]])
+            cust = self.cursor.fetchone()
+            tree.insert('', 'end', values=
+            (row[0], row[1], cust[0], row[2], row[3]))
 
-    def set_value(self, data):
-        """
-        把查询到的放到input中
-        """
-        self.e1.insert(0, data["wo"])
-        self.worker_id.set(data["worker_id"])
-        self.customer.set(data["customer"])
-        self.address.set(data["address"])
-        self.qty.set(data["qty"])
-        self.tracking.insert(0, data["tracking"])
-        self.price.set(data["price"])
+        submitBtn = Button(self.master, text="Submit", command=lambda: self.submit(tree), style='C.TButton')
+        printBtn = Button(self.master, text="Print", command=self.print, style='C.TButton')
 
-    def get_all_input(self):
-        """
-        获得所有已经录入的信息
-        """
-        data = {
-            "wo": self.e1.get(),
-            "tracking": self.tracking.get(),
-        }
-        return data
+        submitBtn.place(x=480, y=35, width=80)
+        printBtn.place(x=480, y=65, width=80)
+
+    # INSERT FUNCTIONS BELOW
+
+    def submit(self, tree):
+        update = "UPDATE work_in_progress SET status = 'Completed' WHERE wo_number = \"" + self.wo + "\""
+        self.cursor.execute(update)
+        self.mydb.commit()
+
+        tree.delete(*tree.get_children())
+
+        tree.column("#0", minwidth=0, width=0, stretch=False)
+        tree.heading("#1", text="Work Order", command=lambda: self.sort_column(tree, 0, False))
+        tree.column("#1", minwidth=0, width=100, stretch=False)
+        tree.heading("#2", text="Department", command=lambda: self.sort_column(tree, 1, False))
+        tree.column("#2", minwidth=0, width=100, stretch=False)
+        tree.heading("#3", text="Customer", command=lambda: self.sort_column(tree, 2, False))
+        tree.column("#3", minwidth=0, width=150, stretch=False)
+        tree.heading("#4", text="Received Date", command=lambda: self.sort_column(tree, 3, False))
+        tree.column("#4", minwidth=0, width=150, stretch=False)
+        tree.heading("#5", text="Estimated Ship", command=lambda: self.sort_column(tree, 4, False))
+        tree.column("#5", minwidth=0, width=150, stretch=False)
+
+        tree.configure(height=5)
+        tree.place(x=7, y=180)  # You may need to increase y's value to fit your form
+
+        printAll = "SELECT * FROM work_in_progress WHERE status = \"" + "Shipping" + "\""  # CHANGE "ASSEMBLY" TO YOUR DEPARTMENT
+        cursor = self.mydb.cursor()
+        cursor.execute(printAll)
+        records = cursor.fetchall()
+
+        for row in records:
+            custQuery = "SELECT name FROM customer WHERE cust_id = %s"
+            self.cursor.execute(custQuery, [row[4]])
+            cust = self.cursor.fetchone()
+            tree.insert('', 'end', values=
+            (row[0], row[1], cust[0], row[2], row[3]))
+
+        tkinter.messagebox.showinfo("Success", "Part Shipped")
+
+    def print(self):
+        query = "SELECT cust_id, address, price FROM work_in_progress WHERE wo_number = \"" + self.wo + "\""
+        self.cursor.execute(query)
+        result = self.cursor.fetchone()
+        cust_id = result[0]
+        custQuery = "SELECT name FROM customer WHERE cust_id = \"" + cust_id + "\""
+        self.cursor.execute(custQuery)
+        custResult = self.cursor.fetchone()
+        data = [result[0], custResult[0], result[1], result[2]]
+
+        file = "invoice_template.xlsx"
+        workbook = openpyxl.load_workbook(file)
+        active = workbook.active
+        active["B9"] = 1
+        active["C4"] = custResult[0]
+        active["C5"] = result[1]
+        active["D9"] = 1
+        active["E9"] = float(result[2])
+        active["F9"] = 0
+
+        newfile = custResult[0] + " Invoice.xlsx"
+
+        workbook.save(newfile)
+        savemessage = "Saved " + newfile
+        tkinter.messagebox.showinfo("Saved", savemessage)
+
+    # BELOW IS CODE FOR THE TREE. DO NOT CHANGE
+
+    def sort_column(self, tree, col, reverse):
+        tree.delete(*tree.get_children())
+
+        if (col == 0):
+            querySort = "SELECT * FROM work_in_progress WHERE status = 'Shipping' ORDER BY wo_number"
+        elif (col == 1):
+            querySort = "SELECT * FROM work_in_progress WHERE status = 'Shipping' ORDER BY status"
+        elif (col == 2):
+            querySort = "SELECT * FROM work_in_progress WHERE status = 'Shipping' ORDER BY cust_id"
+        elif (col == 3):
+            querySort = "SELECT * FROM work_in_progress WHERE status = 'Shipping' ORDER BY date_recv"
+        elif (col == 4):
+            querySort = "SELECT * FROM work_in_progress WHERE status = 'Shipping' ORDER BY eta"
+
+        self.cursor.execute(querySort)
+        records = self.cursor.fetchall()
+
+        for row in records:
+            custQuery = "SELECT name FROM customer WHERE cust_id = %s"
+            self.cursor.execute(custQuery, [row[4]])
+            cust = self.cursor.fetchone()
+            tree.insert('', 'end', values=
+            (row[0], row[1], cust[0], row[2], row[3]))
+
+
+    def select(self, wo):
+        self.wonum = "Work Order: " + wo
+        self.wo = str(wo)
+        query = "SELECT cust_id, address, price FROM work_in_progress WHERE wo_number = \"" + self.wo + "\""
+        self.cursor.execute(query)
+        result = self.cursor.fetchone()
+        cust_id = result[0]
+        custQuery = "SELECT name FROM customer WHERE cust_id = \"" + cust_id + "\""
+        self.cursor.execute(custQuery)
+        custResult = self.cursor.fetchone()
+        data = [result[0], custResult[0], result[1], result[2]]
+
+        self.customer = "Customer: " + data[1]
+        self.addr = "Address: " + data[2]
+        self.price = "Price: $" + data[3]
+
+        self.woLabel.destroy()
+        self.custLabel.destroy()
+        self.addrLabel.destroy()
+        self.priceLabel.destroy()
+
+
+        self.custLabel = Label(self.master, text=self.customer, font=("arial", 13, "bold"))
+        self.addrLabel = Label(self.master, text=self.addr, font=("arial", 13, "bold"))
+        self.priceLabel = Label(self.master, text=self.price, font=("arial", 13, "bold"))
+
+        self.custLabel.place(x=5, y=80)
+        self.addrLabel.place(x=5, y=105)
+        self.priceLabel.place(x=5, y=130)
+
+
+        self.woLabel = Label(self.master, text=self.wonum, font=("arial", 12, "bold"))
+        self.woLabel.place(x=5, y=25)
+
 
 
 if __name__ == "__main__":
-    interface = Tk()
-    interface.configure()
-    interface.title("Inventory")
-    interface.geometry("600x440")
-    Interface(interface, "0003", "6")
-    interface.mainloop()
+    root = Tk()
+    root.geometry("665x340") #You may need to change this to fit your window
+    root.title("Department") # Change to your department
+    app = Shipping(root, "0001") #Change to your window name
+    root.mainloop()

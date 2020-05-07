@@ -1,45 +1,43 @@
 from tkinter import *
-from tkinter import ttk
 from login import Login
-from assembly_class import assembly
+from assembly_class import Assembly
 from testing import TestingWindow
-from shipping import Interface
+from shipping import Shipping
 from receiving import Receiving
 from accounting import accounting
 from admin import Admin
-from selection import WOWindow
 
 
 def main():
     root = Tk()
     root.geometry("650x500")
+    root.title("Login")
     login1 = Login(root)
     root.mainloop()
     if login1.dept == "Receiving":
         root = Tk()
         root.geometry("650x500")
+        root.title("Receiving")
         root.configure(bg="light gray")
         receiving1 = Receiving(root)
         root.mainloop()
     elif login1.dept == "Assembly":
-        workorder = WOWindow(login1.dept)
         root = Tk()
-        root.geometry("600x500")
+        root.geometry("665x340")
         root.title("Assembly")
-        app = assembly(root, "0002", workorder)
+        app = Assembly(root, "0002")
         root.mainloop()
     elif login1.dept == "Testing":
-        workorder = WOWindow(login1.dept)
         root = Tk()
-        root.geometry("600x500")
+        root.geometry("680x500")
         root.title("Testing")
-        app = TestingWindow(root, workorder, "0003")
+        app = TestingWindow(root, "0003")
         root.mainloop()
     elif login1.dept == "Shipping":
-        workorder = WOWindow(login1.dept)
         root = Tk()
-        Interface(interface, workorder, "0004")
-        shipping(workorder, workerID)
+        root.geometry("665x340")
+        root.title("Shipping")
+        Shipping(root)
         root.mainloop()
     elif login1.dept == "Accounting":
         root = Tk()

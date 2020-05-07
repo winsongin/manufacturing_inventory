@@ -5,6 +5,14 @@ import tkinter.messagebox
 import mysql.connector
 import itertools
 import openpyxl
+import assembly_class
+import login
+import testing
+import shipping
+import receiving
+import accounting
+import admin
+import selection
 
 class Shipping:# Change Department to your department
     def __init__(self, master, emp_id):
@@ -26,7 +34,16 @@ class Shipping:# Change Department to your department
 
     # Change MyWindow to your window name
     def shipping(self):
+        # File Menu
+        self.FileMenu = Menu(self.master)
+        self.master.config(menu=self.FileMenu)
 
+        self.subMenu = Menu(self.FileMenu)
+        self.subMenu2 = Menu(self.FileMenu)
+        self.FileMenu.add_cascade(label="File", menu=self.subMenu)
+        self.subMenu.add_command(label="Exit", command=self.master.destroy)
+        self.subMenu.add_command(label="Logout", command=self.Logoff)
+        
         # Worker ID Label. Do Not Move
         id = Label(self.master, text=self.emp_id, font=("arial", 12, "bold"))
         id.place(x=5, y=5)
@@ -139,6 +156,61 @@ class Shipping:# Change Department to your department
 
         tkinter.messagebox.showinfo("Success", "Part Shipped")
 
+    
+    #logout function
+    def Logoff(self):
+        answer = tkinter.messagebox.askquestion("Logout", "Are you sure you want to logout? ")
+
+        if answer == "yes":
+            tkinter.messagebox.showinfo("Logout", "Goodbye")
+            self.master.destroy()
+
+            root = Tk()
+            root.geometry("650x500")
+            login1 = login.Login(root)
+            root.mainloop()
+            if login1.dept == "Receiving":
+                root = Tk()
+                root.geometry("650x500")
+                root.configure(bg="light gray")
+                receiving1 = receiving.Receiving(root)
+                root.mainloop()
+            elif login1.dept == "Assembly":
+                workorder = selection.WOWindow(login1.dept)
+                root = Tk()
+                root.geometry("665x340")
+                root.title("Assembly")
+                app = assembly_class.Assembly(root, "0002")
+                root.mainloop()
+            elif login1.dept == "Testing":
+                workorder = selection.WOWindow(login1.dept)
+                root = Tk()
+                root.geometry("680x500")
+                root.title("Testing")
+                app = testing.TestingWindow(root, "0003")
+                root.mainloop()
+            elif login1.dept == "Shipping":
+                workorder = selection.WOWindow(login1.dept)
+                root = Tk()
+                root.geometry("680x400")
+                app = shipping.Shipping(root, "0004")
+                root.mainloop()
+            elif login1.dept == "Accounting":
+                root = Tk()
+                root.geometry("500x300")
+                root.title("Accounting")
+                close_window = Button(root, text="Close", command=root.quit)
+                close_window.place(x=90, y=230)
+                app = accounting(root, "0005")
+
+            elif login1.dept == "Admin":
+                root = Tk()
+                root.geometry("600x500")
+                root.title("New User")
+                root.configure(bg="light gray")
+                admin1 = admin.Admin(root)
+                root.mainloop()
+        
     def print(self):
         query = "SELECT cust_id, address, price FROM work_in_progress WHERE wo_number = \"" + self.wo + "\""
         self.cursor.execute(query)

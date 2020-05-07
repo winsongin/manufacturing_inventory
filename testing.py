@@ -7,7 +7,7 @@ import itertools
 import assembly_class
 import login
 import testing
-import shipping_connector
+import shipping
 import receiving
 import accounting
 import admin
@@ -155,7 +155,7 @@ class TestingWindow:
             tkinter.messagebox.showinfo("Logout", "Goodbye")
             self.master.destroy()
 
-            root = Tk()
+           root = Tk()
             root.geometry("650x500")
             login1 = login.Login(root)
             root.mainloop()
@@ -182,13 +182,14 @@ class TestingWindow:
             elif login1.dept == "Shipping":
                 workorder = selection.WOWindow(login1.dept)
                 root = Tk()
-                shipping_connector.Interface(root, workorder, "0004")
+                root.geometry("680x400")
+                app = shipping.Shipping(root, "0004")
                 root.mainloop()
             elif login1.dept == "Accounting":
                 root = Tk()
                 root.geometry("500x300")
                 root.title("Accounting")
-                close_window = tk.Button(root, text="Close", command=master.quit)
+                close_window = Button(root, text="Close", command=root.quit)
                 close_window.place(x=90, y=230)
                 app = accounting(root, "0005")
 
@@ -199,6 +200,7 @@ class TestingWindow:
                 root.configure(bg="light gray")
                 admin1 = admin.Admin(root)
                 root.mainloop()
+                
     #function will check if pass or fail.
     def onClick(self):
         answer = tkinter.messagebox.askquestion("RESULT", "Are these tests correct? ")

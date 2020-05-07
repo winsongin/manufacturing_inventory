@@ -5,31 +5,52 @@ mydb = sql.connect(host = 'localhost',user = 'root',passwd = 'Razgriz!949',datab
     
 class Login:
     def __init__(self,root):
+
         self.root = root
+        
         self.dept = ''
 
-        #Label object
-        self.lUsername = tk.Label(self.root, text = 'Employee ID')
-        self.lPassword = tk.Label(self.root, text = 'Password')
-
+        #Label object 
+        
+        self.lUsername = tk.Label(self.root, text = 'Employee ID', font=("arial", 12))
+        
+        self.lPassword = tk.Label(self.root, text = 'Password', font=("arial", 12))
+        
+        self.wrong = tk.Label(self.root, text = 'Please Try Again', font=("arial", 12))
+        
         #Variables to Store Data
+    
         self.user = tk.StringVar()
+    
         self.passwd = tk.StringVar()
-
+    
         #Entry object
-        self.eUsername = tk.Entry(self.root, textvariable = self.user)
-        self.ePassword = tk.Entry(self.root, textvariable = self.passwd, show ='*')
-
+    
+        self.eUsername = tk.Entry(self.root, textvariable = self.user,font=("arial", 12))
+    
+        self.ePassword = tk.Entry(self.root, textvariable = self.passwd, show ='*',font=("arial", 12))
+        
         #Button
-        self.bLogin = tk.Button(self.root, text = 'Login', command = self.execute)
-
+    
+        self.bLogin = tk.Button(self.root, text = 'Login', command = self.execute, height = 1, width = 8,font=("arial", 12))
+        
+        self.root.bind('<Return>', self.buttonPressed)
+        
         #placing in GUI
-        self.lUsername.pack(side= tk.TOP, anchor = 'center', fill = 'x')
-        self.eUsername.pack(side= tk.TOP, anchor = 'center')
-        self.lPassword.pack(side= tk.TOP, anchor = 'center')
-        self.ePassword.pack(side= tk.TOP, anchor = 'center')
-        self.bLogin.pack(side = tk.BOTTOM, anchor = 'center')
-
+    
+        self.lUsername.pack()
+    
+        self.eUsername.pack()
+    
+        self.lPassword.pack()
+    
+        self.ePassword.pack()
+        
+        self.bLogin.pack()
+        
+    def buttonPressed(self,event):
+        self.execute()
+          
     #gets Username from Database
     def getUser(self):
         cur = mydb.cursor()
@@ -37,30 +58,28 @@ class Login:
         cur.execute(statement)
         result = cur.fetchone()
         result = ''.join(result)
-        print(result)
         if result == self.user.get():
             return True
-
+        
         elif result == None:
             return True
 
     #gets Password from Database
     def getPass(self):
         cur = mydb.cursor()
-        statement = ("select pass from employees where pass = '{}'").format(self.ePassword.get())
+        statement = ("select pass from employees where employee_id = '{}'").format(self.eUsername.get())
         cur.execute(statement)
         result = cur.fetchone()
-
         result = ''.join(result)
         #if not in database return Lock is True
         if result == self.passwd.get():
-            return False
-
+            return False    
+        
         elif result == None:
             return True
-
-        #if in database return false
-
+        
+        #if in database return false  
+       
     #Find Department For User
     def findDept(self):
         cur = mydb.cursor()
@@ -73,19 +92,23 @@ class Login:
             d.append(ts)
 
         return (d[0])
-
+        
     #Login Function
     def execute(self):
         temp = ''
-        lock = True
-        found = False
+        lock = True                                                  
+        found = False                                               
         found = self.getUser()
-        lock = self.getPass()
+        lock = self.getPass() 
         if found == True and lock == False:
             temp = self.findDept()
-            user = self.user.get()
             self.dept = temp
             self.root.destroy()
+        else:
+            if(self.wrong.winfo_ismapped() == True):
+                self.wrong.pack_forget()
+            self.wrong.pack()
+       
 
             return temp, user
 

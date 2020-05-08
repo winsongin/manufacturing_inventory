@@ -1,8 +1,10 @@
-
+from tkinter import *
+from tkinter.ttk import *
 import mysql.connector
 import sys
 import tkinter as tk
 from tkinter import ttk
+import tkinter.messagebox
 import assembly_class
 import login
 import shipping
@@ -11,7 +13,6 @@ import receiving
 import accounting
 import admin
 import selection
-
 # myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "Razgriz!949", database = "inventory_system")
 
 myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "Razgriz!949", database = "inventory_system")
@@ -19,7 +20,7 @@ myDb = mysql.connector.connect(host = "localhost", user = "root", passwd = "Razg
 
 class Admin:
     # Order gets submitted to the database
-    def onSubmit(self):
+    def onSubmit(self, tree):
         myCursor = myDb.cursor()   
 
         empID = self.employeeIDInput.get()
@@ -97,8 +98,20 @@ class Admin:
 
             # myCursor.execute(query, (empID, password, fName, lName, pNum, department, canReceive, canAssemble, canTest, canShip, isAdmin, isAccounting))
             myDb.commit()
-            
-    #Logout function
+
+            for i in tree.get_children():
+                tree.delete(i)
+
+            printAll = "SELECT * FROM employees"
+            cursor = myDb.cursor()
+            cursor.execute(printAll)
+            records = cursor.fetchall()
+
+            for row in records:
+                tree.insert('', 'end', values=
+                (row[0], row[1]))
+
+    # Logout function
     def Logoff(self):
         answer = tkinter.messagebox.askquestion("Logout", "Are you sure you want to logout? ")
 
@@ -107,7 +120,7 @@ class Admin:
             self.root.destroy()
 
             master = tk.Tk()
-            master.geometry("650x500")
+            root.geometry("350x200")
             login1 = login.Login(master)
             master.mainloop()
             if login1.dept == "Receiving":
@@ -151,8 +164,7 @@ class Admin:
                 master.configure(bg="light gray")
                 admin1 = admin.Admin(master)
                 master.mainloop()
-        
-            
+
     def reset(self):
         self.employeeIDInput.set("")
         self.passwordInput.set("")
@@ -168,12 +180,9 @@ class Admin:
         # self.canShip.set("")
         # self.isdminInput.set("")
 
-        
-        
     def __init__(self, root): 
         self.root = root
-        
-        #File Menu
+
         self.FileMenu = tk.Menu(root)
         self.root.config(menu=self.FileMenu)
 
@@ -182,7 +191,7 @@ class Admin:
         self.FileMenu.add_cascade(label="File", menu=self.subMenu)
         self.subMenu.add_command(label="Exit", command=self.root.destroy)
         self.subMenu.add_command(label="Logout", command=self.Logoff)
-        
+
         # Prompts the user for the employee ID
         self.employeeIDInput = tk.StringVar()
         self.employeeIDLabel = tk.Label(self.root, text="Employee ID:", bg="light gray")
@@ -270,11 +279,54 @@ class Admin:
         # self.isAdminLabel.place(x=40, y=520)
         # self.isAdminEntry.place(x=150, y=520)
 
-        self.submit = tk.Button(self.root, text="Submit", bg='red', highlightbackground="light gray", command=self.onSubmit)
+        # Selection Grid
+        tree = Treeview(self.root, column=("column", "column1"))
+        searchQuery = StringVar()
+        selection = StringVar()
+
+        load_button = Button(self.root, text="Select Employee", command=lambda: self.select(selection.get()),
+                             style='C.TButton')
+        selection_entry = Entry(self.root, width=15, textvariable=selection)
+
+        selection_entry.place(x=330, y=180)
+        load_button.place(x=430, y=180)
+
+        tree.column("#0", minwidth=0, width=0, stretch=False)
+        tree.heading("#1", text="Employee ID")
+        tree.column("#1", minwidth=0, width=100, stretch=False)
+        tree.heading("#2", text="Name")
+        tree.column("#2", minwidth=0, width=100, stretch=False)
+
+
+        tree.configure(height=5)
+        tree.place(x=330, y=20)
+
+        printAll = "SELECT * FROM employees"
+        cursor = myDb.cursor()
+        cursor.execute(printAll)
+        records = cursor.fetchall()
+
+        for row in records:
+            tree.insert('', 'end', values=
+            (row[0], row[1]))
+
+        self.submit = tk.Button(self.root, text="Submit", bg='red', highlightbackground="light gray", command=lambda: self.onSubmit(tree))
         self.submit.place(x=250, y=350)
 
         self.reset = tk.Button(self.root, text="Reset", bg='red', highlightbackground="light gray", command=self.reset)
         self.reset.place(x=200, y=350)
+
+    def select(self, emp_id):
+        query = "SELECT * FROM employees WHERE employee_id = \'" + emp_id + "\'"
+        cursor = myDb.cursor()
+        cursor.execute(query)
+        result = cursor.fetchone()
+
+        self.employeeIDInput.set(result[0])
+        self.passwordInput.set(result[5])
+        self.firstNameInput.set(result[1])
+        self.lastNameInput.set(result[2])
+        self.phoneNumberInput.set(result[3])
 
 if __name__ == "__main__": 
     root = tk.Tk()

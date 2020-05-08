@@ -3,6 +3,15 @@ from tkinter.ttk import *
 import tkinter.messagebox
 import mysql.connector
 import itertools
+import login
+import testing
+import shipping
+import receiving
+import accounting
+import admin
+import inventory
+import assembly_class
+
 
 class accounting:
     def __init__(self, master, emp_id):
@@ -34,11 +43,14 @@ class accounting:
         self.cust_id = StringVar(self.master)
         pay = StringVar()
 
-        #cust_name = curr_customer[0]
-        #cust_addr = curr_customer[1]
-
-        #print(cust_name)
-        #print(cust_addr)
+        # Creating file menu
+        self.FileMenu = Menu(self.master)
+        self.master.config(menu=self.FileMenu)
+        self.subMenu = Menu(self.master)
+        self.subMenu2 = Menu(self.master)
+        self.FileMenu.add_cascade(label="File", menu=self.subMenu)
+        self.subMenu.add_command(label="Exit", command=self.master.destroy)
+        self.subMenu.add_command(label="Logout", command=self.Logoff)
 
         #Displays Employee number
         self.empLabel = Label(self.master, text="Employee: ", font=("arial", 12))
@@ -114,8 +126,77 @@ class accounting:
         self.mydb.commit()
     
     def showTSales(self):      
-        message = "$" + str(self.totalSales)
-        messagebox.showinfo("Total Sales",message)
+        message = "$" + str("{:.2f}".format(self.totalSales))
+        tkinter.messagebox.showinfo("Total Sales",message)
+
+        # logout fucntion
+
+    def Logoff(self):
+        answer = tkinter.messagebox.askquestion("Logout", "Are you sure you want to logout? ")
+
+        if answer == "yes":
+            tkinter.messagebox.showinfo("Logout", "Goodbye")
+            self.master.destroy()
+
+            root = Tk()
+            root.geometry("350x200")
+            root.title("Login")
+            root.resizable(False, False)
+            login1 = login.Login(root)
+            root.mainloop()
+            if login1.dept == "Receiving":
+                root = Tk()
+                root.geometry("400x500")
+                root.title("Receiving")
+                root.resizable(False, False)
+                root.configure(bg="light gray")
+                receiving1 = receiving.Receiving(root)
+                root.mainloop()
+            elif login1.dept == "Assembly":
+                root = Tk()
+                root.geometry("665x380")
+                root.title("Assembly")
+                root.resizable(False, False)
+                app = assembly_class.Assembly(root, "0002")
+                root.mainloop()
+            elif login1.dept == "Testing":
+                root = Tk()
+                root.geometry("680x500")
+                root.title("Testing")
+                root.resizable(False, False)
+                app = testing.TestingWindow(root, "0003")
+                root.mainloop()
+            elif login1.dept == "Shipping":
+                root = Tk()
+                root.geometry("665x380")
+                root.title("Shipping")
+                root.resizable(False, False)
+                shipping.Shipping(root, "0004")
+                root.mainloop()
+            elif login1.dept == "Accounting":
+                root = Tk()
+                root.geometry("500x300")
+                root.title("Accounting")
+                root.resizable(False, False)
+                close_window = Button(root, text="Close", command=root.quit)
+                close_window.place(x=90, y=230)
+                app = accounting.accounting(root, "0005")
+                root.mainloop()
+            elif login1.dept == "Admin":
+                root = Tk()
+                root.geometry("600x500")
+                root.title("New User")
+                root.resizable(False, False)
+                root.configure(bg="light gray")
+                admin1 = admin.Admin(root)
+                root.mainloop()
+            elif login1.dept == "Inventory":
+                root = Tk()
+                root.geometry("620x500")
+                root.title("Inventory")
+                root.resizable(False, False)
+                app = inventory.Inventory(root)
+                root.mainloop()
         
         
 if __name__ == "__main__":

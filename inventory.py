@@ -3,14 +3,14 @@ from tkinter.ttk import *
 import tkinter.messagebox
 import mysql.connector
 import itertools
-import assembly_class
 import login
 import testing
 import shipping
 import receiving
 import accounting
 import admin
-import selection
+import inventory
+import assembly_class
 
 class Inventory:
     def __init__(self, master):
@@ -25,18 +25,17 @@ class Inventory:
         self.inventoryWindow()
 
     def inventoryWindow(self):
-        #File Menu
+        inv_label = Label(self.master, text="Inventory", font=("arial", 16, "bold"))
+        inv_label.place(x=280, y=5)
+
+        # Creating file menu
         self.FileMenu = Menu(self.master)
         self.master.config(menu=self.FileMenu)
-
-        self.subMenu = Menu(self.FileMenu)
-        self.subMenu2 = Menu(self.FileMenu)
+        self.subMenu = Menu(self.master)
+        self.subMenu2 = Menu(self.master)
         self.FileMenu.add_cascade(label="File", menu=self.subMenu)
         self.subMenu.add_command(label="Exit", command=self.master.destroy)
         self.subMenu.add_command(label="Logout", command=self.Logoff)
-        
-        inv_label = Label(self.master, text="Inventory", font=("arial", 16, "bold"))
-        inv_label.place(x=280, y=5)
 
         tree = Treeview(self.master, column=("clm0", "clm1", "clm2", "clm3", "clm4"))
         tree.configure(height=15)
@@ -80,7 +79,8 @@ class Inventory:
         editBtn.place(x=537, y=380)
         addBtn.place(x=537, y=410)
 
-    #Logout Function    
+        # logout fucntion
+
     def Logoff(self):
         answer = tkinter.messagebox.askquestion("Logout", "Are you sure you want to logout? ")
 
@@ -89,51 +89,65 @@ class Inventory:
             self.master.destroy()
 
             root = Tk()
-            root.geometry("650x500")
+            root.geometry("350x200")
+            root.title("Login")
+            root.resizable(False, False)
             login1 = login.Login(root)
             root.mainloop()
             if login1.dept == "Receiving":
                 root = Tk()
-                root.geometry("650x500")
+                root.geometry("400x500")
+                root.title("Receiving")
+                root.resizable(False, False)
                 root.configure(bg="light gray")
                 receiving1 = receiving.Receiving(root)
                 root.mainloop()
             elif login1.dept == "Assembly":
-                workorder = selection.WOWindow(login1.dept)
                 root = Tk()
-                root.geometry("665x340")
+                root.geometry("665x380")
                 root.title("Assembly")
+                root.resizable(False, False)
                 app = assembly_class.Assembly(root, "0002")
                 root.mainloop()
             elif login1.dept == "Testing":
-                workorder = selection.WOWindow(login1.dept)
                 root = Tk()
                 root.geometry("680x500")
                 root.title("Testing")
+                root.resizable(False, False)
                 app = testing.TestingWindow(root, "0003")
                 root.mainloop()
             elif login1.dept == "Shipping":
-                workorder = selection.WOWindow(login1.dept)
                 root = Tk()
-                root.geometry("680x400")
-                app = shipping.Shipping(root, "0004")
+                root.geometry("665x380")
+                root.title("Shipping")
+                root.resizable(False, False)
+                shipping.Shipping(root, "0004")
                 root.mainloop()
             elif login1.dept == "Accounting":
                 root = Tk()
                 root.geometry("500x300")
                 root.title("Accounting")
+                root.resizable(False, False)
                 close_window = Button(root, text="Close", command=root.quit)
                 close_window.place(x=90, y=230)
                 app = accounting(root, "0005")
-
+                root.mainloop()
             elif login1.dept == "Admin":
                 root = Tk()
                 root.geometry("600x500")
                 root.title("New User")
+                root.resizable(False, False)
                 root.configure(bg="light gray")
                 admin1 = admin.Admin(root)
                 root.mainloop()
-    
+            elif login1.dept == "Inventory":
+                root = Tk()
+                root.geometry("620x500")
+                root.title("Inventory")
+                root.resizable(False, False)
+                app = inventory.Inventory(root)
+                root.mainloop()
+
     def sort_column(self, tree, col):
         # Delete all of the entries in the tree first.
         tree.delete(*tree.get_children())
@@ -157,7 +171,7 @@ class Inventory:
         for each in records:
             tree.insert('', 'end', values=(each[0], each[1], each[2], each[3], each[4]))
 
-    def search_columns(self, tree, item):
+    def search(self, tree, item):
         tree.delete(*tree.get_children())
 
         # Display all of the data if nothing is entered in the search box.

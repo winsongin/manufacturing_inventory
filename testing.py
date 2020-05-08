@@ -11,7 +11,7 @@ import shipping
 import receiving
 import accounting
 import admin
-import selection
+import inventory
 
 
 class TestingWindow:
@@ -44,7 +44,7 @@ class TestingWindow:
         self.subMenu.add_command(label="Logout", command=self.Logoff)
 
         # creating labels here:
-        self.testing_label = Label(self.master, text="TESTING PROCESS", relief="solid", width=18, font=("arial", 25, "bold"))
+        self.testing_label = Label(self.master, text="TESTING PROCESS", relief="solid", width=17.5, font=("arial", 25, "bold"))
 
         # displaying worker ID:
         self.workerID_label = Label(self.master, text=self.emp_id, font=("arial", 15, "bold"))
@@ -70,7 +70,7 @@ class TestingWindow:
         style.configure('C.TButton', padding=0, font=("arial", 12), background='gray',
                         foreground='Green')
 
-        self.enter_button = Button(self.master, text="Enter", command=lambda: self.onClick(),  style='C.TButton')  # Command is binding to fuction.
+        self.enter_button = Button(self.master, text="Enter", command=lambda: self.onClick(tree, selection.get()),  style='C.TButton')  # Command is binding to fuction.
         self.reset_button = Button(self.master, text="Reset", command=self.reset, style='C.TButton')
 
         # User input
@@ -84,7 +84,7 @@ class TestingWindow:
         self.entry6 = Entry(self.master, textvariable=self.E6)
 
         # Placing all Labels and Buttons on to window.
-        self.testing_label.place(x=130, y=10)
+        self.testing_label.place(x=160, y=10)
         self.workerID_label.place(x=10, y=110)
         self.status_label.place(x=10, y=140)
         self.orderStatusEntry.place(x=150, y=140)
@@ -100,7 +100,7 @@ class TestingWindow:
         self.p2.place(x=480, y=250)
         self.p3.place(x=480, y=280)
         self.p4.place(x=480, y=310)
-        self.enter_button.place(x=400, y=340)
+        self.enter_button.place(x=440, y=340)
         self.reset_button.place(x=320, y=340)
 
         self.entry3.place(x=310, y=220)
@@ -116,25 +116,25 @@ class TestingWindow:
         load_button = Button(self.master, text="Select Work Order", command=lambda: self.select(selection.get()), style='C.TButton')
         selection_entry = Entry(self.master, width=15, textvariable=selection)
 
-        selection_entry.place(x=500, y=8)
-        load_button.place(x=500, y=30)
+        selection_entry.place(x=500, y=110)
+        load_button.place(x=500, y=140)
 
         tree.column("#0", minwidth=0, width=0, stretch=False)
-        tree.heading("#1", text="Work Order", command=lambda: self.sort_column(tree, 0, "Assembly", False))
+        tree.heading("#1", text="Work Order", command=lambda: self.sort_column(tree, 0, "Testing", False))
         tree.column("#1", minwidth=0, width=100, stretch=False)
-        tree.heading("#2", text="Department", command=lambda: self.sort_column(tree, 1, "Assembly", False))
+        tree.heading("#2", text="Department", command=lambda: self.sort_column(tree, 1, "Testing", False))
         tree.column("#2", minwidth=0, width=100, stretch=False)
-        tree.heading("#3", text="Customer", command=lambda: self.sort_column(tree, 2, "Assembly", False))
+        tree.heading("#3", text="Customer", command=lambda: self.sort_column(tree, 2, "Testing", False))
         tree.column("#3", minwidth=0, width=150, stretch=False)
-        tree.heading("#4", text="Received Date", command=lambda: self.sort_column(tree, 3, "Assembly", False))
+        tree.heading("#4", text="Received Date", command=lambda: self.sort_column(tree, 3, "Testing", False))
         tree.column("#4", minwidth=0, width=150, stretch=False)
-        tree.heading("#5", text="Estimated Ship", command=lambda: self.sort_column(tree, 4, "Assembly", False))
+        tree.heading("#5", text="Estimated Ship", command=lambda: self.sort_column(tree, 4, "Testing", False))
         tree.column("#5", minwidth=0, width=150, stretch=False)
 
         tree.configure(height=5)
         tree.place(x=7, y=370) # You may need to increase y's value to fit your form
 
-        printAll = "SELECT * FROM work_in_progress WHERE status = \"" + "TestingWindow" + "\"" # CHANGE "ASSEMBLY" TO YOUR DEPARTMENT
+        printAll = "SELECT * FROM work_in_progress WHERE status = \"" + "Testing" + "\""
         cursor = self.mydb.cursor()
         cursor.execute(printAll)
         records = cursor.fetchall()
@@ -155,67 +155,101 @@ class TestingWindow:
             tkinter.messagebox.showinfo("Logout", "Goodbye")
             self.master.destroy()
 
-           root = Tk()
-            root.geometry("650x500")
+            root = Tk()
+            root.geometry("350x200")
+            root.title("Login")
+            root.resizable(False, False)
             login1 = login.Login(root)
             root.mainloop()
             if login1.dept == "Receiving":
                 root = Tk()
-                root.geometry("650x500")
+                root.geometry("400x500")
+                root.title("Receiving")
+                root.resizable(False, False)
                 root.configure(bg="light gray")
                 receiving1 = receiving.Receiving(root)
                 root.mainloop()
             elif login1.dept == "Assembly":
-                workorder = selection.WOWindow(login1.dept)
                 root = Tk()
-                root.geometry("665x340")
+                root.geometry("665x380")
                 root.title("Assembly")
+                root.resizable(False, False)
                 app = assembly_class.Assembly(root, "0002")
                 root.mainloop()
             elif login1.dept == "Testing":
-                workorder = selection.WOWindow(login1.dept)
                 root = Tk()
                 root.geometry("680x500")
                 root.title("Testing")
-                app = testing.TestingWindow(root, "0003")
+                root.resizable(False, False)
+                app = TestingWindow(root, "0003")
                 root.mainloop()
             elif login1.dept == "Shipping":
-                workorder = selection.WOWindow(login1.dept)
                 root = Tk()
-                root.geometry("680x400")
-                app = shipping.Shipping(root, "0004")
+                root.geometry("665x380")
+                root.title("Shipping")
+                root.resizable(False, False)
+                shipping.Shipping(root, "0004")
                 root.mainloop()
             elif login1.dept == "Accounting":
                 root = Tk()
                 root.geometry("500x300")
                 root.title("Accounting")
+                root.resizable(False, False)
                 close_window = Button(root, text="Close", command=root.quit)
                 close_window.place(x=90, y=230)
-                app = accounting(root, "0005")
-
+                app = accounting.accounting(root, "0005")
+                root.mainloop()
             elif login1.dept == "Admin":
                 root = Tk()
                 root.geometry("600x500")
                 root.title("New User")
+                root.resizable(False, False)
                 root.configure(bg="light gray")
                 admin1 = admin.Admin(root)
                 root.mainloop()
-                
+            elif login1.dept == "Inventory":
+                root = Tk()
+                root.geometry("620x500")
+                root.title("Inventory")
+                root.resizable(False, False)
+                app = inventory.Inventory(root)
+                root.mainloop()
     #function will check if pass or fail.
-    def onClick(self):
+    def onClick(self,tree, wo):
         answer = tkinter.messagebox.askquestion("RESULT", "Are these tests correct? ")
         cursor = self.mydb.cursor()
         if answer == "yes" and 5 <= int(self.entry3.get()) <= 12 and 98 <= int(self.entry4.get()) <= 100 and \
                 2 <= int(self.entry5.get()) <= 4 and 98 <= int(self.entry6.get()) <= 100:
             tkinter.messagebox.showinfo("RESULT", "ALL TEST PASS!")
             cursor = self.mydb.cursor()
-            cursor.execute("UPDATE work_in_progress SET status = 'Shipping' ")
+            query = "UPDATE work_in_progress SET status = 'Shipping' WHERE wo_number = \'" + wo + "\'"
+            print(query)
+            cursor.execute(query)
             self.mydb.commit()
+
 
         else:
             tkinter.messagebox.showinfo("RESULT", "TESTS FAILED!")
-            cursor.execute("UPDATE work_in_progress SET status = 'Assembly' ")
+            query = "UPDATE work_in_progress SET status = 'Assembly' WHERE wo_number = \'" + wo + "\'"
+            print(query)
+            cursor.execute(query)
             self.mydb.commit()
+
+        printAll = "SELECT * FROM work_in_progress WHERE status = \"" + "Testing" + "\""
+        cursor = self.mydb.cursor()
+        cursor.execute(printAll)
+        records = cursor.fetchall()
+
+        for i in tree.get_children():
+            tree.delete(i)
+
+        for row in records:
+            custQuery = "SELECT name FROM customer WHERE cust_id = %s"
+            self.cursor.execute(custQuery, [row[4]])
+            cust = self.cursor.fetchone()
+            print(cust)
+            tree.insert('', 'end', values=
+            (row[0], row[1], cust[0], row[2], row[3]))
 
     # gets status of order
     def getStatus(self):
@@ -234,8 +268,12 @@ class TestingWindow:
 
     def sort_column(self, tree, col, department, reverse):
         tree.delete(*tree.get_children())
-        db_Info = self.mydb.get_server_info()
-        cursor = self.mydb.cursor()
+
+        connection = mysql.connector.connect(host="localhost",
+                                             user="root", password="Razgriz!949",
+                                             auth_plugin="mysql_native_password", database="inventory_system")
+        db_Info = connection.get_server_info()
+        cursor = connection.cursor()
         cursor.execute("select database()")
         records = cursor.fetchone()
 
@@ -252,6 +290,12 @@ class TestingWindow:
 
         cursor.execute(querySort)
         records = cursor.fetchall()
+        for row in records:
+            print("Work Number: ", row[0])
+            print("Status: ", row[1])
+            print("Date Received: ", row[2])
+            print("ETA: ", row[3])
+            print("Customer ID: ", row[4])
 
         for row in records:
             custQuery = "SELECT name FROM customer WHERE cust_id = %s"
@@ -260,10 +304,6 @@ class TestingWindow:
             print(cust)
             tree.insert('', 'end', values=
             (row[0], row[1], cust[0], row[2], row[3]))
-
-        cursor.close()
-        self.mydb.close()
-        print("MySQL connection closed.")
 
     def select(self, wo):
         self.wonum = "Work Order: " + wo

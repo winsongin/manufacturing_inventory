@@ -3,6 +3,14 @@ from tkinter.ttk import *
 import tkinter.messagebox
 import mysql.connector
 import itertools
+import login
+import testing
+import shipping
+import receiving
+import accounting
+import admin
+import inventory
+
 
 class Assembly:
     def __init__(self, master, emp_id):
@@ -72,6 +80,8 @@ class Assembly:
         self.subMenu.add_command(label="Exit", command=self.master.destroy)
         self.subMenu.add_command(label="Logout", command=self.Logoff)
 
+        self.testing_label = Label(self.master, text="ASSEMBLY", relief="solid", width=10.5,
+                                   font=("arial", 25, "bold"))
         qty_label = Label(self.master, text="Qty", font=("arial", 13, "bold"))
         stock_label = Label(self.master, text="Stock", font=("arial", 13, "bold"))
         partNum1_label = Label(self.master, text="Chassis: ", font=("arial", 13, "bold"))
@@ -98,26 +108,27 @@ class Assembly:
         partNum2_qty = Entry(self.master, width=5, textvariable=self.partNum2Qty)
         partNum3_qty = Entry(self.master, width=5, textvariable=self.partNum3Qty)
 
+        self.testing_label.place(x=240, y=10)
         id = Label(self.master, text=self.emp_id, font=("arial", 12, "bold"))
-        id.place(x=5, y=5)
+        id.place(x=5, y=65)
 
-        qty_label.place(x=205, y=55)
-        stock_label.place(x=265, y=55)
+        qty_label.place(x=205, y=115)
+        stock_label.place(x=265, y=115)
 
-        partNum1_label.place(x=5, y=80)
-        partNum2_label.place(x=5, y=105)
-        partNum3_label.place(x=5, y=130)
+        partNum1_label.place(x=5, y=140)
+        partNum2_label.place(x=5, y=165)
+        partNum3_label.place(x=5, y=190)
 
-        reset_button.place(x=480, y=35, width=80)
-        enter_button.place(x=480, y=65, width=80)
-        stock_button.place(x=480, y=95, width=80)
+        reset_button.place(x=480, y=95, width=80)
+        enter_button.place(x=480, y=125, width=80)
+        stock_button.place(x=480, y=155, width=80)
 
-        partNum1_entry.place(x=85, y=80)
-        partNum2_entry.place(x=85, y=105)
-        partNum3_entry.place(x=85, y=130)
-        partNum1_qty.place(x=205, y=80)
-        partNum2_qty.place(x=205, y=105)
-        partNum3_qty.place(x=205, y=130)
+        partNum1_entry.place(x=85, y=140)
+        partNum2_entry.place(x=85, y=165)
+        partNum3_entry.place(x=85, y=190)
+        partNum1_qty.place(x=205, y=140)
+        partNum2_qty.place(x=205, y=165)
+        partNum3_qty.place(x=205, y=190)
 
         #Selection Grid
         tree = Treeview(self.master, column=("column", "column1", "column2", "column3", "column4"))
@@ -127,8 +138,8 @@ class Assembly:
         load_button = Button(self.master, text="Select Work Order", command=lambda: self.select(selection.get()), style='C.TButton')
         selection_entry = Entry(self.master, width=15, textvariable=selection)
 
-        selection_entry.place(x=400, y=8)
-        load_button.place(x=500, y=7)
+        selection_entry.place(x=400, y=68)
+        load_button.place(x=500, y=67)
 
         tree.column("#0", minwidth=0, width=0, stretch=False)
         tree.heading("#1", text="Work Order", command=lambda: self.sort_column(tree, 0, "Assembly", False))
@@ -143,7 +154,7 @@ class Assembly:
         tree.column("#5", minwidth=0, width=150, stretch=False)
 
         tree.configure(height=5)
-        tree.place(x=7, y=180)
+        tree.place(x=7, y=240)
 
         printAll = "SELECT * FROM work_in_progress WHERE status = \"" + "Assembly" + "\""
         cursor = self.mydb.cursor()
@@ -167,49 +178,63 @@ class Assembly:
             self.master.destroy()
 
             root = Tk()
-            root.geometry("650x500")
+            root.geometry("350x200")
+            root.title("Login")
+            root.resizable(False, False)
             login1 = login.Login(root)
             root.mainloop()
             if login1.dept == "Receiving":
                 root = Tk()
-                root.geometry("650x500")
+                root.geometry("400x500")
+                root.title("Receiving")
+                root.resizable(False, False)
                 root.configure(bg="light gray")
                 receiving1 = receiving.Receiving(root)
                 root.mainloop()
             elif login1.dept == "Assembly":
-                workorder = selection.WOWindow(login1.dept)
                 root = Tk()
-                root.geometry("665x340")
+                root.geometry("665x380")
                 root.title("Assembly")
-                app = assembly_class.Assembly(root, "0002")
+                root.resizable(False, False)
+                app = Assembly(root, "0002")
                 root.mainloop()
             elif login1.dept == "Testing":
-                workorder = selection.WOWindow(login1.dept)
                 root = Tk()
                 root.geometry("680x500")
                 root.title("Testing")
+                root.resizable(False, False)
                 app = testing.TestingWindow(root, "0003")
                 root.mainloop()
             elif login1.dept == "Shipping":
-                workorder = selection.WOWindow(login1.dept)
                 root = Tk()
-                root.geometry("680x400")
-                app = shipping.Shipping(root, "0004")
+                root.geometry("665x380")
+                root.title("Shipping")
+                root.resizable(False, False)
+                shipping.Shipping(root, "0004")
                 root.mainloop()
             elif login1.dept == "Accounting":
                 root = Tk()
                 root.geometry("500x300")
                 root.title("Accounting")
+                root.resizable(False, False)
                 close_window = Button(root, text="Close", command=root.quit)
                 close_window.place(x=90, y=230)
                 app = accounting(root, "0005")
-
+                root.mainloop()
             elif login1.dept == "Admin":
                 root = Tk()
                 root.geometry("600x500")
                 root.title("New User")
+                root.resizable(False, False)
                 root.configure(bg="light gray")
                 admin1 = admin.Admin(root)
+                root.mainloop()
+            elif login1.dept == "Inventory":
+                root = Tk()
+                root.geometry("620x500")
+                root.title("Inventory")
+                root.resizable(False, False)
+                app = inventory.Inventory(root)
                 root.mainloop()
   
     def reset(self):
@@ -248,8 +273,6 @@ class Assembly:
         cursor.execute(printAll)
         records = cursor.fetchall()
 
-        counter = 0
-
         for i in tree.get_children():
             tree.delete(i)
 
@@ -278,9 +301,9 @@ class Assembly:
         self.part1Stock_label = Label(self.master, text=part1_qty, font=("arial", 13, "bold"))
         self.part2Stock_label = Label(self.master, text=part2_qty, font=("arial", 13, "bold"))
         self.part3Stock_label = Label(self.master, text=part3_qty, font=("arial", 13, "bold"))
-        self.part1Stock_label.place(x=260, y=75)
-        self.part2Stock_label.place(x=260, y=100)
-        self.part3Stock_label.place(x=260, y=125)
+        self.part1Stock_label.place(x=260, y=135)
+        self.part2Stock_label.place(x=260, y=160)
+        self.part3Stock_label.place(x=260, y=185)
 
     def sort_column(self, tree, col, department, reverse):
         tree.delete(*tree.get_children())
@@ -323,19 +346,18 @@ class Assembly:
 
         cursor.close()
         connection.close()
-        print("MySQL connection closed.")
 
     def select(self, wo):
         self.wonum = "Work Order: " + wo
         self.wo = wo
         number = Label(self.master, text=self.wonum, font=("arial", 12, "bold"))
-        number.place(x=0, y=25)
+        number.place(x=7, y=85)
 
 
 
 if __name__ == "__main__":
     root = Tk()
-    root.geometry("665x340")
+    root.geometry("665x380")
     root.title("Assembly")
     app = Assembly(root, "0001")
     root.mainloop()
